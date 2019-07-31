@@ -2,17 +2,40 @@
 	"alt": {
 		"naito-one-logo": "Logo Naito One"
 	},
+	"error": {
+		"credentials": "Ces identifiants ne correspondent pas.",
+		"unknown": "Une erreur s'est produite. Veuillez réessayer plus tard."
+	},
+	"menu": {
+		"alerts": "Alertes",
+		"explore": "Explorer les données",
+		"infos": "Informations",
+		"objectives": "Objectifs"
+	},
 	"pages": {
+		"index": {
+			"hello": "Bonjour, {name}",
+			"summary": "Vous possédez <strong>{sensors} capteurs</strong> en ligne sur <strong>{sites} sites</strong>.",
+			"summary-small": "<strong>{sensors} capteurs</strong> en ligne sur <strong>{sites} sites</strong>.",
+			"title": "Tableau de bord"
+		},
 		"login": {
 			"form": {
 				"email": "Adresse email",
 				"forgotten-password": "Mot de passe oublié",
 				"password": "Mot de passe",
-				"remember-me": "Se souvenir de moi",
+				"remember-me": "Rester connecté",
 				"submit": "Connexion"
 			},
 			"new-client": "Pas encore client ? Découvrez meters.ch !",
 			"title": "Portail de connexion Meters.ch"
+		},
+		"reset": {
+			"form": {
+				"explain": "Entrez votre adresse email afin de recevoir un lien de réinitialisation.",
+				"submit": "Réinitialiser le mot de passe"
+			},
+			"title": "Mot de passe oublié"
 		}
 	}
 }

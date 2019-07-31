@@ -35,7 +35,10 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/vue-i18n'],
+  plugins: [
+    '~/plugins/vue-i18n',
+    { src: '~/plugins/client-data', mode: 'client' },
+  ],
   /*
    ** Nuxt.js modules
    */

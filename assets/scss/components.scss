@@ -2,26 +2,62 @@
   @apply cursor-pointer select-none outline-none;
 }
 
+.disabled {
+  filter: grayscale(1) opacity(0.5);
+}
+
 .section {
   @apply flex flex-col items-center;
+}
+
+@keyframes pulse-saturation {
+  0% {
+    filter: saturate(0) opacity(0.5);
+  }
+
+  60% {
+    filter: saturate(2) opacity(0.5);
+  }
+
+  100% {
+    filter: saturate(0) opacity(0.5);
+  }
 }
 
 .action {
   @apply clickable flex items-center justify-center py-3 px-4 rounded-md font-semibold;
 }
 
+.round-action {
+  @apply clickable rounded-full p-3 text-xl;
+}
+
 .inline-action {
   @apply clickable flex items-center py-3 pr-4 font-semibold;
 }
 
-.inline-action:hover,
-.action:hover {
-  @apply lighten-5 shadow-lg;
-}
+.action,
+.round-action,
+.inline-action {
+  &.action__processing {
+    animation: 1s infinite ease-in pulse-saturation;
+  }
 
-.inline-action:active,
-.action:active {
-  @apply darken-5 shadow-none;
+  &:disabled {
+    @apply disabled;
+  }
+
+  &:focus {
+    @apply shadow-outline;
+  }
+
+  &:hover:not(:disabled) {
+    @apply lighten-5 shadow-lg;
+  }
+
+  &:active:not(:disabled) {
+    @apply darken-5 shadow-none;
+  }
 }
 
 .green-link {
@@ -46,10 +82,20 @@
   }
 
   > input {
-    display: none;
+    // display flex so it stopts taking place in the DOM
+    // don't display: none because then it is not focusable
+    @apply w-0 h-0 overflow-hidden flex;
 
     &:checked ~ .material-checkbox-fake::after {
       content: 'check_box';
+    }
+
+    &:disabled ~ .material-checkbox-fake::after {
+      @apply disabled;
+    }
+
+    &:focus ~ .material-checkbox-fake::after {
+      @apply shadow-outline;
     }
   }
 
@@ -67,6 +113,10 @@
 
   &:focus {
     @apply border-gray-700;
+  }
+
+  &:disabled {
+    @apply disabled;
   }
 }
 

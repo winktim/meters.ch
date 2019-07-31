@@ -1,5 +1,3 @@
-import createPersistedState from 'vuex-persistedstate'
-
 export const state = () => ({
   email: 'hello@naito.one',
   api: 'http://127.0.0.1:8000',
@@ -9,6 +7,7 @@ export const state = () => ({
   locale: 'en',
   apiToken: null,
   rememberMe: false,
+  isProbablyClient: false,
 })
 
 export const mutations = {
@@ -20,14 +19,22 @@ export const mutations = {
       state.locale = locale
 
       this.app.i18n.locale = locale
+      localStorage.setItem('locale', locale)
+      document.documentElement.lang = locale
     }
   },
-}
+  SET_API_TOKEN(state, { apiToken }) {
+    state.apiToken = apiToken
+    state.isProbablyClient = true
 
-export const plugins = process.browser
-  ? [
-      createPersistedState({
-        paths: ['locale', 'apiToken'],
-      }),
-    ]
-  : []
+    if (state.rememberMe) {
+      localStorage.setItem('apiToken', apiToken)
+    }
+  },
+  SET_REMEMBER_ME(state, { rememberMe }) {
+    state.rememberMe = rememberMe
+  },
+  SET_IS_PROBABLY_CLIENT(state, { isProbablyClient }) {
+    state.isProbablyClient = isProbablyClient
+  },
+}

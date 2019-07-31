@@ -60,8 +60,14 @@ module.exports = {
       },
       spacing: {
         '15': '3.75rem',
+        '60': '15rem',
+      },
+      width: {
+        '100': '25rem',
+        '120': '30rem',
       },
       height: {
+        '18': '4.5rem',
         '76': '19rem',
         '100': '25rem',
       },
@@ -75,6 +81,9 @@ module.exports = {
       },
       borderRadius: {
         md: '0.3rem',
+      },
+      inset: {
+        full: '100%',
       },
     },
   },
