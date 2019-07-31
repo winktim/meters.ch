@@ -1,0 +1,18 @@
+{
+	"alt": {
+		"naito-one-logo": "Logo Naito One"
+	},
+	"pages": {
+		"login": {
+			"form": {
+				"email": "Adresse email",
+				"forgotten-password": "Mot de passe oublié",
+				"password": "Mot de passe",
+				"remember-me": "Se souvenir de moi",
+				"submit": "Connexion"
+			},
+			"new-client": "Pas encore client ? Découvrez meters.ch !",
+			"title": "Portail de connexion Meters.ch"
+		}
+	}
+}

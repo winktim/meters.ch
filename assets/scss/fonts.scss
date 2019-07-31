@@ -1,0 +1,36 @@
+// Raleway
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Raleway'), local('Raleway-Regular'),
+    url(/fonts/Raleway-Regular.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local('Raleway-Medium'), url(/fonts/Raleway-Medium.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Raleway-SemiBold'),
+    url(/fonts/Raleway-SemiBold.woff2) format('woff2');
+}
+
+// Staatliches
+@font-face {
+  font-family: 'Staatliches';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Staatliches Regular'), local('Staatliches-Regular'),
+    url(/fonts/Staatliches-Regular.woff2) format('woff2');
+}

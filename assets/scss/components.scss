@@ -1,0 +1,105 @@
+.clickable {
+  @apply cursor-pointer select-none outline-none;
+}
+
+.section {
+  @apply flex flex-col items-center;
+}
+
+.action {
+  @apply clickable flex items-center justify-center py-3 px-4 rounded-md font-semibold;
+}
+
+.inline-action {
+  @apply clickable flex items-center py-3 pr-4 font-semibold;
+}
+
+.inline-action:hover,
+.action:hover {
+  @apply lighten-5 shadow-lg;
+}
+
+.inline-action:active,
+.action:active {
+  @apply darken-5 shadow-none;
+}
+
+.green-link {
+  text-decoration: underline;
+  @apply text-naito-green-200;
+
+  &:hover {
+    @apply text-naito-green-100;
+  }
+}
+
+.material-checkbox {
+  > .material-checkbox-fake {
+    cursor: pointer;
+    @apply p-2;
+    &::after {
+      content: 'check_box_outline_blank';
+
+      font-family: 'Material Icons';
+      @apply pointer-events-none select-none text-xl;
+    }
+  }
+
+  > input {
+    display: none;
+
+    &:checked ~ .material-checkbox-fake::after {
+      content: 'check_box';
+    }
+  }
+
+  &:hover {
+    @apply lighten-5;
+  }
+
+  &:active {
+    @apply darken-5;
+  }
+}
+
+.transparent-input {
+  @apply bg-transparent border-b-2 border-gray-300 appearance-none outline-none transition-border-color-100;
+
+  &:focus {
+    @apply border-gray-700;
+  }
+}
+
+.transperent-select {
+  > select {
+    @apply clickable block appearance-none bg-transparent pr-4;
+
+    &:focus {
+      @apply outline-none;
+    }
+
+    > option {
+      @apply bg-gray-100;
+
+      //prevent <option>s from becoming transparent on firefox
+      &:not(:checked) {
+        @apply text-gray-900;
+      }
+    }
+
+    // hide firefox outline
+    &:-moz-focusring {
+      color: transparent;
+      text-shadow: 0 0 0 theme('colors.gray.900');
+    }
+  }
+
+  &::after {
+    content: 'arrow_drop_down';
+
+    font-family: 'Material Icons';
+    top: theme('spacing.4');
+    right: theme('spacing.4');
+    @apply absolute pointer-events-none;
+  }
+}

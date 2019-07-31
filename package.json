@@ -1,0 +1,29 @@
+{
+  "name": "meters-ch",
+  "version": "1.0.0",
+  "description": "Meters.ch Website",
+  "author": "Tim Winkelmann",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
+  },
+  "dependencies": {
+    "node-sass": "^4.12.0",
+    "nuxt": "^2.0.0",
+    "nuxt-purgecss": "^0.2.1",
+    "sass-loader": "^7.1.0",
+    "vue-i18n": "^8.11.2",
+    "vuex-persistedstate": "^2.5.4"
+  },
+  "devDependencies": {
+    "lodash": "^4.17.11",
+    "nodemon": "^1.18.9",
+    "prettier": "^1.16.4",
+    "push-dir": "^0.4.1",
+    "tailwindcss": "^1.0.0"
+  }
+}
