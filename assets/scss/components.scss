@@ -84,7 +84,10 @@
   > input {
     // display flex so it stopts taking place in the DOM
     // don't display: none because then it is not focusable
-    @apply w-0 h-0 overflow-hidden flex;
+    // firefox: can't set widht/height for checkbox, so use transform
+    transform: scale(0);
+    // this makes sure it doesn't take space in the DOM
+    @apply absolute;
 
     &:checked ~ .material-checkbox-fake::after {
       content: 'check_box';
