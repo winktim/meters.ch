@@ -1,8 +1,13 @@
 .background-image {
-  background: #c8cfc7;
+  background: #e4e7e0;
   background-image: url(/images/background_low.jpg);
   background-attachment: fixed;
-  background-size: cover;
+  background-size: 1100px;
+  background-repeat: no-repeat;
   background-position-y: top;
   background-position-x: center;
+
+  @media (min-width: theme('screens.md')) {
+    background-size: cover;
+  }
 }
