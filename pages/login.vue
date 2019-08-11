@@ -22,11 +22,15 @@
       />
 
       <div class="w-full pt-4 flex justify-between">
-        <label class="flex-grow" for="password-input" v-text="$t('pages.login.form.password')"></label>
+        <label
+          class="flex-grow flex items-center"
+          for="password-input"
+          v-text="$t('pages.login.form.password')"
+        ></label>
         <nuxt-link
           tabindex="1"
           :to="{ path: 'reset', query: { email: email }}"
-          class="green-link text-right ml-4"
+          class="green-link text-right ml-4 p-4 md:p-0"
           v-text="$t('pages.login.form.forgotten-password')"
         ></nuxt-link>
       </div>
@@ -69,18 +73,25 @@
       href="https://naito.one/meters"
       v-text="$t('pages.login.new-client')"
     ></a>
-
-    <!-- error message -->
-    <div
-      class="fixed top-0 mt-16 w-5/6 md:w-auto mx-auto bg-red-600 text-gray-100 p-4 rounded-md shadow flex"
-      v-if="showErrorMessage"
-    >
-      <span class="text-center w-full" v-text="$t(errorMessage)"></span>
-    </div>
   </div>
 </template>
 <script>
 export default {
+  head() {
+    return {
+      title: `${this.$t('pages.login.title')} - Meters`,
+      htmlAttrs: {
+        lang: this.$store.state.locale,
+      },
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('pages.login.description'),
+        },
+      ],
+    }
+  },
   beforeMount() {
     if (this.$store.state.apiToken !== null) {
       this.$router.replace('/')
@@ -89,8 +100,6 @@ export default {
   data() {
     return {
       loggingIn: false,
-      showErrorMessage: false,
-      errorMessage: 'error.unknown',
       email: '',
     }
   },
@@ -103,27 +112,16 @@ export default {
       const password = event.target[1].value
       const rememberMe = event.target[2].checked
 
-      // hide a potential error message
-      this.showErrorMessage = false
-
-      // TODO: remove fake delay
-      // await new Promise(resolve => setTimeout(resolve, 3000))
+      // hide a potential message
+      this.$store.dispatch('hideMessage')
 
       try {
-        const res = await fetch(this.$store.state.api + '/login', {
-          method: 'POST',
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
+        const res = await this.$post('/login', {
+          email,
+          password,
         })
 
         const parsed = await res.json()
-        console.log(parsed)
 
         // TODO: handle API errors
         if (!res.ok) {
@@ -135,17 +133,16 @@ export default {
           if (parsed.errors) {
             // get and show the first error message
             const firstError = Object.values(parsed.errors)[0][0]
-            if (firstError === 'These credentials do not match our records.') {
-              this.errorMessage = 'error.credentials'
-            }
+            this.$store.dispatch('showMessage', {
+              message: firstError,
+              isError: true,
+            })
+          } else {
+            this.$store.dispatch('showMessage', {
+              message: parsed.message,
+              isError: true,
+            })
           }
-
-          this.showErrorMessage = true
-
-          setTimeout(() => {
-            this.showErrorMessage = false
-            this.errorMessage = 'error.unknown'
-          }, 7000)
 
           // stop here
           return
@@ -156,18 +153,16 @@ export default {
         }
 
         localStorage.setItem('hasConnected', true)
-        this.$store.commit('SET_API_TOKEN', { apiToken: parsed.apiToken })
+        this.$store.commit('SET_API_TOKEN', { apiToken: parsed.api_token })
 
         this.$router.push('/')
       } catch (e) {
         console.error('Error getting response', e)
 
-        this.showErrorMessage = true
-
-        setTimeout(() => {
-          this.showErrorMessage = false
-          this.errorMessage = 'error.unknown'
-        }, 10000)
+        this.$store.dispatch('showMessage', {
+          message: this.$t('error.unknown'),
+          isError: true,
+        })
       } finally {
         this.loggingIn = false
       }

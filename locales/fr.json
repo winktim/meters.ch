@@ -1,41 +1,55 @@
 {
-	"alt": {
-		"naito-one-logo": "Logo Naito One"
-	},
-	"error": {
-		"credentials": "Ces identifiants ne correspondent pas.",
-		"unknown": "Une erreur s'est produite. Veuillez réessayer plus tard."
-	},
-	"menu": {
-		"alerts": "Alertes",
-		"explore": "Explorer les données",
-		"infos": "Informations",
-		"objectives": "Objectifs"
-	},
-	"pages": {
-		"index": {
-			"hello": "Bonjour, {name}",
-			"summary": "Vous possédez <strong>{sensors} capteurs</strong> en ligne sur <strong>{sites} sites</strong>.",
-			"summary-small": "<strong>{sensors} capteurs</strong> en ligne sur <strong>{sites} sites</strong>.",
-			"title": "Tableau de bord"
-		},
-		"login": {
-			"form": {
-				"email": "Adresse email",
-				"forgotten-password": "Mot de passe oublié",
-				"password": "Mot de passe",
-				"remember-me": "Rester connecté",
-				"submit": "Connexion"
-			},
-			"new-client": "Pas encore client ? Découvrez meters.ch !",
-			"title": "Portail de connexion Meters.ch"
-		},
-		"reset": {
-			"form": {
-				"explain": "Entrez votre adresse email afin de recevoir un lien de réinitialisation.",
-				"submit": "Réinitialiser le mot de passe"
-			},
-			"title": "Mot de passe oublié"
-		}
-	}
+  "alt": {
+    "naito-one-logo": "Logo Naito One"
+  },
+  "error": {
+    "unknown": "Une erreur s'est produite. Veuillez réessayer plus tard."
+  },
+  "menu": {
+    "alerts": "Alertes",
+    "explore": "Explorer les données",
+    "infos": "Informations",
+    "objectives": "Objectifs"
+  },
+  "pages": {
+    "index": {
+      "hello": "Bonjour, {name}",
+      "summary": "Vous possédez <strong>{sensor}</strong> en ligne sur <strong>{site}</strong>.",
+      "sensor": "capteur | capteurs",
+      "site": "site | sites",
+      "summary-small": "<strong>{sensor}</strong> en ligne sur <strong>{site}</strong>.",
+      "title": "Tableau de bord",
+      "description": "Explorez vos données sur le tableau de bord en ligne de Meters"
+    },
+    "login": {
+      "form": {
+        "email": "Adresse email",
+        "forgotten-password": "Mot de passe oublié",
+        "password": "Mot de passe",
+        "remember-me": "Rester connecté",
+        "submit": "Connexion"
+      },
+      "new-client": "Pas encore client ? Découvrez meters.ch !",
+      "title": "Portail de connexion Meters.ch",
+      "description": "Connectez-vous au tableau de bord en ligne de Meters avec vos identifiants"
+    },
+    "reset": {
+      "form": {
+        "explain": "Entrez votre adresse email afin de recevoir un lien de réinitialisation.",
+        "note": "Si vous ne recevez pas d'email, pensez à vérifier votre dossier SPAM.",
+        "submit": "Réinitialiser le mot de passe"
+      },
+      "title": "Mot de passe oublié",
+      "description": "Demandez un email de réinitialisation pour le mot de passe de votre compte Meters"
+    },
+    "fresh": {
+      "form": {
+        "explain": "Veuillez entrer un nouveau mot de passe pour votre compte.",
+        "confirm": "Confirmer le mot de passe",
+        "submit": "Enregistrer et se connecter"
+      },
+      "title": "Nouveau mot de passe",
+      "description": "Créez un nouveau mot de passe pour votre compte Meters à partir d'un lien reçu par email"
+    }
+  }
 }

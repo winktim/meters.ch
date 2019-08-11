@@ -2,7 +2,7 @@
   <div class="mt-4 lg:mt-16 section">
     <section class="section">
       <img src="/images/naito-900.svg" :alt="$t('alt.naito-one-logo')" class="w-32" />
-      <h1 class="font-heading text-2xl text-center" v-text="$t('pages.reset.title')"></h1>
+      <h1 class="font-heading text-2xl text-center" v-text="$t('pages.fresh.title')"></h1>
     </section>
 
     <form
@@ -10,23 +10,30 @@
       action="#"
       @submit="reset"
     >
-      <p class="text-center text-gray-800" v-text="$t('pages.reset.form.explain')"></p>
-      <p class="text-center text-gray-600 mb-4" v-text="$t('pages.reset.form.note')"></p>
-      <label class="w-full" for="email-input" v-text="$t('pages.login.form.email')"></label>
+      <p class="text-center text-gray-800 mb-4" v-text="$t('pages.fresh.form.explain')"></p>
+      <label class="w-full" for="password-input" v-text="$t('pages.login.form.password')"></label>
       <input
         :disabled="resetting"
-        v-model="email"
         class="w-full px-4 py-2 mb-8 transparent-input"
-        type="email"
-        name="email-input"
-        id="email-input"
+        type="password"
+        name="password-input"
+        id="password-input"
+        required
+      />
+      <label class="w-full" for="confirm-input" v-text="$t('pages.fresh.form.confirm')"></label>
+      <input
+        :disabled="resetting"
+        class="w-full px-4 py-2 mb-8 transparent-input"
+        type="password"
+        name="confirm-input"
+        id="confirm-input"
         required
       />
       <input
         :disabled="resetting"
         class="action w-full bg-naito-green-200 text-gray-100"
         type="submit"
-        :value="$t('pages.reset.form.submit')"
+        :value="$t('pages.fresh.form.submit')"
       />
     </form>
   </div>
@@ -35,7 +42,7 @@
 export default {
   head() {
     return {
-      title: `${this.$t('pages.reset.title')} - Meters`,
+      title: `${this.$t('pages.fresh.title')} - Meters`,
       htmlAttrs: {
         lang: this.$store.state.locale,
       },
@@ -43,23 +50,27 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: this.$t('pages.reset.description'),
+          content: this.$t('pages.fresh.description'),
         },
       ],
     }
   },
   mounted() {
-    this.email = this.$route.query.email
+    this.verifyToken = this.$route.query.verify_token
   },
   beforeMount() {
     if (this.$store.state.apiToken !== null) {
       this.$router.replace('/')
     }
+
+    if (!this.$route.query.verify_token) {
+      this.$router.replace('/login')
+    }
   },
   data() {
     return {
+      verifyToken: null,
       resetting: false,
-      email: '',
     }
   },
   methods: {
@@ -67,20 +78,23 @@ export default {
       event.preventDefault()
 
       this.resetting = true
-      const email = event.target[0].value
+      const password = event.target[0].value
+      const password_confirmation = event.target[1].value
 
       // hide a potential message
       this.$store.dispatch('hideMessage')
 
       try {
-        const res = await this.$get('/reset', {
-          email,
+        const res = await this.$post('/reset', {
+          verify_token: this.verifyToken,
+          password,
+          password_confirmation,
         })
 
         const parsed = await res.json()
 
         if (!res.ok) {
-          // focus email
+          // focus password
           event.target[0].focus()
 
           if (parsed.errors) {
@@ -95,20 +109,17 @@ export default {
               message: parsed.message,
               isError: true,
             })
+            this.$router.push('/reset')
           }
 
           // stop here
           return
         }
 
-        // store the message then return to the login page
+        localStorage.setItem('hasConnected', true)
+        this.$store.commit('SET_API_TOKEN', { apiToken: parsed.api_token })
 
-        this.$store.dispatch('showMessage', {
-          message: parsed.message,
-          isError: false,
-        })
-
-        this.$router.push('/login')
+        this.$router.push('/')
       } catch (e) {
         console.error('Error getting response', e)
 

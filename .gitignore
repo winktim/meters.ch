@@ -16,3 +16,6 @@ node_modules/
 
 # Nuxt generate
 dist
+
+# env variables
+.env*

@@ -1,13 +1,15 @@
 import path from 'path'
 import glob from 'glob-all'
 
+import './config'
+
 export default {
   mode: 'universal',
   /*
    ** Headers of the page
    */
   head: {
-    title: 'Naito One',
+    title: 'Meters',
     htmlAttrs: {
       lang: 'en',
     },
@@ -15,6 +17,12 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { 'http-equiv': 'X-UA-Compatible', 'content': 'ie=edge' },
+      {
+        hid: 'description',
+        name: 'description',
+        content:
+          "Meters is a service that helps you manage your company's energy consumption and temperatures",
+      },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
@@ -37,7 +45,9 @@ export default {
    */
   plugins: [
     '~/plugins/vue-i18n',
+    { src: '~/plugins/requests', mode: 'client' },
     { src: '~/plugins/client-data', mode: 'client' },
+    { src: '~/plugins/api', mode: 'client' },
   ],
   /*
    ** Nuxt.js modules

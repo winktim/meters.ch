@@ -1,41 +1,55 @@
 {
-	"alt": {
-		"naito-one-logo": "Naito One Logo"
-	},
-	"error": {
-		"credentials": "These credentials do not match our records.",
-		"unknown": "An error occurred. Please try again later."
-	},
-	"menu": {
-		"alerts": "Alerts",
-		"explore": "Explore the data",
-		"infos": "Information",
-		"objectives": "Objectives"
-	},
-	"pages": {
-		"index": {
-			"hello": "Hello, {name}",
-			"summary": "You have <strong>{sensors} sensors</strong> online on <strong>{sites} sites</strong>.",
-			"summary-small": "<strong>{sensors} sensors</strong> online on <strong>{sites} sites</strong>.",
-			"title": "Dashboard"
-		},
-		"login": {
-			"form": {
-				"email": "Email address",
-				"forgotten-password": "Forgotten password",
-				"password": "Password",
-				"remember-me": "Stay logged in",
-				"submit": "Login"
-			},
-			"new-client": "Not a client yet ? Discover meters.ch !",
-			"title": "Login portal of Meters.ch"
-		},
-		"reset": {
-			"form": {
-				"explain": "Enter your email address to receive a reset link.",
-				"submit": "Reset password"
-			},
-			"title": "Forgotten password"
-		}
-	}
+  "alt": {
+    "naito-one-logo": "Naito One Logo"
+  },
+  "error": {
+    "unknown": "An error occurred. Please try again later."
+  },
+  "menu": {
+    "alerts": "Alerts",
+    "explore": "Explore the data",
+    "infos": "Information",
+    "objectives": "Objectives"
+  },
+  "pages": {
+    "index": {
+      "hello": "Hello, {name}",
+      "summary": "You have <strong>{sensor}</strong> online on <strong>{site}</strong>.",
+      "sensor": "sensor | sensors",
+      "site": "site | sites",
+      "summary-small": "<strong>{sensor}</strong> online on <strong>{site}</strong>.",
+      "title": "Dashboard",
+      "description": "Explore your data on the Meters online dashboard"
+    },
+    "login": {
+      "form": {
+        "email": "Email address",
+        "forgotten-password": "Forgotten password",
+        "password": "Password",
+        "remember-me": "Stay logged in",
+        "submit": "Login"
+      },
+      "new-client": "Not a client yet ? Discover meters.ch !",
+      "title": "Login portal of Meters.ch",
+      "description": "Login to the Meters online dashboard using your credentials"
+    },
+    "reset": {
+      "form": {
+        "explain": "Enter your email address to receive a reset link.",
+        "note": "If you don't recieve the email, check your SPAM folder.",
+        "submit": "Reset password"
+      },
+      "title": "Forgotten password",
+      "description": "Ask for an email to reset the password of your Meters account"
+    },
+    "fresh": {
+      "form": {
+        "explain": "Please enter a new password for your account.",
+        "confirm": "Confirm password",
+        "submit": "Save and login"
+      },
+      "title": "New password",
+      "description": "Create a new password for your Meters account from a link given to you by email"
+    }
+  }
 }

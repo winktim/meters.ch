@@ -16,9 +16,9 @@
         <app-menu v-if="isMenuOpen" class="absolute top-full w-60 mt-1"></app-menu>
       </div>
       <div>
-        <p v-html="$t('pages.index.hello', { name:'Mouloude' })"></p>
-        <p class="sm:hidden" v-html="$t('pages.index.summary-small', { sensors: 12, sites: 3 })"></p>
-        <p class="hidden sm:block" v-html="$t('pages.index.summary', { sensors: 12, sites: 3 })"></p>
+        <p v-html="$t('pages.index.hello', { name })"></p>
+        <p class="sm:hidden" v-html="$t('pages.index.summary-small', sensorAndSitParams)"></p>
+        <p class="hidden sm:block" v-html="$t('pages.index.summary', sensorAndSitParams)"></p>
       </div>
     </section>
   </div>
@@ -28,11 +28,33 @@ import AppHeader from '../components/app-header.vue'
 import AppMenu from '../components/app-menu.vue'
 
 export default {
+  head() {
+    return {
+      title: `${this.$t('pages.index.title')} - Meters`,
+      htmlAttrs: {
+        lang: this.$store.state.locale,
+      },
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('pages.index.description'),
+        },
+      ],
+    }
+  },
   components: { AppHeader, AppMenu },
   beforeMount() {
     if (this.$store.state.apiToken === null) {
       this.$router.replace('/login')
     }
+  },
+  async mounted() {
+    await Promise.all([
+      this.$fetchUser(),
+      this.$fetchResources(),
+      this.$fetchSites(),
+    ])
   },
   data() {
     return {
@@ -43,6 +65,35 @@ export default {
     toggleMenu(event) {
       event.preventDefault()
       this.isMenuOpen = !this.isMenuOpen
+    },
+  },
+  computed: {
+    /**
+     * @returns {string}
+     */
+    name() {
+      return this.$store.getters.name
+    },
+    /**
+     * @returns {number}
+     */
+    numResources() {
+      return this.$store.getters.numResources
+    },
+    /**
+     * @returns {number}
+     */
+    numSites() {
+      return this.$store.getters.numSites
+    },
+    sensorAndSitParams() {
+      return {
+        sensor: `${this.numResources} ${this.$tc(
+          'pages.index.sensor',
+          this.numResources
+        )}`,
+        site: `${this.numSites} ${this.$tc('pages.index.site', this.numSites)}`,
+      }
     },
   },
 }

@@ -123,12 +123,12 @@
   }
 }
 
-.transperent-select {
+.transparent-select {
   > select {
     @apply clickable block appearance-none bg-transparent pr-4;
 
     &:focus {
-      @apply outline-none;
+      @apply outline-none shadow-outline;
     }
 
     > option {

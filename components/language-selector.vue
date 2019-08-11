@@ -1,5 +1,5 @@
 <template>
-  <div class="relative transperent-select">
+  <div class="relative transparent-select">
     <select
       aria-label="Choix de la langue"
       name="language-select"
