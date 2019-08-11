@@ -25,6 +25,7 @@ export default {
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    noscript: [{ innerHTML: 'This website requires JavaScript.' }],
   },
   /*
    ** Customize the progress-bar color
@@ -56,7 +57,16 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['nuxt-purgecss'],
+  modules: ['nuxt-purgecss', '@nuxtjs/pwa'],
+
+  // PWA
+  manifest: {
+    name: 'Meters.ch',
+    author: 'Naito One',
+    description:
+      "Meters is a service that helps you manage your company's energy consumption and temperatures",
+    theme_color: '#3C6285',
+  },
 
   purgeCSS: {
     paths: glob.sync([
