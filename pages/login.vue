@@ -77,6 +77,7 @@
 </template>
 <script>
 export default {
+  middleware: 'not-auth',
   head() {
     return {
       title: `${this.$t('pages.login.title')} - Meters`,
@@ -90,11 +91,6 @@ export default {
           content: this.$t('pages.login.description'),
         },
       ],
-    }
-  },
-  beforeMount() {
-    if (this.$store.state.apiToken !== null) {
-      this.$router.replace('/')
     }
   },
   data() {

@@ -40,6 +40,7 @@
 </template>
 <script>
 export default {
+  middleware: ['has-verify-token', 'not-auth'],
   head() {
     return {
       title: `${this.$t('pages.fresh.title')} - Meters`,
@@ -57,15 +58,6 @@ export default {
   },
   mounted() {
     this.verifyToken = this.$route.query.verify_token
-  },
-  beforeMount() {
-    if (this.$store.state.apiToken !== null) {
-      this.$router.replace('/')
-    }
-
-    if (!this.$route.query.verify_token) {
-      this.$router.replace('/login')
-    }
   },
   data() {
     return {

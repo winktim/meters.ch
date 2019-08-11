@@ -33,6 +33,7 @@
 </template>
 <script>
 export default {
+  middleware: 'not-auth',
   head() {
     return {
       title: `${this.$t('pages.reset.title')} - Meters`,
@@ -50,11 +51,6 @@ export default {
   },
   mounted() {
     this.email = this.$route.query.email
-  },
-  beforeMount() {
-    if (this.$store.state.apiToken !== null) {
-      this.$router.replace('/')
-    }
   },
   data() {
     return {

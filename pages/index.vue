@@ -28,6 +28,7 @@ import AppHeader from '../components/app-header.vue'
 import AppMenu from '../components/app-menu.vue'
 
 export default {
+  middleware: 'needs-auth',
   head() {
     return {
       title: `${this.$t('pages.index.title')} - Meters`,
@@ -44,11 +45,6 @@ export default {
     }
   },
   components: { AppHeader, AppMenu },
-  beforeMount() {
-    if (this.$store.state.apiToken === null) {
-      this.$router.replace('/login')
-    }
-  },
   async mounted() {
     await Promise.all([
       this.$fetchUser(),

@@ -1,10 +1,10 @@
 import path from 'path'
 import glob from 'glob-all'
 
-import './config'
+import config from './config'
 
 export default {
-  mode: 'universal',
+  mode: 'spa',
   /*
    ** Headers of the page
    */
@@ -46,9 +46,13 @@ export default {
   plugins: [
     '~/plugins/vue-i18n',
     { src: '~/plugins/requests', mode: 'client' },
-    { src: '~/plugins/client-data', mode: 'client' },
     { src: '~/plugins/api', mode: 'client' },
   ],
+
+  router: {
+    middleware: 'client-data',
+  },
+
   /*
    ** Nuxt.js modules
    */
@@ -76,4 +80,6 @@ export default {
      */
     extend(config, ctx) {},
   },
+
+  env: config.parsed,
 }
