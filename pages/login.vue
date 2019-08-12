@@ -1,7 +1,7 @@
 <template>
   <div class="mt-4 lg:mt-16 section">
     <section class="section">
-      <img src="/images/naito-900.svg" :alt="$t('alt.naito-one-logo')" class="w-32" />
+      <img src="/images/naito-900.svg" :alt="$t('alt.naito-one-logo')" class="w-16 sm:mb-2 md:w-32" />
       <h1 class="font-heading text-2xl text-center" v-text="$t('pages.login.title')"></h1>
     </section>
 
@@ -10,7 +10,7 @@
       action="#"
       @submit="login"
     >
-      <label class="w-full" for="email-input" v-text="$t('pages.login.form.email')"></label>
+      <label class="w-full" for="email-input" v-text="$t('global.email')"></label>
       <input
         :disabled="loggingIn"
         v-model="email"

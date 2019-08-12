@@ -4,7 +4,11 @@
       :class="['fixed', 'top-0', 'left-0', 'w-screen', 'h-screen', isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none']"
       @click="isMenuOpen = false"
     ></div>
-    <app-header :title="$t('pages.index.title')" :back="false"></app-header>
+    <app-header
+      :title="$t('pages.index.title')"
+      :description="$t('pages.index.description')"
+      :back="false"
+    ></app-header>
 
     <section class="bg-gray-100 rounded-md p-4 flex items-center">
       <div class="relative">
@@ -46,11 +50,7 @@ export default {
   },
   components: { AppHeader, AppMenu },
   async mounted() {
-    await Promise.all([
-      this.$fetchUser(),
-      this.$fetchResources(),
-      this.$fetchSites(),
-    ])
+    await Promise.all([this.$getUser(), this.$getResources(), this.$getSites()])
   },
   data() {
     return {

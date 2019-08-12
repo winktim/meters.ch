@@ -1,11 +1,12 @@
 <template>
   <div class="relative transparent-select">
     <select
-      aria-label="Choix de la langue"
+      :aria-label="$t(label)"
+      :title="$t(label)"
       name="language-select"
       id="language-select"
       class="px-2 w-15 h-15 font-heading text-sm"
-      @change="SET_LOCALE({ locale: $event.target.value })"
+      @change="$emit('change', { locale: $event.target.value })"
       :value="locale"
     >
       <option v-for="(locale, i) in locales" :key="i" :value="locale" v-text="locale.toUpperCase()"></option>
@@ -13,18 +14,19 @@
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
-
 export default {
-  methods: {
-    ...mapMutations(['SET_LOCALE']),
-  },
-  computed: {
-    locales() {
-      return this.$store.state.locales
+  props: {
+    locales: {
+      type: Array,
+      required: true,
     },
-    locale() {
-      return this.$store.state.locale
+    locale: {
+      type: String,
+      required: true,
+    },
+    label: {
+      type: String,
+      required: true,
     },
   },
 }

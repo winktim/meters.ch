@@ -1,9 +1,17 @@
 {
+  "global": {
+    "email": "Email address",
+    "set_locale": "Language selection",
+    "back": "Go back"
+  },
   "alt": {
     "naito-one-logo": "Naito One Logo"
   },
   "error": {
     "unknown": "An error occurred. Please try again later."
+  },
+  "api": {
+    "user_updated": "User information successfully saved"
   },
   "menu": {
     "alerts": "Alerts",
@@ -19,11 +27,40 @@
       "site": "site | sites",
       "summary-small": "<strong>{sensor}</strong> online on <strong>{site}</strong>.",
       "title": "Dashboard",
-      "description": "Explore your data on the Meters online dashboard"
+      "description": "View your saved graphs and access the functionalities of the Meters website"
+    },
+    "infos": {
+      "title": "Information",
+      "description": "Get information about your account and company on Meters",
+      "client": "Client",
+      "user": "User",
+      "locale_explain": "This language is only used when we send you emails.",
+      "data": {
+        "client_name": "Company",
+        "client_number": "Client number",
+        "num_sensors": "Number of sensors",
+        "num_sites": "Number of sites",
+        "user_name": "Name",
+        "created_at": "Account creation",
+        "locale": "Contact language"
+      },
+      "support": "Contact support",
+      "logout": "Logout"
+    },
+    "explore": {
+      "title": "Explore",
+      "description": "Explore your data in details, download it and save graphs to your dashboard",
+      "period": "Period",
+      "to": "to"
+    },
+    "objectives": {
+      "title": "Objectives",
+      "description": "View, edit and create new objectives on the Meters platform",
+      "info": "Recieve weekly or monthly reports of your energy consumption to reach your objectives.",
+      "new": "New objective"
     },
     "login": {
       "form": {
-        "email": "Email address",
         "forgotten-password": "Forgotten password",
         "password": "Password",
         "remember-me": "Stay logged in",

@@ -1,10 +1,23 @@
-export default function({ store }) {
-  console.log('running client data')
-  const locale = localStorage.getItem('locale')
-  if (locale) {
-    // set it immidiatly for the first requests to use it
-    store.commit('SET_LOCALE', { locale })
+function getNavigatorLanguage() {
+  if (navigator.languages && navigator.languages.length) {
+    return navigator.languages[0]
+  } else {
+    return (
+      navigator.userLanguage ||
+      navigator.language ||
+      navigator.browserLanguage ||
+      'en'
+    )
   }
+}
+
+export default function({ store }) {
+  if (store.state.readClientData) {
+    return
+  }
+
+  const locale = localStorage.getItem('locale')
+  store.commit('SET_LOCALE', { locale: locale || getNavigatorLanguage() })
 
   const apiToken = localStorage.getItem('apiToken')
   if (apiToken) {
@@ -17,4 +30,6 @@ export default function({ store }) {
       isProbablyClient: hasConnected === 'true',
     })
   }
+
+  store.commit('SET_READ_CLIENT_DATA', { readClientData: true })
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="fixed top-0 mt-16 flex justify-center w-full">
-    <div :class="classes" v-if="show">
+    <div :class="classes">
       <span class="text-center w-full" v-text="lastMessage"></span>
     </div>
   </div>
@@ -19,7 +19,12 @@ export default {
         'rounded-md',
         'shadow',
         'flex',
-      ]
+        'transition-opacity-200',
+      ].concat(
+        this.show
+          ? ['opacity-1', 'pointer-events-auto', 'notice-me-senpai']
+          : ['opacity-0', 'pointer-events-none']
+      )
     },
     /**
      * @returns {boolean}

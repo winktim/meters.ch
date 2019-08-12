@@ -1,9 +1,17 @@
 {
+  "global": {
+    "email": "Adresse email",
+    "set_locale": "Choix de la langue",
+    "back": "Retour"
+  },
   "alt": {
     "naito-one-logo": "Logo Naito One"
   },
   "error": {
     "unknown": "Une erreur s'est produite. Veuillez réessayer plus tard."
+  },
+  "api": {
+    "user_updated": "Informations utilisateur enregistrées avec succès"
   },
   "menu": {
     "alerts": "Alertes",
@@ -19,11 +27,40 @@
       "site": "site | sites",
       "summary-small": "<strong>{sensor}</strong> en ligne sur <strong>{site}</strong>.",
       "title": "Tableau de bord",
-      "description": "Explorez vos données sur le tableau de bord en ligne de Meters"
+      "description": "Visionnez les graphiques sauvegardés et accédez aux fonctionnalitées du site Meters"
+    },
+    "infos": {
+      "title": "Informations",
+      "description": "Obtenez des informations concernant votre compte et votre entreprise chez Meters",
+      "client": "Client",
+      "user": "Utilisateur",
+      "locale_explain": "Cette langue n'est utilisée que lorsque nous vous envoyons des emails.",
+      "data": {
+        "client_name": "Entreprise",
+        "client_number": "Numéro de client",
+        "num_sensors": "Nombre de capteurs",
+        "num_sites": "Nombre de sites",
+        "user_name": "Nom",
+        "created_at": "Création du compte",
+        "locale": "Langue de contact"
+      },
+      "support": "Contacter le support",
+      "logout": "Se déconnecter"
+    },
+    "explore": {
+      "title": "Explorer",
+      "description": "Explorez vos données en détails, téléchargez-les et ajoutez des graphiques à votre tableau de bord",
+      "period": "Période",
+      "to": "au"
+    },
+    "objectives": {
+      "title": "Objectifs",
+      "description": "Visionnez, éditez et créez de nouveaux objectifs sur la plateforme Meters",
+      "info": "Recevez des rapports hebdomadaires ou mensuels de vos dépenses énergétiques afin d’atteindre vos objectifs.",
+      "new": "Nouvel objectif"
     },
     "login": {
       "form": {
-        "email": "Adresse email",
         "forgotten-password": "Mot de passe oublié",
         "password": "Mot de passe",
         "remember-me": "Rester connecté",

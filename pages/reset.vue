@@ -12,7 +12,7 @@
     >
       <p class="text-center text-gray-800" v-text="$t('pages.reset.form.explain')"></p>
       <p class="text-center text-gray-600 mb-4" v-text="$t('pages.reset.form.note')"></p>
-      <label class="w-full" for="email-input" v-text="$t('pages.login.form.email')"></label>
+      <label class="w-full" for="email-input" v-text="$t('global.email')"></label>
       <input
         :disabled="resetting"
         v-model="email"
