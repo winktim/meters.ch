@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-0 mt-16 flex justify-center w-full">
+  <div :class="parenClasses">
     <div :class="classes">
       <span class="text-center w-full" v-text="lastMessage"></span>
     </div>
@@ -20,11 +20,17 @@ export default {
         'shadow',
         'flex',
         'transition-opacity-200',
-      ].concat(
-        this.show
-          ? ['opacity-1', 'pointer-events-auto', 'notice-me-senpai']
-          : ['opacity-0', 'pointer-events-none']
-      )
+      ].concat(this.show ? ['opacity-1', , 'notice-me-senpai'] : ['opacity-0'])
+    },
+    parenClasses() {
+      return [
+        'fixed',
+        'top-0',
+        'mt-16',
+        'flex',
+        'justify-center',
+        'w-full',
+      ].concat(this.show ? ['pointer-events-auto'] : ['pointer-events-none'])
     },
     /**
      * @returns {boolean}
