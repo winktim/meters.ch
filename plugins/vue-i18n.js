@@ -8,6 +8,7 @@ Vue.use(VueI18n)
  */
 const localeMapper = {
   en: 'en-ch',
+  // TODO: fixe de for dates
   fr: 'de-ch',
   de: 'de-ch',
 }
