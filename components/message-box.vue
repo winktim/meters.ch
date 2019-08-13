@@ -20,7 +20,11 @@ export default {
         'shadow',
         'flex',
         'transition-opacity-200',
-      ].concat(this.show ? ['opacity-1', , 'notice-me-senpai'] : ['opacity-0'])
+      ].concat(
+        this.show
+          ? ['opacity-1', 'pointer-events-auto', 'notice-me-senpai']
+          : ['opacity-0']
+      )
     },
     parenClasses() {
       return [
@@ -30,7 +34,8 @@ export default {
         'flex',
         'justify-center',
         'w-full',
-      ].concat(this.show ? ['pointer-events-auto'] : ['pointer-events-none'])
+        'pointer-events-none',
+      ]
     },
     /**
      * @returns {boolean}
