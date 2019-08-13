@@ -1,9 +1,7 @@
 <template>
   <div :class="backClasses" ref="back" @click="cancelOnBack">
     <div :class="parentClasses">
-      <section
-        class="w-full sm:w-120 bg-gray-100 rounded-md p-4 shadow-lg flex flex-col justify-between"
-      >
+      <section :class="sectionClasses">
         <div class="overflow-y-auto max-h-full">
           <h2
             class="text-center font-heading text-2xl my-3"
@@ -167,7 +165,21 @@ export default {
         'md:pt-16',
         'h-auto',
         'max-h-screen',
+        'pointer-events-none',
       ]
+    },
+    sectionClasses() {
+      return [
+        'w-full',
+        'sm:w-120',
+        'bg-gray-100',
+        'rounded-md',
+        'p-4',
+        'shadow-lg',
+        'flex',
+        'flex-col',
+        'justify-between',
+      ].concat(this.show ? ['pointer-events-auto'] : [])
     },
     resource() {
       return this.$store.getters.resource({ resource_id: this.resource_id })
