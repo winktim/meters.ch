@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { indexOnId } from '../assets/utils'
 
 export const state = () => ({
   api: `${process.env.API_ROOT}/${process.env.API_VERSION}`,
@@ -27,8 +28,17 @@ export const state = () => ({
     sites: null,
     sensors: null,
     resources: null,
+    resourceTypes: null,
     client: null,
     readings: [],
+  },
+  dataById: {
+    alerts: null,
+    objectives: null,
+    sites: null,
+    sensors: null,
+    resources: null,
+    resourceTypes: null,
   },
 })
 
@@ -66,21 +76,43 @@ export const mutations = {
   SET_MESSAGE_TIMEOUT(state, { timeout }) {
     state.messageBox.timeout = timeout
   },
+
   SET_USER(state, { user }) {
     state.data.user = user
-  },
-  SET_RESOURCES(state, { resources }) {
-    state.data.resources = resources
-  },
-  SET_SITES(state, { sites }) {
-    state.data.sites = sites
   },
   SET_CLIENT(state, { client }) {
     state.data.client = client
   },
+
+  SET_RESOURCES(state, { resources }) {
+    state.data.resources = resources
+    state.dataById.resources = indexOnId(resources)
+  },
+  SET_RESOURCE_TYPES(state, { resourceTypes }) {
+    state.data.resourceTypes = resourceTypes
+    state.dataById.resourceTypes = indexOnId(resourceTypes)
+  },
+  SET_SENSORS(state, { sensors }) {
+    state.data.sensors = sensors
+    state.dataById.sensors = indexOnId(sensors)
+  },
+  SET_SITES(state, { sites }) {
+    state.data.sites = sites
+    state.dataById.sites = indexOnId(sites)
+  },
   SET_OBJECTIVES(state, { objectives }) {
     state.data.objectives = objectives
+    state.dataById.objectives = indexOnId(objectives)
   },
+  UPDATE_OBJECTIVE(state, { objective }) {
+    const current = state.dataById.objectives[objective.id]
+    Object.assign(current, objective)
+  },
+  ADD_OBJECTIVE(state, { objective }) {
+    state.data.objectives.push(objective)
+    state.dataById.objectives[objective.id] = objective
+  },
+
   SET_IS_APP_LOADING(state, { isAppLoading }) {
     state.isAppLoading = isAppLoading
   },
@@ -96,7 +128,7 @@ export const mutations = {
 }
 
 export const actions = {
-  showMessage({ commit, dispatch }, { message, isError }) {
+  showMessage({ commit, dispatch }, { message, isError, time }) {
     commit('SET_MESSAGE', { message, isError })
 
     dispatch('hideMessage')
@@ -107,7 +139,7 @@ export const actions = {
 
       const timeout = setTimeout(() => {
         commit('SET_SHOW_MESSAGE', { show: false })
-      }, 10000)
+      }, time || 10000)
 
       commit('SET_MESSAGE_TIMEOUT', { timeout })
     })
@@ -153,4 +185,52 @@ export const getters = {
   numResources: state =>
     state.data.resources ? state.data.resources.length : 0,
   numSites: state => (state.data.sites ? state.data.sites.length : 0),
+  objectives: state => (state.data.objectives ? state.data.objectives : []),
+
+  // Database relations getters
+
+  resource: state => hasResource => {
+    if (!hasResource) {
+      return null
+    }
+
+    if (state.dataById.resources === null) {
+      return null
+    }
+
+    return state.dataById.resources[hasResource.resource_id]
+  },
+  resourceType: state => hasResourceType => {
+    if (!hasResourceType) {
+      return null
+    }
+
+    if (state.dataById.resourceTypes === null) {
+      return null
+    }
+
+    return state.dataById.resourceTypes[hasResourceType.resource_type_id]
+  },
+  sensor: state => hasSensor => {
+    if (!hasSensor) {
+      return null
+    }
+
+    if (state.dataById.sensors === null) {
+      return null
+    }
+
+    return state.dataById.sensors[hasSensor.sensor_id]
+  },
+  site: state => hasSite => {
+    if (!hasSite) {
+      return null
+    }
+
+    if (state.dataById.sites === null) {
+      return null
+    }
+
+    return state.dataById.sites[hasSite.site_id]
+  },
 }

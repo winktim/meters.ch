@@ -9,10 +9,19 @@ export default ({ app, store, redirect }, inject) => {
         const parsed = await res.json()
 
         if (!res.ok) {
-          store.dispatch('showMessage', {
-            message: parsed.message,
-            isError: true,
-          })
+          if (parsed.errors) {
+            // get and show the first error message
+            const firstError = Object.values(parsed.errors)[0][0]
+            store.dispatch('showMessage', {
+              message: firstError,
+              isError: true,
+            })
+          } else {
+            store.dispatch('showMessage', {
+              message: parsed.message,
+              isError: true,
+            })
+          }
 
           if (res.status === 401 || res.status === 403) {
             store.dispatch('logout')
@@ -63,7 +72,7 @@ export default ({ app, store, redirect }, inject) => {
     }
 
     try {
-      const parsed = await classi('get', '/resourceTypes')
+      const parsed = await classic('get', '/resourceTypes')
       store.commit('SET_RESOURCE_TYPES', { resourceTypes: parsed })
     } catch (e) {}
   })
@@ -76,6 +85,17 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/sites')
       store.commit('SET_SITES', { sites: parsed })
+    } catch (e) {}
+  })
+
+  inject('getSensors', async function(force) {
+    if (store.state.data.sensors !== null && !force) {
+      return
+    }
+
+    try {
+      const parsed = await classic('get', '/sensors')
+      store.commit('SET_SENSORS', { sensors: parsed })
     } catch (e) {}
   })
 
@@ -101,6 +121,8 @@ export default ({ app, store, redirect }, inject) => {
     } catch (e) {}
   })
 
+  // PUT
+
   inject('putUser', async function(payload) {
     if (store.state.data.user === null) {
       return
@@ -119,6 +141,47 @@ export default ({ app, store, redirect }, inject) => {
       store.dispatch('showMessage', {
         message: app.i18n.t('api.user_updated'),
         isError: false,
+        time: 1500,
+      })
+    } catch (e) {}
+  })
+
+  inject('putObjective', async function(payload) {
+    if (store.state.data.objectives === null) {
+      return
+    }
+
+    try {
+      const parsed = await classic('put', `/objectives/${payload.id}`, payload)
+
+      // new objective infos are returned on success
+      store.commit('UPDATE_OBJECTIVE', { objective: parsed })
+
+      store.dispatch('showMessage', {
+        message: app.i18n.t('api.objective_updated'),
+        isError: false,
+        time: 1500,
+      })
+    } catch (e) {}
+  })
+
+  // POST
+
+  inject('postObjective', async function(payload) {
+    if (store.state.data.objectives === null) {
+      return
+    }
+
+    try {
+      const parsed = await classic('post', '/objectives', payload)
+
+      // new objective infos are returned on success
+      store.commit('ADD_OBJECTIVE', { objective: parsed })
+
+      store.dispatch('showMessage', {
+        message: app.i18n.t('api.objective_created'),
+        isError: false,
+        time: 1500,
       })
     } catch (e) {}
   })

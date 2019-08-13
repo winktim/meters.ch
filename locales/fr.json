@@ -2,7 +2,22 @@
   "global": {
     "email": "Adresse email",
     "set_locale": "Choix de la langue",
-    "back": "Retour"
+    "back": "Retour",
+    "cancel": "Annuler",
+    "confirm": "Valider"
+  },
+  "features": {
+    "resource_types": {
+      "Temperature": "Température",
+      "Water": "Eau",
+      "Electricity": "Électricité",
+      "Gas": "Gaz",
+      "Oil": "Mazout"
+    },
+    "objective_types": {
+      "weekly": "semaine",
+      "monthly": "mois"
+    }
   },
   "alt": {
     "naito-one-logo": "Logo Naito One"
@@ -11,7 +26,9 @@
     "unknown": "Une erreur s'est produite. Veuillez réessayer plus tard."
   },
   "api": {
-    "user_updated": "Informations utilisateur enregistrées avec succès"
+    "user_updated": "Informations utilisateur enregistrées avec succès",
+    "objective_updated": "Objectif enregistré avec succès",
+    "objective_created": "Nouvel objectif créé avec succès"
   },
   "menu": {
     "alerts": "Alertes",
@@ -57,7 +74,20 @@
       "title": "Objectifs",
       "description": "Visionnez, éditez et créez de nouveaux objectifs sur la plateforme Meters",
       "info": "Recevez des rapports hebdomadaires ou mensuels de vos dépenses énergétiques afin d’atteindre vos objectifs.",
-      "new": "Nouvel objectif"
+      "modes": {
+        "create": "Nouvel objectif",
+        "edit": "Éditer l'objectif",
+        "delete": "Supprimer l'objectif"
+      },
+      "form": {
+        "weekly": "Hebdomadaire",
+        "monthly": "Mensuel",
+        "value": "Objectif",
+        "resource": "Ressource",
+        "objective": "Objectif de consommation",
+        "weekly_compare": "7 derniers jours",
+        "monthly_compare": "30 derniers jours"
+      }
     },
     "login": {
       "form": {

@@ -40,6 +40,7 @@ module.exports = {
           '700': '#616161',
           '800': '#424242',
           '900': '#212121',
+          'darken': '#21212155',
         },
         'naito-pink': {
           '100': '#DA91C9',
@@ -61,16 +62,22 @@ module.exports = {
       spacing: {
         '15': '3.75rem',
         '60': '15rem',
+        '100': '25rem',
       },
       width: {
         '100': '25rem',
         '120': '30rem',
+        '160': '40rem',
         '200': '50rem',
       },
       height: {
         '18': '4.5rem',
         '76': '19rem',
         '100': '25rem',
+        '200': '50rem',
+      },
+      maxHeight: {
+        '200': '50rem',
       },
       fontFamily: {
         content: ['Raleway', 'sans-serif'],

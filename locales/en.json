@@ -2,7 +2,22 @@
   "global": {
     "email": "Email address",
     "set_locale": "Language selection",
-    "back": "Go back"
+    "back": "Go back",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "features": {
+    "resource_types": {
+      "Temperature": "Temperature",
+      "Water": "Water",
+      "Electricity": "Electricity",
+      "Gas": "Gas",
+      "Oil": "Oil"
+    },
+    "objective_types": {
+      "weekly": "week",
+      "monthly": "month"
+    }
   },
   "alt": {
     "naito-one-logo": "Naito One Logo"
@@ -11,7 +26,9 @@
     "unknown": "An error occurred. Please try again later."
   },
   "api": {
-    "user_updated": "User information successfully saved"
+    "user_updated": "User information successfully saved",
+    "objective_updated": "Objective successfully saved",
+    "objective_created": "New objective successfully created"
   },
   "menu": {
     "alerts": "Alerts",
@@ -57,7 +74,20 @@
       "title": "Objectives",
       "description": "View, edit and create new objectives on the Meters platform",
       "info": "Recieve weekly or monthly reports of your energy consumption to reach your objectives.",
-      "new": "New objective"
+      "modes": {
+        "create": "New objective",
+        "edit": "Edit objective",
+        "delete": "Delete objective"
+      },
+      "form": {
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "value": "Objective",
+        "resource": "Resource",
+        "objective": "Consumption objective",
+        "weekly_compare": "Last 7 day",
+        "monthly_compare": "Last 30 days"
+      }
     },
     "login": {
       "form": {
