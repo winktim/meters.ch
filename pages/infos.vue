@@ -29,6 +29,7 @@
             :locale="userLocale"
             :locales="locales"
             :label="'global.set_locale'"
+            name="backend"
             @change="saveUserLocale"
           ></language-selector>
         </li>

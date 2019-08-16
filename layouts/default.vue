@@ -6,6 +6,7 @@
         :locale="locale"
         :locales="locales"
         :label="'global.set_locale'"
+        name="page"
         @change="SET_LOCALE($event)"
       ></language-selector>
     </div>
