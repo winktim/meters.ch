@@ -14,36 +14,33 @@
         v-for="(objective, i) in objectives"
         :key="i"
       >
-        <a
+        <button
           class="font-bold flex-grow py-4 pl-4 clickable focus:shadow-outline flex items-center"
-          href="#"
           @click="update($event, objective.id)"
           :title="$t('pages.objectives.modes.edit')"
         >
           <span class="flex-grow" v-text="objective.text"></span>
           <i class="material-icons text-naito-blue-100 text-lg px-5">edit</i>
-        </a>
+        </button>
 
-        <a
+        <button
           class="flex items-center text-naito-blue-100 text-lg py-4 px-5 clickable focus:shadow-outline"
-          href="#"
           @click="del($event, objective.id)"
           :title="$t('pages.objectives.modes.delete')"
         >
           <i class="material-icons">delete</i>
-        </a>
+        </button>
       </li>
     </ul>
 
     <div class="mt-4 mb-24 md:mt-8 flex justify-center">
-      <a
+      <button
         class="w-full lg:w-200 action bg-naito-blue-200 text-gray-100 text-center relative"
         @click="create"
-        href="#"
       >
         <i class="material-icons absolute left-0 ml-4">add</i>
         <span v-text="$t('pages.objectives.modes.create')"></span>
-      </a>
+      </button>
     </div>
 
     <objective-popup

@@ -12,11 +12,10 @@
 
     <section class="bg-gray-100 rounded-md p-4 flex items-center">
       <div class="relative">
-        <a
-          href="#"
+        <button
           @click="toggleMenu"
           class="round-action material-icons bg-naito-blue-200 text-gray-100 mr-4"
-        >menu</a>
+        >menu</button>
         <app-menu v-if="isMenuOpen" class="absolute top-full w-60 mt-1"></app-menu>
       </div>
       <div>
@@ -58,8 +57,7 @@ export default {
     }
   },
   methods: {
-    toggleMenu(event) {
-      event.preventDefault()
+    toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen
     },
   },

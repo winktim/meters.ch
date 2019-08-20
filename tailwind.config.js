@@ -78,6 +78,8 @@ module.exports = {
       },
       maxHeight: {
         '200': '50rem',
+        '32': '8rem',
+        '64': '16rem',
       },
       fontFamily: {
         content: ['Raleway', 'sans-serif'],

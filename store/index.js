@@ -112,6 +112,23 @@ export const mutations = {
     state.data.objectives.push(objective)
     state.dataById.objectives[objective.id] = objective
   },
+  REMOVE_OBJECTIVE(state, { objective }) {
+    const current = state.dataById.objectives[objective.id]
+
+    if (!current) {
+      return
+    }
+
+    delete state.dataById.objectives[objective.id]
+
+    const index = state.data.objectives.indexOf(current)
+
+    if (index === -1) {
+      return
+    }
+
+    state.data.objectives.splice(index, 1)
+  },
 
   SET_IS_APP_LOADING(state, { isAppLoading }) {
     state.isAppLoading = isAppLoading
@@ -182,6 +199,7 @@ export const getters = {
   clientName: state => (state.data.client ? state.data.client.name : '...'),
   clientNumber: state => (state.data.client ? state.data.client.number : '...'),
   clientEmail: state => (state.data.client ? state.data.client.email : '...'),
+  resources: state => (state.data.resources ? state.data.resources : []),
   numResources: state =>
     state.data.resources ? state.data.resources.length : 0,
   numSites: state => (state.data.sites ? state.data.sites.length : 0),

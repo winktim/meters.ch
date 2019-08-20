@@ -118,16 +118,22 @@
   }
 }
 
+.material-radio,
 .material-checkbox {
+  > .material-radio-fake,
   > .material-checkbox-fake {
-    cursor: pointer;
-    @apply p-2;
+    @apply p-2 cursor-pointer;
     &::after {
       content: 'check_box_outline_blank';
 
       font-family: 'Material Icons';
       @apply pointer-events-none select-none text-xl;
     }
+  }
+
+  // other icon for the radio
+  > .material-radio-fake::after {
+    content: 'radio_button_unchecked';
   }
 
   > input {
@@ -142,10 +148,17 @@
       content: 'check_box';
     }
 
+    // other icon for the radio
+    &:checked ~ .material-radio-fake::after {
+      content: 'radio_button_checked';
+    }
+
+    &:disabled ~ .material-radio-fake::after,
     &:disabled ~ .material-checkbox-fake::after {
       @apply disabled;
     }
 
+    &:focus ~ .material-radio-fake::after,
     &:focus ~ .material-checkbox-fake::after {
       @apply shadow-outline;
     }
@@ -169,6 +182,24 @@
 
   &:disabled {
     @apply disabled;
+  }
+}
+
+.wrapped-transparent-input {
+  > .wrapped-style {
+    @apply border-b-2 border-gray-300 transition-border-color-100;
+  }
+
+  > input {
+    @apply bg-transparent appearance-none outline-none;
+
+    &:focus ~ .wrapped-style {
+      @apply border-gray-700;
+    }
+
+    &:disabled ~ .wrapped-style {
+      @apply disabled;
+    }
   }
 }
 

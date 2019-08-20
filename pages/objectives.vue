@@ -14,36 +14,33 @@
         v-for="(objective, i) in objectives"
         :key="i"
       >
-        <a
+        <button
           class="font-bold flex-grow py-4 pl-4 clickable focus:shadow-outline flex items-center"
-          href="#"
-          @click="update($event, objective.id)"
+          @click="update(objective.id)"
           :title="$t('pages.objectives.modes.edit')"
         >
-          <span class="flex-grow" v-text="objective.text"></span>
+          <span class="flex-grow" v-text="objective.value"></span>
           <i class="material-icons text-naito-blue-100 text-lg px-5">edit</i>
-        </a>
+        </button>
 
-        <a
+        <button
           class="flex items-center text-naito-blue-100 text-lg py-4 px-5 clickable focus:shadow-outline"
-          href="#"
-          @click="del($event, objective.id)"
+          @click="del(objective.id)"
           :title="$t('pages.objectives.modes.delete')"
         >
           <i class="material-icons">delete</i>
-        </a>
+        </button>
       </li>
     </ul>
 
     <div class="mt-4 mb-24 md:mt-8 flex justify-center">
-      <a
+      <button
         class="w-full lg:w-200 action bg-naito-blue-200 text-gray-100 text-center relative"
         @click="create"
-        href="#"
       >
         <i class="material-icons absolute left-0 ml-4">add</i>
         <span v-text="$t('pages.objectives.modes.create')"></span>
-      </a>
+      </button>
     </div>
 
     <objective-popup
@@ -91,15 +88,13 @@ export default {
   },
   data() {
     return {
-      mode: 'edit',
+      mode: 'create',
       id: -1,
       show: false,
     }
   },
   methods: {
-    create(event) {
-      event.preventDefault()
-
+    create() {
       // make sure to hide any messages
       this.$store.dispatch('hideMessage')
 
@@ -107,9 +102,7 @@ export default {
       this.show = true
       return
     },
-    update(event, id) {
-      event.preventDefault()
-
+    update(id) {
       // make sure to hide any messages
       this.$store.dispatch('hideMessage')
 
@@ -117,10 +110,11 @@ export default {
       this.id = id
       this.show = true
     },
-    del(event, id) {
-      event.preventDefault()
+    del(id) {
+      // make sure to hide any messages
+      this.$store.dispatch('hideMessage')
 
-      // TODO: implement
+      this.$delObjective({ id })
     },
     popupCancel() {
       this.show = false
@@ -142,7 +136,7 @@ export default {
       return this.$store.getters.objectives.map(objective => {
         const out = {
           id: objective.id,
-          text: '',
+          value: '',
         }
 
         const resource = this.$store.getters.resource(objective)
@@ -164,7 +158,7 @@ export default {
         )
         const type = this.$t('features.objective_types.' + objective.type)
 
-        out.text = `${formattedResource}, ${objective.value} ${resourceType.symbol}/${type}`
+        out.value = `${formattedResource}, ${objective.value} ${resourceType.symbol}/${type}`
 
         return out
       })

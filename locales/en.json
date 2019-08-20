@@ -4,7 +4,8 @@
     "set_locale": "Language selection",
     "back": "Go back",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "no_results": "No results"
   },
   "features": {
     "resource_types": {
@@ -28,7 +29,8 @@
   "api": {
     "user_updated": "User information successfully saved",
     "objective_updated": "Objective successfully saved",
-    "objective_created": "New objective successfully created"
+    "objective_created": "New objective successfully created",
+    "objective_deleted": "Objective successfully deleted"
   },
   "menu": {
     "alerts": "Alerts",
@@ -86,7 +88,9 @@
         "resource": "Resource",
         "objective": "Consumption objective",
         "weekly_compare": "Last 7 day",
-        "monthly_compare": "Last 30 days"
+        "monthly_compare": "Last 30 days",
+        "find_resource": "Search for a resource",
+        "missing_resource": "Please select a resource to validate the objective"
       }
     },
     "login": {

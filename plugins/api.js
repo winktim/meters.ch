@@ -6,6 +6,12 @@ export default ({ app, store, redirect }, inject) => {
         store.dispatch('addAwaitingEvent', { awaitingEvent })
 
         const res = await awaitingEvent
+
+        // no content
+        if (res.status === 204) {
+          return resolve(null)
+        }
+
         const parsed = await res.json()
 
         if (!res.ok) {
@@ -181,7 +187,28 @@ export default ({ app, store, redirect }, inject) => {
       store.dispatch('showMessage', {
         message: app.i18n.t('api.objective_created'),
         isError: false,
-        time: 1500,
+        time: 2000,
+      })
+    } catch (e) {}
+  })
+
+  // DELETE
+
+  inject('delObjective', async function(payload) {
+    if (store.state.data.objectives === null) {
+      return
+    }
+
+    try {
+      await classic('delete', `/objectives/${payload.id}`)
+
+      // new objective infos are returned on success
+      store.commit('REMOVE_OBJECTIVE', { objective: payload })
+
+      store.dispatch('showMessage', {
+        message: app.i18n.t('api.objective_deleted'),
+        isError: false,
+        time: 2000,
       })
     } catch (e) {}
   })

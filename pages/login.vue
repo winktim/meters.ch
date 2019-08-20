@@ -119,7 +119,6 @@ export default {
 
         const parsed = await res.json()
 
-        // TODO: handle API errors
         if (!res.ok) {
           // focus email
           event.target[0].focus()

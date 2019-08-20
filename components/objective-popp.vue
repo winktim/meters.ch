@@ -2,51 +2,74 @@
   <div :class="backClasses" ref="back" @click="cancelOnBack">
     <div :class="parentClasses">
       <section :class="sectionClasses">
-        <div class="overflow-y-auto max-h-full">
+        <div class="overflow-y-auto max-h-full px-4 sm:px-6">
           <h2
             class="text-center font-heading text-2xl my-3"
             v-text="$t('pages.objectives.modes.' + mode)"
           ></h2>
           <!-- resource -->
-          <div>
-            <h3 class="font-bold text-lg" v-text="$t('pages.objectives.form.resource')"></h3>
-            <!-- TODO: implement abstract custom select with search -->
+          <div class="mb-8">
+            <h3 class="font-bold text-lg mb-2" v-text="$t('pages.objectives.form.resource')"></h3>
+            <select-search
+              name="resource"
+              :placeholder="$t('pages.objectives.form.find_resource')"
+              :options="formattedResources"
+              v-model="resource_id"
+            ></select-search>
           </div>
           <div class="flex flex-col mb-12">
-            <h3 class="font-bold text-lg" v-text="$t('pages.objectives.form.objective')"></h3>
+            <h3 class="font-bold text-lg mb-2" v-text="$t('pages.objectives.form.objective')"></h3>
             <!-- type -->
-            <div>
-              <input
-                type="radio"
-                id="type-weekly-input"
-                value="weekly"
-                name="type-input"
-                v-model="type"
-              />
-              <label for="type-weekly-input" v-text="$t('pages.objectives.form.weekly')"></label>
+            <div class="flex items-center">
+              <label class="material-radio text-naito-green-200" for="type-weekly-input">
+                <input
+                  type="radio"
+                  id="type-weekly-input"
+                  value="weekly"
+                  name="type-input"
+                  v-model="type"
+                />
+                <div class="material-radio-fake"></div>
+              </label>
+              <label
+                class="flex-grow select-none"
+                for="type-weekly-input"
+                v-text="$t('pages.objectives.form.weekly')"
+              ></label>
             </div>
 
-            <div>
-              <input
-                type="radio"
-                id="type-monthly-input"
-                value="monthly"
-                name="type-input"
-                v-model="type"
-              />
-              <label for="type-monthly-input" v-text="$t('pages.objectives.form.monthly')"></label>
+            <div class="flex items-center">
+              <label class="material-radio text-naito-green-200" for="type-monthly-input">
+                <input
+                  type="radio"
+                  id="type-monthly-input"
+                  value="monthly"
+                  name="type-input"
+                  v-model="type"
+                />
+                <div class="material-radio-fake"></div>
+              </label>
+              <label
+                class="flex-grow select-none"
+                for="type-monthly-input"
+                v-text="$t('pages.objectives.form.monthly')"
+              ></label>
             </div>
 
             <!-- value -->
-            <div class="flex text-gray-700">
+            <div class="flex items-center text-gray-700">
               <label class="w-1/2" v-text="compareString"></label>
               <span class="text-right flex-grow mx-2" v-text="compareValue"></span>
               <span v-text="symbol"></span>
             </div>
-            <div class="flex">
-              <label class="w-1/2" for="value-input" v-text="$t('pages.objectives.form.value')"></label>
+            <div class="flex items-center">
+              <label
+                class="w-1/2 select-none"
+                for="value-input"
+                v-text="$t('pages.objectives.form.value')"
+              ></label>
               <input
-                class="text-right flex-grow mx-2"
+                class="text-right flex-grow mx-2 py-2 transparent-input"
                 type="number"
                 min="0"
                 name="value-input"
@@ -59,26 +82,30 @@
         </div>
         <!-- actions -->
         <div class="flex mb-3">
-          <a
+          <button
             class="flex-grow mr-3 action bg-gray-600 text-gray-100 text-center"
-            href="#"
             @click="cancel"
             v-text="$t('global.cancel')"
-          ></a>
-          <a
+          ></button>
+          <button
+            :disabled="resource_id === -1"
+            :title="resource_id === -1 ? $t('pages.objectives.form.missing_resource') : ''"
             class="flex-grow ml-3 action bg-naito-green-200 text-gray-100 text-center"
-            href="#"
             @click="confirm"
             v-text="$t('global.confirm')"
-          ></a>
+          ></button>
         </div>
       </section>
     </div>
   </div>
 </template>
 <script>
+import { formatResource } from '../assets/utils'
+import SelectSearch from '../components/search-select'
+
 export default {
   name: 'MessageBox',
+  components: { SelectSearch },
   props: {
     show: Boolean,
     mode: String,
@@ -116,13 +143,10 @@ export default {
         this.$emit('cancel')
       }
     },
-    cancel(event) {
-      event.preventDefault()
+    cancel() {
       this.$emit('cancel')
     },
-    confirm(event) {
-      event.preventDefault()
-
+    confirm() {
       const payload = {
         type: this.type,
         value: this.value,
@@ -197,6 +221,26 @@ export default {
     compareValue() {
       // TODO implement
       return 0
+    },
+    allResources() {
+      return this.$store.getters.resources.filter(resource => {
+        const resourceType = this.$store.getters.resourceType(resource)
+        return resourceType && resourceType.name !== 'Temperature'
+      })
+    },
+    formattedResources() {
+      return this.allResources.map(resource => {
+        const resourceType = this.$store.getters.resourceType(resource)
+        let site = null
+        if (this.$store.getters.numSites > 1) {
+          const sensor = this.$store.getters.sensor(resource)
+          site = this.$store.getters.site(sensor)
+        }
+        return {
+          id: resource.id,
+          value: formatResource(this.$i18n, resource, resourceType, site),
+        }
+      })
     },
   },
 }
