@@ -116,6 +116,17 @@ export default ({ app, store, redirect }, inject) => {
     } catch (e) {}
   })
 
+  inject('getAlerts', async function(force) {
+    if (store.state.data.alerts !== null && !force) {
+      return
+    }
+
+    try {
+      const parsed = await classic('get', '/alerts')
+      store.commit('SET_ALERTS', { alerts: parsed })
+    } catch (e) {}
+  })
+
   inject('getClient', async function(force) {
     if (store.state.data.client !== null && !force) {
       return
@@ -166,7 +177,26 @@ export default ({ app, store, redirect }, inject) => {
       store.dispatch('showMessage', {
         message: app.i18n.t('api.objective_updated'),
         isError: false,
-        time: 1500,
+        time: 2000,
+      })
+    } catch (e) {}
+  })
+
+  inject('putAlert', async function(payload) {
+    if (store.state.data.alerts === null) {
+      return
+    }
+
+    try {
+      const parsed = await classic('put', `/alerts/${payload.id}`, payload)
+
+      // new alert infos are returned on success
+      store.commit('UPDATE_ALERT', { alert: parsed })
+
+      store.dispatch('showMessage', {
+        message: app.i18n.t('api.alert_updated'),
+        isError: false,
+        time: 2000,
       })
     } catch (e) {}
   })
@@ -192,6 +222,25 @@ export default ({ app, store, redirect }, inject) => {
     } catch (e) {}
   })
 
+  inject('postAlert', async function(payload) {
+    if (store.state.data.alerts === null) {
+      return
+    }
+
+    try {
+      const parsed = await classic('post', '/alerts', payload)
+
+      // new alert infos are returned on success
+      store.commit('ADD_ALERT', { alert: parsed })
+
+      store.dispatch('showMessage', {
+        message: app.i18n.t('api.alert_created'),
+        isError: false,
+        time: 2000,
+      })
+    } catch (e) {}
+  })
+
   // DELETE
 
   inject('delObjective', async function(payload) {
@@ -207,6 +256,24 @@ export default ({ app, store, redirect }, inject) => {
 
       store.dispatch('showMessage', {
         message: app.i18n.t('api.objective_deleted'),
+        isError: false,
+        time: 2000,
+      })
+    } catch (e) {}
+  })
+
+  inject('delAlert', async function(payload) {
+    if (store.state.data.alerts === null) {
+      return
+    }
+
+    try {
+      await classic('delete', `/alerts/${payload.id}`)
+
+      store.commit('REMOVE_ALERT', { alert: payload })
+
+      store.dispatch('showMessage', {
+        message: app.i18n.t('api.alert_deleted'),
         isError: false,
         time: 2000,
       })

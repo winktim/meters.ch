@@ -5,11 +5,12 @@
         <div class="overflow-y-auto max-h-full px-4 sm:px-6">
           <h2
             class="text-center font-heading text-2xl my-3"
-            v-text="$t('pages.objectives.modes.' + mode)"
+            v-text="$t('pages.alerts.modes.' + mode)"
           ></h2>
+
           <!-- resource -->
           <div class="mb-8">
-            <h3 class="font-bold text-lg mb-2" v-text="$t('pages.objectives.form.resource')"></h3>
+            <h3 class="font-bold text-lg mb-2" v-text="$t('pages.alerts.form.resource')"></h3>
             <select-search
               name="resource"
               :placeholder="$t('pages.objectives.form.find_resource')"
@@ -17,69 +18,102 @@
               v-model="resource_id"
             ></select-search>
           </div>
-          <div class="flex flex-col mb-12">
-            <h3 class="font-bold text-lg mb-2" v-text="$t('pages.objectives.form.objective')"></h3>
-            <!-- type -->
-            <div class="flex items-center">
-              <label class="material-radio text-naito-green-200" for="type-weekly-input">
-                <input
-                  type="radio"
-                  id="type-weekly-input"
-                  value="weekly"
-                  name="type-input"
-                  v-model="type"
-                />
-                <div class="material-radio-fake"></div>
-              </label>
-              <label
-                class="flex-grow select-none"
-                for="type-weekly-input"
-                v-text="$t('pages.objectives.form.weekly')"
-              ></label>
-            </div>
 
-            <div class="flex items-center">
-              <label class="material-radio text-naito-green-200" for="type-monthly-input">
-                <input
-                  type="radio"
-                  id="type-monthly-input"
-                  value="monthly"
-                  name="type-input"
-                  v-model="type"
-                />
-                <div class="material-radio-fake"></div>
-              </label>
-              <label
-                class="flex-grow select-none"
-                for="type-monthly-input"
-                v-text="$t('pages.objectives.form.monthly')"
-              ></label>
-            </div>
+          <div class="flex flex-col mb-8">
+            <h3 class="font-bold text-lg" v-text="$t('pages.alerts.form.range')"></h3>
+            <p class="mb-2 text-gray-800" v-text="$t('pages.alerts.form.range_note')"></p>
 
-            <!-- value -->
-            <div class="flex items-center text-gray-700">
-              <label class="w-1/2" v-text="compareString"></label>
-              <span class="text-right flex-grow mx-2" v-text="compareValue"></span>
-              <span v-text="symbol"></span>
-            </div>
+            <!-- min -->
             <div class="flex items-center">
-              <label
-                class="w-1/2 select-none"
-                for="value-input"
-                v-text="$t('pages.objectives.form.value')"
-              ></label>
+              <label class="w-1/2 select-none" for="min-input" v-text="$t('pages.alerts.form.min')"></label>
               <input
                 class="text-right flex-grow mx-2 py-2 transparent-input"
                 type="number"
-                min="0"
-                name="value-input"
-                id="value-input"
-                v-model="value"
+                min="-99"
+                max="99"
+                step="0.5"
+                name="min-input"
+                id="min-input"
+                v-model="min"
               />
-              <span v-text="symbol"></span>
+              <span>°C</span>
+            </div>
+
+            <!-- max -->
+            <div class="flex items-center">
+              <label class="w-1/2 select-none" for="max-input" v-text="$t('pages.alerts.form.max')"></label>
+              <input
+                class="text-right flex-grow mx-2 py-2 transparent-input"
+                type="number"
+                min="-99"
+                max="99"
+                step="0.5"
+                name="max-input"
+                id="max-input"
+                v-model="max"
+              />
+              <span>°C</span>
+            </div>
+          </div>
+
+          <!-- tolerance -->
+          <div class="flex flex-col mb-12">
+            <h3 class="font-bold text-lg" v-text="$t('pages.alerts.form.tolerance')"></h3>
+            <p class="mb-2 text-gray-800" v-text="$t('pages.alerts.form.tolerance_note')"></p>
+
+            <div class="flex items-center">
+              <label class="material-radio text-naito-green-200" for="tolerance-none-input-radio">
+                <input
+                  type="radio"
+                  id="tolerance-none-input-radio"
+                  value="none"
+                  name="tolerance-input-radio"
+                  v-model="toleranceRadio"
+                />
+                <div class="material-radio-fake"></div>
+              </label>
+              <label
+                class="flex-grow select-none"
+                for="tolerance-none-input-radio"
+                v-text="$t('pages.alerts.form.tolerance_none')"
+              ></label>
+            </div>
+
+            <div class="flex items-center">
+              <label class="material-radio text-naito-green-200" for="tolerance-custom-input-radio">
+                <input
+                  type="radio"
+                  id="tolerance-custom-input-radio"
+                  value="custom"
+                  name="tolerance-input-radio"
+                  v-model="toleranceRadio"
+                />
+                <div class="material-radio-fake"></div>
+              </label>
+              <label
+                class="flex-grow flex items-center select-none"
+                for="tolerance-custom-input-radio"
+              >
+                <span v-text="$t('pages.alerts.form.tolerance_custom')"></span>
+                <input
+                  class="text-right flex-grow mx-2 py-2 transparent-input"
+                  type="number"
+                  :disabled="!isCustomTolerance"
+                  min="1"
+                  max="12"
+                  name="tolerance-input"
+                  id="tolerance-input"
+                  v-model="tolerance"
+                />
+                <span
+                  :class="grayedIfNotCustomClasses"
+                  v-text="$tc('pages.alerts.form.hours', tolerance)"
+                ></span>
+              </label>
             </div>
           </div>
         </div>
+
         <!-- actions -->
         <div class="flex mb-3">
           <button
@@ -104,7 +138,7 @@ import { formatResource } from '../assets/utils'
 import SelectSearch from '../components/search-select'
 
 export default {
-  name: 'ObjectivePopup',
+  name: 'AlertPopup',
   components: { SelectSearch },
   props: {
     show: Boolean,
@@ -113,8 +147,10 @@ export default {
   },
   data() {
     return {
-      type: 'weekly',
-      value: 0,
+      min: 0,
+      max: 30,
+      toleranceRadio: 'none',
+      tolerance: 1,
       resource_id: -1,
     }
   },
@@ -126,13 +162,23 @@ export default {
 
       if (this.editMode) {
         // reset to the given current values
-        this.type = this.current.type
-        this.value = this.current.value
+        this.min = this.current.min
+        this.max = this.current.max
         this.resource_id = this.current.resource_id
+
+        if (this.current.tolerance === 0) {
+          this.toleranceRadio = 'none'
+          this.tolerance = 1
+        } else {
+          this.toleranceRadio = 'custom'
+          this.tolerance = this.current.tolerance
+        }
       } else {
         // reset to the default values
-        this.type = 'weekly'
-        this.value = 0
+        this.min = 0
+        this.max = 30
+        this.toleranceRadio = 'none'
+        this.tolerance = 1
         this.resource_id = -1
       }
     },
@@ -148,8 +194,9 @@ export default {
     },
     confirm() {
       const payload = {
-        type: this.type,
-        value: parseFloat(this.value),
+        min: parseFloat(this.min),
+        max: parseFloat(this.max),
+        tolerance: this.isCustomTolerance ? parseInt(this.tolerance) : 0,
         resource_id: this.resource_id,
       }
 
@@ -161,6 +208,12 @@ export default {
     },
   },
   computed: {
+    isCustomTolerance() {
+      return this.toleranceRadio === 'custom'
+    },
+    grayedIfNotCustomClasses() {
+      return this.isCustomTolerance ? ['text-gray-900'] : ['text-gray-500']
+    },
     backClasses() {
       return [
         'fixed',
@@ -208,29 +261,17 @@ export default {
     resource() {
       return this.$store.getters.resource({ resource_id: this.resource_id })
     },
-    symbol() {
-      const resourceType = this.$store.getters.resourceType(this.resource)
-      return resourceType ? resourceType.symbol : ''
-    },
     editMode() {
       return this.mode === 'edit'
-    },
-    compareString() {
-      return this.$t(`pages.objectives.form.${this.type}_compare`)
-    },
-    compareValue() {
-      // TODO implement
-      return 0
     },
     allResources() {
       return this.$store.getters.resources.filter(resource => {
         const resourceType = this.$store.getters.resourceType(resource)
-        return resourceType && resourceType.name !== 'Temperature'
+        return resourceType && resourceType.name === 'Temperature'
       })
     },
     formattedResources() {
       return this.allResources.map(resource => {
-        const resourceType = this.$store.getters.resourceType(resource)
         let site = null
         if (this.$store.getters.numSites > 1) {
           const sensor = this.$store.getters.sensor(resource)
@@ -238,7 +279,7 @@ export default {
         }
         return {
           id: resource.id,
-          value: formatResource(this.$i18n, resource, resourceType, site),
+          value: formatResource(this.$i18n, resource, null, site),
         }
       })
     },

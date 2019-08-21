@@ -1,9 +1,9 @@
 /**
  *
  * @param {import('vue-i18n').default} i18n
- * @param {*} resource
- * @param {*} resourceType
- * @param {*} site
+ * @param {{description: string}} resource
+ * @param {{name: string}} resourceType optional
+ * @param {{name: string}} site optional
  */
 export function formatResource(i18n, resource, resourceType, site) {
   const values = []

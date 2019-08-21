@@ -30,7 +30,10 @@
     "user_updated": "Informations utilisateur enregistrées avec succès",
     "objective_updated": "Objectif enregistré avec succès",
     "objective_created": "Nouvel objectif créé avec succès",
-    "objective_deleted": "Objectif supprimé avec succès"
+    "objective_deleted": "Objectif supprimé avec succès",
+    "alert_updated": "Alerte enregistrée avec succès",
+    "alert_created": "Nouvelle alerte créée avec succès",
+    "alert_deleted": "Alerte supprimée avec succès"
   },
   "menu": {
     "alerts": "Alertes",
@@ -91,6 +94,28 @@
         "monthly_compare": "30 derniers jours",
         "find_resource": "Rechercher une ressource",
         "missing_resource": "Veuillez sélectionner une resource pour valider l'objectif"
+      }
+    },
+    "alerts": {
+      "title": "Alertes",
+      "description": "Visionnez, éditez et créez de nouvelles alertes sur la plateforme Meters",
+      "info": "Recevez des alertes lorsque vos sondes de température relèvent des valeurs anormales.",
+      "modes": {
+        "create": "Nouvelle alerte",
+        "edit": "Éditer l'alerte",
+        "delete": "Supprimer l'alerte"
+      },
+      "form": {
+        "resource": "Sonde thermique",
+        "range": "Températures attendus (inclusif)",
+        "range_note": "Vous ne recevrez pas de nouvelles alertes jusqu'à ce que la température soit redevenue normale.",
+        "min": "Minimum",
+        "max": "Maximum",
+        "tolerance": "Tolérance",
+        "tolerance_note": "Pendant combien de temps la température doit être hors de la plage avant qu'une alerte soit envoyée.",
+        "tolerance_none": "Aucune",
+        "tolerance_custom": "Durant",
+        "hours": "Heure | Heures"
       }
     },
     "login": {

@@ -30,7 +30,10 @@
     "user_updated": "User information successfully saved",
     "objective_updated": "Objective successfully saved",
     "objective_created": "New objective successfully created",
-    "objective_deleted": "Objective successfully deleted"
+    "objective_deleted": "Objective successfully deleted",
+    "alert_updated": "Alert successfully saved",
+    "alert_created": "New alert successfully created",
+    "alert_deleted": "Alert successfully deleted"
   },
   "menu": {
     "alerts": "Alerts",
@@ -91,6 +94,28 @@
         "monthly_compare": "Last 30 days",
         "find_resource": "Search for a resource",
         "missing_resource": "Please select a resource to validate the objective"
+      }
+    },
+    "alerts": {
+      "title": "Alerts",
+      "description": "View, edit and create new alerts on the Meters platform",
+      "info": "Recieve alerts when your temperature sensors read unusual values.",
+      "modes": {
+        "create": "New alert",
+        "edit": "Edit alert",
+        "delete": "Delete alert"
+      },
+      "form": {
+        "resource": "Temperature sensor",
+        "range": "Expected temperatures (inclusive)",
+        "range_note": "You won't recieve further alerts until the temperature has gone back to normal.",
+        "min": "Minimum",
+        "max": "Maximum",
+        "tolerance": "Tolerance",
+        "tolerance_note": "For how much time must the temperature be outside the range before an alert is sent.",
+        "tolerance_none": "None",
+        "tolerance_custom": "For",
+        "hours": "Hour | Hours"
       }
     },
     "login": {

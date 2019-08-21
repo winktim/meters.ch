@@ -43,6 +43,7 @@ export const state = () => ({
 })
 
 export const mutations = {
+  // SET
   SET_LOCALE(state, { locale }) {
     if (state.locales.indexOf(locale) !== -1) {
       state.locale = locale
@@ -104,14 +105,41 @@ export const mutations = {
     state.data.objectives = objectives
     state.dataById.objectives = indexOnId(objectives)
   },
+  SET_ALERTS(state, { alerts }) {
+    state.data.alerts = alerts
+    state.dataById.alerts = indexOnId(alerts)
+  },
+  SET_IS_APP_LOADING(state, { isAppLoading }) {
+    state.isAppLoading = isAppLoading
+  },
+  SET_READ_CLIENT_DATA(state, { readClientData }) {
+    state.readClientData = readClientData
+  },
+
+  // UPDATE
   UPDATE_OBJECTIVE(state, { objective }) {
     const current = state.dataById.objectives[objective.id]
     Object.assign(current, objective)
   },
+  UPDATE_ALERT(state, { alert }) {
+    const current = state.dataById.alerts[alert.id]
+    Object.assign(current, alert)
+  },
+
+  // ADD
   ADD_OBJECTIVE(state, { objective }) {
     state.data.objectives.push(objective)
     state.dataById.objectives[objective.id] = objective
   },
+  ADD_ALERT(state, { alert }) {
+    state.data.alerts.push(alert)
+    state.dataById.alerts[alert.id] = alert
+  },
+  ADD_AWAITING_EVENT(state, { awaitingEvent }) {
+    state.awaitingEvents.push(awaitingEvent)
+  },
+
+  // REMOVE
   REMOVE_OBJECTIVE(state, { objective }) {
     const current = state.dataById.objectives[objective.id]
 
@@ -129,18 +157,25 @@ export const mutations = {
 
     state.data.objectives.splice(index, 1)
   },
+  REMOVE_ALERT(state, { alert }) {
+    const current = state.dataById.alerts[alert.id]
 
-  SET_IS_APP_LOADING(state, { isAppLoading }) {
-    state.isAppLoading = isAppLoading
-  },
-  ADD_AWAITING_EVENT(state, { awaitingEvent }) {
-    state.awaitingEvents.push(awaitingEvent)
+    if (!current) {
+      return
+    }
+
+    delete state.dataById.alerts[alert.id]
+
+    const index = state.data.alerts.indexOf(current)
+
+    if (index === -1) {
+      return
+    }
+
+    state.data.alerts.splice(index, 1)
   },
   REMOVE_AWAITING_EVENT(state, { awaitingEvent }) {
     state.awaitingEvents.splice(state.awaitingEvents.indexOf(awaitingEvent), 1)
-  },
-  SET_READ_CLIENT_DATA(state, { readClientData }) {
-    state.readClientData = readClientData
   },
 }
 
@@ -204,6 +239,7 @@ export const getters = {
     state.data.resources ? state.data.resources.length : 0,
   numSites: state => (state.data.sites ? state.data.sites.length : 0),
   objectives: state => (state.data.objectives ? state.data.objectives : []),
+  alerts: state => (state.data.alerts ? state.data.alerts : []),
 
   // Database relations getters
 

@@ -6,27 +6,27 @@
       :back="true"
     ></app-header>
 
-    <p class="font-medium text-center mb-6" v-text="$t('pages.objectives.info')"></p>
+    <p class="font-medium text-center mb-6" v-text="$t('pages.alerts.info')"></p>
 
     <ul class="flex flex-col items-center">
       <li
         class="w-full lg:w-200 my-1 flex justify-between bg-gray-100 rounded-md hover:shadow-lg"
-        v-for="(objective, i) in objectives"
+        v-for="(alert, i) in alerts"
         :key="i"
       >
         <button
           class="font-bold flex-grow py-4 pl-4 clickable focus:shadow-outline flex items-center"
-          @click="update($event, objective.id)"
-          :title="$t('pages.objectives.modes.edit')"
+          @click="update(alert.id)"
+          :title="$t('pages.alerts.modes.edit')"
         >
-          <span class="flex-grow" v-text="objective.text"></span>
+          <span class="flex-grow" v-text="alert.value"></span>
           <i class="material-icons text-naito-blue-100 text-lg px-5">edit</i>
         </button>
 
         <button
           class="flex items-center text-naito-blue-100 text-lg py-4 px-5 clickable focus:shadow-outline"
-          @click="del($event, objective.id)"
-          :title="$t('pages.objectives.modes.delete')"
+          @click="del(alert.id)"
+          :title="$t('pages.alerts.modes.delete')"
         >
           <i class="material-icons">delete</i>
         </button>
@@ -39,17 +39,17 @@
         @click="create"
       >
         <i class="material-icons absolute left-0 ml-4">add</i>
-        <span v-text="$t('pages.objectives.modes.create')"></span>
+        <span v-text="$t('pages.alerts.modes.create')"></span>
       </button>
     </div>
 
-    <objective-popup
+    <alert-popup
       :show="show"
       :mode="mode"
-      :current="id === -1 ? null : $store.state.dataById.objectives[id]"
+      :current="id === -1 ? null : $store.state.dataById.alerts[id]"
       @cancel="popupCancel"
       @confirm="popupConfirm"
-    ></objective-popup>
+    ></alert-popup>
   </div>
 </template>
 <script>
@@ -57,7 +57,7 @@ import { formatResource } from '../assets/utils'
 import { DateTime } from 'luxon'
 
 import AppHeader from '../components/app-header'
-import ObjectivePopup from '../components/objective-popp'
+import AlertPopup from '../components/alert-popup'
 
 export default {
   middleware: 'needs-auth',
@@ -76,11 +76,11 @@ export default {
       ],
     }
   },
-  components: { AppHeader, ObjectivePopup },
+  components: { AppHeader, AlertPopup },
   async mounted() {
     await Promise.all([
       this.$getResources(),
-      this.$getObjectives(),
+      this.$getAlerts(),
       this.$getResourceTypes(),
       this.$getSensors(),
       this.$getSites(),
@@ -88,15 +88,13 @@ export default {
   },
   data() {
     return {
-      mode: 'edit',
+      mode: 'create',
       id: -1,
       show: false,
     }
   },
   methods: {
-    create(event) {
-      event.preventDefault()
-
+    create() {
       // make sure to hide any messages
       this.$store.dispatch('hideMessage')
 
@@ -104,9 +102,7 @@ export default {
       this.show = true
       return
     },
-    update(event, id) {
-      event.preventDefault()
-
+    update(id) {
       // make sure to hide any messages
       this.$store.dispatch('hideMessage')
 
@@ -114,10 +110,11 @@ export default {
       this.id = id
       this.show = true
     },
-    del(event, id) {
-      event.preventDefault()
+    del(id) {
+      // make sure to hide any messages
+      this.$store.dispatch('hideMessage')
 
-      // TODO: implement
+      this.$delAlert({ id })
     },
     popupCancel() {
       this.show = false
@@ -127,41 +124,34 @@ export default {
 
       if (payload.id !== undefined) {
         // update existing
-        this.$putObjective(payload)
+        this.$putAlert(payload)
       } else {
         // create new
-        this.$postObjective(payload)
+        this.$postAlert(payload)
       }
     },
   },
   computed: {
-    objectives() {
-      return this.$store.getters.objectives.map(objective => {
+    alerts() {
+      return this.$store.getters.alerts.map(alert => {
         const out = {
-          id: objective.id,
-          text: '',
+          id: alert.id,
+          value: '',
         }
 
-        const resource = this.$store.getters.resource(objective)
+        const resource = this.$store.getters.resource(alert)
 
         if (resource === null) {
           return out
         }
 
-        const resourceType = this.$store.getters.resourceType(resource)
+        const formattedResource = formatResource(this.$i18n, resource)
 
-        if (resourceType === null) {
-          return out
+        out.value = `${formattedResource}, ${alert.min} — ${alert.max} °C`
+
+        if (alert.tolerance > 0) {
+          out.value += `, ${alert.tolerance}h`
         }
-
-        const formattedResource = formatResource(
-          this.$i18n,
-          resource,
-          resourceType
-        )
-        const type = this.$t('features.objective_types.' + objective.type)
-
-        out.text = `${formattedResource}, ${objective.value} ${resourceType.symbol}/${type}`
 
         return out
       })
