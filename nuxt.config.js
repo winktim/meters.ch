@@ -61,11 +61,13 @@ export default {
 
   // PWA
   manifest: {
-    name: 'Meters.ch',
+    name: 'Meters.ch Web App',
+    short_name: 'Meters.ch',
     author: 'Naito One',
     description:
       "Meters is a service that helps you manage your company's energy consumption and temperatures",
     theme_color: '#3C6285',
+    background_color: '#e4e7e0',
   },
 
   purgeCSS: {
