@@ -100,7 +100,12 @@
   </div>
 </template>
 <script>
-import { formatResource } from '../assets/utils'
+import {
+  formatResource,
+  last7DaysPeriod,
+  last30DaysPeriod,
+} from '../assets/utils'
+import { DateTime } from 'luxon'
 import SearchSelect from '../components/search-select'
 
 export default {
@@ -116,6 +121,7 @@ export default {
       type: 'weekly',
       value: 0,
       resource_id: -1,
+      compareValue: 0,
     }
   },
   watch: {
@@ -135,6 +141,22 @@ export default {
         this.value = 0
         this.resource_id = -1
       }
+    },
+    async resource_id(resource_id) {
+      console.log('executed')
+      if (resource_id === -1) {
+        return
+      }
+
+      const now = DateTime.local()
+
+      const period =
+        this.type === 'weekly' ? last7DaysPeriod(now) : last30DaysPeriod(now)
+
+      const readings = await this.$getReadings(resource_id, period)
+
+      // sum up the values for the period
+      this.compareValue = readings.reduce((carry, sum) => carry + sum, 0)
     },
   },
   methods: {
@@ -217,10 +239,6 @@ export default {
     },
     compareString() {
       return this.$t(`pages.objectives.form.${this.type}_compare`)
-    },
-    compareValue() {
-      // TODO implement
-      return 0
     },
     allResources() {
       return this.$store.getters.resources.filter(resource => {

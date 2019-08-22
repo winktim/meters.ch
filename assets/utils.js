@@ -55,3 +55,25 @@ export const periods = {
 }
 
 export const reversePeriods = Object.keys(periods)
+
+/**
+ * Get a period representing the last 30 days
+ * @param {import('luxon').DateTime} reference
+ */
+export function last30DaysPeriod(reference) {
+  return {
+    from: reference.minus({ days: 30 }),
+    to: reference,
+  }
+}
+
+/**
+ * Get a period representing the last 7 days
+ * @param {import('luxon').DateTime} reference
+ */
+export function last7DaysPeriod(reference) {
+  return {
+    from: reference.minus({ days: 7 }),
+    to: reference,
+  }
+}

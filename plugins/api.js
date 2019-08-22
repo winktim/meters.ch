@@ -138,6 +138,14 @@ export default ({ app, store, redirect }, inject) => {
     } catch (e) {}
   })
 
+  inject('getReadings', async function(resource, payload) {
+    try {
+      return await classic('get', `/resources/${resource}/readings`, payload)
+    } catch (e) {
+      return []
+    }
+  })
+
   // PUT
 
   inject('putUser', async function(payload) {
