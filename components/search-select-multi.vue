@@ -57,7 +57,7 @@
           @keydown="checkForTab"
           @click="showOptions = false"
           :title="$t('global.selector_close')"
-          class="clickable material-icons focus:shadow-outline hover:lighten-10 active:darken-10 p-4 text-xl"
+          class="clickable material-icons focus:shadow-outline hover:lighten-10 active:darken-10 p-4 text-xl ml-auto"
         >close</button>
       </div>
     </div>
@@ -224,7 +224,7 @@ export default {
       )
     },
     actionsClasses() {
-      return ['flex-grow', 'border-gray-300', 'flex', 'justify-between'].concat(
+      return ['flex-grow', 'border-gray-300', 'flex'].concat(
         this.top ? ['border-b-2'] : ['border-t-2']
       )
     },
