@@ -20,7 +20,6 @@
       <div class="wrapped-style w-full h-full pointer-events-none absolute"></div>
     </div>
     <ul :class="optionsClasses">
-      <!-- TODO: make it radio buttons ! -->
       <li class="flex-grow flex" v-for="option in filteredOptions" :key="option.id">
         <!-- TODO: use shadow-outline, but croped by overflow-y-auto -->
         <button
