@@ -99,6 +99,12 @@
       "description": "Explore your data in details, download it and save graphs to your dashboard",
       "period": "Period",
       "to": "to",
+      "download": {
+        "title": "Download the displayed data"
+      },
+      "bookmark": {
+        "title": "Bookmark the current chart"
+      },
       "form": {
         "find_resources": "Select resources"
       }

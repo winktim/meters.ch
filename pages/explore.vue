@@ -19,6 +19,23 @@
 
     <section>{{resources}}</section>
 
+    <section class="fixed bottom-0 right-0 mb-60 text-gray-100 rounded-l-md flex flex-col">
+      <button
+        :title="$t('pages.explore.download.title')"
+        @click="download"
+        class="rounded-tl-md p-4 bg-naito-blue-200 simple-action"
+      >
+        <i class="material-icons text-xl">get_app</i>
+      </button>
+      <button
+        :title="$t('pages.explore.bookmark.title')"
+        @click="bookmark"
+        class="rounded-bl-md p-4 bg-naito-blue-200 simple-action"
+      >
+        <i class="material-icons text-xl">bookmark</i>
+      </button>
+    </section>
+
     <!-- parameters -->
     <section
       class="fixed bottom-0 inset-x-0 w-full p-4 md:px-1/5 lg:px-1/4 xl:px-1/3 bg-naito-green-200 shadow-lg-top"
@@ -179,6 +196,8 @@ export default {
           })
       }
     },
+    download() {},
+    bookmark() {},
   },
   watch: {
     offset() {

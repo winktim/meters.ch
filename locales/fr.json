@@ -99,6 +99,12 @@
       "description": "Explorez vos données en détails, téléchargez-les et ajoutez des graphiques à votre tableau de bord",
       "period": "Période",
       "to": "au",
+      "download": {
+        "title": "Télécharger les données affichées"
+      },
+      "bookmark": {
+        "title": "Ajouter un signer pour le graphique actuel"
+      },
       "form": {
         "find_resources": "Sélectionnez des ressources"
       }
