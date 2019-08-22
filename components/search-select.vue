@@ -38,7 +38,7 @@
 </template>
 <script>
 export default {
-  name: 'SelectSearch',
+  name: 'SearchSelect',
   props: {
     name: {
       type: String,
@@ -146,7 +146,7 @@ export default {
       return [
         'absolute',
         'bg-gray-200',
-        'rounded-md',
+        'rounded-b-md',
         'shadow-md',
         'w-full',
         'transition-opacity-100',

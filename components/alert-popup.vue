@@ -11,12 +11,12 @@
           <!-- resource -->
           <div class="mb-8">
             <h3 class="font-bold text-lg mb-2" v-text="$t('pages.alerts.form.resource')"></h3>
-            <select-search
+            <search-select
               name="resource"
               :placeholder="$t('pages.objectives.form.find_resource')"
               :options="formattedResources"
               v-model="resource_id"
-            ></select-search>
+            ></search-select>
           </div>
 
           <div class="flex flex-col mb-8">
@@ -135,11 +135,11 @@
 </template>
 <script>
 import { formatResource } from '../assets/utils'
-import SelectSearch from '../components/search-select'
+import SearchSelect from '../components/search-select'
 
 export default {
   name: 'AlertPopup',
-  components: { SelectSearch },
+  components: { SearchSelect },
   props: {
     show: Boolean,
     mode: String,
