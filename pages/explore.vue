@@ -125,6 +125,74 @@ export default {
       this.$getSensors(),
       this.$getSites(),
     ])
+
+    this.getQuery()
+    this.setQuery()
+  },
+  methods: {
+    setQuery() {
+      const route = {
+        name: this.$router.currentRoute.name,
+        query: {
+          offset: this.offset,
+          agregation: this.agregation,
+          period: this.period,
+          resources: this.resources,
+        },
+      }
+
+      this.$router.replace(route)
+    },
+    getQuery() {
+      const query = this.$route.query
+
+      const period = parseInt(query.period)
+      if (!isNaN(period) && period >= 0 && period < reversePeriods.length) {
+        this.period = period
+      }
+
+      const agregation = parseInt(query.agregation)
+      if (
+        !isNaN(agregation) &&
+        agregation >= 0 &&
+        agregation < reverseAgregations.length
+      ) {
+        this.agregation = agregation
+      }
+
+      const offset = parseInt(query.offset)
+      if (!isNaN(offset) && offset >= 0) {
+        // limit to 365
+        this.offset = Math.min(offset, 365)
+      }
+
+      const resources = query.resources
+      if (Array.isArray(resources) && resources.length > 0) {
+        // filter existing resources
+        this.resources = resources
+          .map(id => parseInt(id))
+          .filter(id => {
+            return (
+              !isNaN(id) &&
+              this.$store.state.dataById.resources[id] !== undefined
+            )
+          })
+      }
+    },
+  },
+  watch: {
+    offset() {
+      this.setQuery()
+    },
+    agregation() {
+      this.setQuery()
+    },
+    period() {
+      this.setQuery()
+    },
+    resources() {
+      this.setQuery()
+    },
   },
   computed: {
     fromDateTime() {
