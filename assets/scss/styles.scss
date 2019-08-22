@@ -5,10 +5,10 @@ button {
   font-weight: normal;
 }
 // Remove firefox & IE outline on all buttons/inputs/etc
-:focus {
+html :focus {
   outline: 0;
 }
-::-moz-focus-inner {
+html ::-moz-focus-inner {
   border: 0;
 }
 
