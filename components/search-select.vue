@@ -20,12 +20,14 @@
       <div class="wrapped-style w-full h-full pointer-events-none absolute"></div>
     </div>
     <ul :class="optionsClasses">
+      <!-- TODO: make it radio buttons ! -->
       <li class="flex-grow flex" v-for="option in filteredOptions" :key="option.id">
         <!-- TODO: use shadow-outline, but croped by overflow-y-auto -->
         <button
           :tabindex="showOptions ? 0 : -1"
           class="p-4 w-full hover:bg-gray-100"
-          @click="clickedOption(option.id)"
+          @click="clickedOption(option)"
+          @keydown="checkForTab"
           v-text="option.value"
         ></button>
       </li>
@@ -114,9 +116,14 @@ export default {
     },
     checkForTab(event) {
       if (event.keyCode === 9) {
-        this.showOptions = false
-        // reset the content of the field when left half-typed
-        this.searchString = this.supposedSearchString
+        // wait for the focus to change and check if it is in the root
+        setTimeout(() => {
+          if (!this.$refs.focusRoot.contains(document.activeElement)) {
+            this.showOptions = false
+            // reset the content of the field when left half-typed
+            this.searchString = this.supposedSearchString
+          }
+        }, 0)
       }
     },
     clear() {
@@ -125,15 +132,13 @@ export default {
       this.currentValue = -1
       this.$emit('input', -1)
     },
-    clickedOption(id) {
-      const option = this.getOptionById(id)
-
-      this.searchString = option ? option.value : ''
+    clickedOption(option) {
+      this.searchString = option.value
       this.supposedSearchString = this.searchString
       this.showOptions = false
-      this.currentValue = id
+      this.currentValue = option.id
 
-      this.$emit('input', id)
+      this.$emit('input', option.id)
     },
   },
   computed: {
