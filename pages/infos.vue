@@ -136,7 +136,7 @@ export default {
         {
           name: 'pages.infos.data.created_at',
           value: this.$store.getters.accountCreatedAt
-            .setLocale(this.$fullLocale())
+            .setLocale(this.$dateLocale())
             .toLocaleString(DateTime.DATE_FULL),
         },
       ]

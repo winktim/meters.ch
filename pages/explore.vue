@@ -198,12 +198,12 @@ export default {
     fromDateTime() {
       return DateTime.local()
         .minus({ days: 1 })
-        .setLocale(this.$fullLocale())
+        .setLocale(this.$dateLocale())
         .toLocaleString(DateTime.DATETIME_SHORT)
     },
     toDateTime() {
       return DateTime.local()
-        .setLocale(this.$fullLocale())
+        .setLocale(this.$dateLocale())
         .toLocaleString(DateTime.DATETIME_SHORT)
     },
     isLastPeriodOffset() {

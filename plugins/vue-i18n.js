@@ -4,12 +4,20 @@ import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 
 /**
- * Map from the simple language local to the full locale for number and date formatting
+ * Map from the simple language local to the full locale for number formatting
  */
-const localeMapper = {
+const numberLocale = {
   en: 'en-ch',
-  // TODO: fixe de for dates
   fr: 'de-ch',
+  de: 'de-ch',
+}
+
+/**
+ * Map from the simple language local to the full locale for date formatting
+ */
+const dateLocale = {
+  en: 'en-ch',
+  fr: 'fr-ch',
   de: 'de-ch',
 }
 
@@ -25,7 +33,11 @@ export default ({ app, store }, inject) => {
     },
   })
 
-  inject('fullLocale', function() {
-    return localeMapper[store.state.locale]
+  inject('numberLocale', function() {
+    return numberLocale[store.state.locale]
+  })
+
+  inject('dateLocale', function() {
+    return dateLocale[store.state.locale]
   })
 }
