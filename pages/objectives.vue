@@ -133,6 +133,7 @@ export default {
   },
   computed: {
     objectives() {
+      const locale = this.$numberLocale()
       return this.$store.getters.objectives.map(objective => {
         const out = {
           id: objective.id,
@@ -158,7 +159,9 @@ export default {
         )
         const type = this.$t('features.objective_types.' + objective.type)
 
-        out.value = `${formattedResource}, ${objective.value} ${resourceType.symbol}/${type}`
+        out.value = `${formattedResource}, ${objective.value.toLocaleString(
+          locale
+        )} ${resourceType.symbol}/${type}`
 
         return out
       })

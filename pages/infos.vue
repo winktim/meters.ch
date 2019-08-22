@@ -106,6 +106,7 @@ export default {
       return this.$store.getters.name
     },
     clientData() {
+      const locale = this.$numberLocale()
       return [
         {
           name: 'pages.infos.data.client_name',
@@ -118,11 +119,11 @@ export default {
         { name: 'global.email', value: this.$store.getters.clientEmail },
         {
           name: 'pages.infos.data.num_sensors',
-          value: this.$store.getters.numResources,
+          value: this.$store.getters.numResources.toLocaleString(locale),
         },
         {
           name: 'pages.infos.data.num_sites',
-          value: this.$store.getters.numSites,
+          value: this.$store.getters.numSites.toLocaleString(locale),
         },
       ]
     },

@@ -133,6 +133,7 @@ export default {
   },
   computed: {
     alerts() {
+      const locale = this.$numberLocale()
       return this.$store.getters.alerts.map(alert => {
         const out = {
           id: alert.id,
@@ -147,7 +148,9 @@ export default {
 
         const formattedResource = formatResource(this.$i18n, resource)
 
-        out.value = `${formattedResource}, ${alert.min} — ${alert.max} °C`
+        out.value = `${formattedResource}, ${alert.min.toLocaleString(
+          locale
+        )} — ${alert.max.toLocaleString(locale)} °C`
 
         if (alert.tolerance > 0) {
           out.value += `, ${alert.tolerance}h`

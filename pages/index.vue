@@ -81,12 +81,16 @@ export default {
       return this.$store.getters.numSites
     },
     sensorAndSitParams() {
+      const locale = this.$numberLocale()
       return {
-        sensor: `${this.numResources} ${this.$tc(
+        sensor: `${this.numResources.toLocaleString(locale)} ${this.$tc(
           'pages.index.sensor',
           this.numResources
         )}`,
-        site: `${this.numSites} ${this.$tc('pages.index.site', this.numSites)}`,
+        site: `${this.numSites.toLocaleString(locale)} ${this.$tc(
+          'pages.index.site',
+          this.numSites
+        )}`,
       }
     },
   },
