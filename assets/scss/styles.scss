@@ -3,10 +3,13 @@ button {
   text-align: left;
   outline: 0;
   font-weight: normal;
-
-  &:focus {
-    outline: 0;
-  }
+}
+// Remove firefox & IE outline on all buttons/inputs/etc
+:focus {
+  outline: 0;
+}
+::-moz-focus-inner {
+  border: 0;
 }
 
 // remove spinner on chrome and firefox
