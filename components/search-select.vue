@@ -4,6 +4,7 @@
       <label :for="inputName" class="material-icons py-2 pl-2 clickable">search</label>
       <input
         @focus="show"
+        @keydown="checkForTab"
         :placeholder="placeholder"
         class="flex-grow px-4 py-2"
         v-model="searchString"
@@ -110,6 +111,13 @@ export default {
       // trick to hide when the document recieves a mousedown event
       event.stopPropagation()
       this.showOptions = true
+    },
+    checkForTab(event) {
+      if (event.keyCode === 9) {
+        this.showOptions = false
+        // reset the content of the field when left half-typed
+        this.searchString = this.supposedSearchString
+      }
     },
     clear() {
       this.searchString = ''
