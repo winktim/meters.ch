@@ -37,3 +37,21 @@ export function indexOnId(arrayWithIds) {
 
   return output
 }
+
+export const agregations = {
+  hour: 0,
+  day: 1,
+  week: 2,
+  month: 3,
+}
+
+export const reverseAgregations = Object.keys(agregations)
+
+export const periods = {
+  day: 0,
+  week: 1,
+  month: 2,
+  year: 3,
+}
+
+export const reversePeriods = Object.keys(periods)

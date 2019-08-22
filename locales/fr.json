@@ -5,7 +5,12 @@
     "back": "Retour",
     "cancel": "Annuler",
     "confirm": "Valider",
-    "no_results": "Aucun résultat"
+    "no_results": "Aucun résultat",
+    "select_all_results": "Sélectionner tous les résultats",
+    "select_none_results": "Déselectionner tous les résultats",
+    "select_all": "Tout sélectionner",
+    "select_none": "Tout déselectionner",
+    "selector_close": "Fermer les résultats du sélecteur"
   },
   "features": {
     "resource_types": {
@@ -34,6 +39,26 @@
     "alert_updated": "Alerte enregistrée avec succès",
     "alert_created": "Nouvelle alerte créée avec succès",
     "alert_deleted": "Alerte supprimée avec succès"
+  },
+  "agregations": {
+    "short": "Agrégat",
+    "hour": "Agrégat par heure",
+    "day": "Agrégat par jour",
+    "week": "Agrégat par semaine",
+    "month": "Agrégat par mois"
+  },
+  "periods": {
+    "short": "Afficher",
+    "day": "Afficher un jour",
+    "week": "Afficher une semaine",
+    "month": "Afficher un mois",
+    "year": "Afficher une année"
+  },
+  "period_offsets": {
+    "day": "Aujourd'hui | Hier | Il y a {count} jours",
+    "week": "Cette semaine | La semaine dernière | Il y a {count} semaines",
+    "month": "Ce mois | Le mois dernier | Il y a {count} mois",
+    "year": "Cette année | L'année dernière | Il y a {count} ans"
   },
   "menu": {
     "alerts": "Alertes",
@@ -73,7 +98,10 @@
       "title": "Explorer",
       "description": "Explorez vos données en détails, téléchargez-les et ajoutez des graphiques à votre tableau de bord",
       "period": "Période",
-      "to": "au"
+      "to": "au",
+      "form": {
+        "find_resources": "Sélectionnez des ressources"
+      }
     },
     "objectives": {
       "title": "Objectifs",

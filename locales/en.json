@@ -5,7 +5,12 @@
     "back": "Go back",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "no_results": "No results"
+    "no_results": "No results",
+    "select_all_results": "Select all results",
+    "select_none_results": "Deselect all results",
+    "select_all": "Select all",
+    "select_none": "Deselect all",
+    "selector_close": "Close the selector's results"
   },
   "features": {
     "resource_types": {
@@ -34,6 +39,26 @@
     "alert_updated": "Alert successfully saved",
     "alert_created": "New alert successfully created",
     "alert_deleted": "Alert successfully deleted"
+  },
+  "agregations": {
+    "short": "Aggregate",
+    "hour": "Aggregate per hour",
+    "day": "Aggregate per day",
+    "week": "Aggregate per week",
+    "month": "Aggregate per month"
+  },
+  "periods": {
+    "short": "Show",
+    "day": "Show a day",
+    "week": "Show a week",
+    "month": "Show a month",
+    "year": "Show a year"
+  },
+  "period_offsets": {
+    "day": "Today | Yesterday | {count} days ago",
+    "week": "This week | Last week | {count} weeks ago",
+    "month": "This month | Last month | {count} months ago",
+    "year": "This year | Last year | {count} years ago"
   },
   "menu": {
     "alerts": "Alerts",
@@ -73,7 +98,10 @@
       "title": "Explore",
       "description": "Explore your data in details, download it and save graphs to your dashboard",
       "period": "Period",
-      "to": "to"
+      "to": "to",
+      "form": {
+        "find_resources": "Select resources"
+      }
     },
     "objectives": {
       "title": "Objectives",

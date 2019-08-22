@@ -73,8 +73,17 @@
   }
 }
 
+.simple-action {
+  @apply clickable flex items-center justify-center;
+}
+
+.outline-action,
 .action {
   @apply clickable flex items-center justify-center py-3 px-4 rounded-md font-semibold;
+}
+
+.outline-action {
+  @apply border-2 border-transparent;
 }
 
 .round-action {
@@ -85,6 +94,8 @@
   @apply clickable flex items-center py-3 pr-4 font-semibold;
 }
 
+.outline-action,
+.simple-action,
 .action,
 .round-action,
 .inline-action {
@@ -101,11 +112,30 @@
   }
 
   &:hover:not(:disabled) {
-    @apply lighten-5 shadow-lg;
+    @apply lighten-5;
   }
 
   &:active:not(:disabled) {
-    @apply darken-5 shadow-none;
+    @apply darken-5;
+  }
+}
+
+.outline-action {
+  &:hover:not(:disabled) {
+    @apply border-gray-400;
+  }
+}
+
+.simple-action,
+.action,
+.round-action,
+.inline-action {
+  &:hover:not(:disabled) {
+    @apply shadow-lg;
+  }
+
+  &:active:not(:disabled) {
+    @apply shadow-none;
   }
 }
 
@@ -173,6 +203,41 @@
   }
 }
 
+.material-select {
+  @apply relative;
+
+  > label {
+    @apply select-none absolute pointer-events-none w-full h-full bg-gray-100 py-2 pl-3 pr-8 text-gray-900 rounded-md;
+  }
+
+  > select {
+    @apply w-full h-full block appearance-none bg-gray-100 py-2 pl-3 pr-8 text-gray-900 rounded-md;
+
+    &:focus {
+      @apply outline-none shadow-outline;
+    }
+
+    // remove select arrow on IE
+    &::-ms-expand {
+      display: none;
+    }
+  }
+
+  &::after {
+    content: 'arrow_drop_down';
+
+    font-family: 'Material Icons';
+    @apply absolute pointer-events-none top-0 bottom-0 right-0 px-3 flex items-center text-gray-900;
+  }
+
+  // handle screens being too small
+  @media (min-width: theme('screens.fake-select')) {
+    > label {
+      @apply hidden;
+    }
+  }
+}
+
 .transparent-input {
   @apply bg-transparent border-b-2 border-gray-300 appearance-none outline-none transition-border-color-100;
 
@@ -196,6 +261,20 @@
     &:focus ~ .wrapped-style {
       @apply border-gray-700;
     }
+
+    &:disabled ~ .wrapped-style {
+      @apply disabled;
+    }
+  }
+}
+
+.wrapped-single-transparent-input {
+  > .wrapped-style {
+    @apply z-bottom bg-gray-100 rounded-md transition-border-radius-200;
+  }
+
+  > input {
+    @apply bg-transparent appearance-none outline-none;
 
     &:disabled ~ .wrapped-style {
       @apply disabled;

@@ -23,6 +23,7 @@ module.exports = {
       'padding': 'padding',
       'padding-top': 'padding-top',
       'border-color': 'border-color',
+      'border-radius': 'border-radius',
     },
     colorVariations: {
       5: 5,
@@ -63,6 +64,9 @@ module.exports = {
         '15': '3.75rem',
         '60': '15rem',
         '100': '25rem',
+        '1/5': '20%',
+        '1/4': '25%',
+        '1/3': '33%',
       },
       width: {
         '100': '25rem',
@@ -85,15 +89,21 @@ module.exports = {
         content: ['Raleway', 'sans-serif'],
         heading: ['Staatliches', 'sans-serif'],
       },
-      boxShadow: {
-        'lg-side':
-          '10px 0 15px -3px rgba(0, 0, 0, 0.1), 4px 0px 6px -2px rgba(0, 0, 0, 0.05)',
-      },
       borderRadius: {
         md: '0.3rem',
       },
       inset: {
         full: '100%',
+      },
+      zIndex: {
+        bottom: '-1',
+      },
+      screens: {
+        'fake-select': '450px',
+      },
+      boxShadow: {
+        'lg-top':
+          '0 -10px 15px -3px rgba(0, 0, 0, 0.1), 0 -4px 6px -2px rgba(0, 0, 0, 0.05)',
       },
     },
   },
