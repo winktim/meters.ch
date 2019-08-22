@@ -12,6 +12,16 @@ html ::-moz-focus-inner {
   border: 0;
 }
 
+// remove ugly firefox dotted outline
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 theme('colors.gray.900');
+}
+select:-moz-focusring * {
+  color: theme('colors.gray.900');
+  text-shadow: none;
+}
+
 // remove spinner on chrome and firefox
 input[type='number'] {
   -moz-appearance: textfield;
