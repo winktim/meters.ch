@@ -20,11 +20,11 @@
           :title="$t('pages.objectives.modes.edit')"
         >
           <span class="flex-grow" v-text="objective.value"></span>
-          <i class="material-icons text-naito-blue-100 text-lg px-5">edit</i>
+          <i class="material-icons text-naito-blue-200 text-lg px-5">edit</i>
         </button>
 
         <button
-          class="flex items-center text-naito-blue-100 text-lg py-4 px-5 clickable focus:shadow-outline"
+          class="flex items-center text-naito-blue-200 text-lg py-4 px-5 clickable focus:shadow-outline"
           @click="del(objective.id)"
           :title="$t('pages.objectives.modes.delete')"
         >
