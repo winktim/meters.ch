@@ -80,7 +80,7 @@ export default {
   middleware: 'not-auth',
   head() {
     return {
-      title: `${this.$t('pages.login.title')} - Meters`,
+      title: this.$t('pages.login.title'),
       htmlAttrs: {
         lang: this.$store.state.locale,
       },
