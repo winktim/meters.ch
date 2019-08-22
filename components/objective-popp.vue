@@ -59,8 +59,11 @@
             <!-- value -->
             <div class="flex items-center text-gray-700">
               <label class="w-1/2" v-text="compareString"></label>
-              <span class="text-right flex-grow mx-2" v-text="compareValue"></span>
-              <span v-text="symbol"></span>
+              <span
+                class="text-right flex-grow mx-2"
+                v-text="compareValue === -1 ? $t('pages.objectives.form.not_enough_data') : compareValue.toLocaleString($numberLocale())"
+              ></span>
+              <span v-if="compareValue !== -1" v-text="symbol"></span>
             </div>
             <div class="flex items-center">
               <label
@@ -142,9 +145,17 @@ export default {
         this.resource_id = -1
       }
     },
-    async resource_id(resource_id) {
-      console.log('executed')
-      if (resource_id === -1) {
+    resource_id() {
+      this.updateCompareValue().catch(console.error)
+    },
+    type() {
+      this.updateCompareValue().catch(console.error)
+    },
+  },
+  methods: {
+    async updateCompareValue() {
+      if (this.resource_id === -1) {
+        this.compareValue = 0
         return
       }
 
@@ -153,13 +164,18 @@ export default {
       const period =
         this.type === 'weekly' ? last7DaysPeriod(now) : last30DaysPeriod(now)
 
-      const readings = await this.$getReadings(resource_id, period)
+      const readings = await this.$getReadings(this.resource_id, period)
 
-      // sum up the values for the period
-      this.compareValue = readings.reduce((carry, sum) => carry + sum, 0)
+      if (readings.length < 2) {
+        this.compareValue = -1
+        return
+      }
+
+      // to get the comsummption, subtract the absolute last from the absolute first
+      this.compareValue = Math.round(
+        readings[readings.length - 1].value - readings[0].value
+      )
     },
-  },
-  methods: {
     cancelOnBack(event) {
       if (event.target === this.$refs.back) {
         this.$emit('cancel')

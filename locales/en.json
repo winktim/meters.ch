@@ -121,7 +121,8 @@
         "weekly_compare": "Last 7 day",
         "monthly_compare": "Last 30 days",
         "find_resource": "Search for a resource",
-        "missing_resource": "Please select a resource to validate the objective"
+        "missing_resource": "Please select a resource to validate the objective",
+        "not_enough_data": "Not enough data to compute the comparison"
       }
     },
     "alerts": {
