@@ -1,5 +1,5 @@
 <template>
-  <div ref="focusRoot" class="relative" @mousedown="show">
+  <div ref="focusRoot" class="relative z-10" @mousedown="show">
     <div class="w-full flex items-center text-gray-900 relative wrapped-transparent-input">
       <label :for="inputName" class="material-icons py-2 pl-2 clickable">search</label>
       <input
