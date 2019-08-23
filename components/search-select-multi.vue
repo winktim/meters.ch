@@ -128,9 +128,12 @@ export default {
     show(event) {
       // trick to hide when the document recieves a mousedown event
       event.stopPropagation()
-      this.showOptions = true
-      if (this.top) {
-        scrollToBottom(this.$refs.scrollDiv)
+
+      if (!this.showOptions) {
+        this.showOptions = true
+        if (this.top) {
+          scrollToBottom(this.$refs.scrollDiv)
+        }
       }
     },
     checkForTab(event) {
