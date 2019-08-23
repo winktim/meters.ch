@@ -34,6 +34,7 @@
   },
   "api": {
     "user_updated": "User information successfully saved",
+    "dashboard_updated": "Dashboard successfully saved",
     "objective_updated": "Objective successfully saved",
     "objective_created": "New objective successfully created",
     "objective_deleted": "Objective successfully deleted",

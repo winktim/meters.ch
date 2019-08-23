@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { indexOnId } from '../assets/utils'
+import { indexOnId, fixDashboard } from '../assets/utils'
 
 export const state = () => ({
   api: `${process.env.API_ROOT}/${process.env.API_VERSION}`,
@@ -80,6 +80,24 @@ export const mutations = {
 
   SET_USER(state, { user }) {
     state.data.user = user
+
+    // convert dashboard if JSON string
+    if (typeof state.data.user.dashboard === 'string') {
+      try {
+        state.data.user.dashboard = JSON.parse(state.data.user.dashboard)
+      } catch (e) {
+        console.warn('Dashboard parsing error:', e)
+        state.data.user.dashboard = []
+      }
+    }
+
+    // fix dashboard if we have resources data
+    if (state.dataById.resources !== null) {
+      state.data.user.dashboard = fixDashboard(
+        state.data.user.dashboard,
+        state.dataById.resources
+      )
+    }
   },
   SET_CLIENT(state, { client }) {
     state.data.client = client
@@ -88,6 +106,14 @@ export const mutations = {
   SET_RESOURCES(state, { resources }) {
     state.data.resources = resources
     state.dataById.resources = indexOnId(resources)
+
+    // fix dashboard if we have user data
+    if (state.data.user !== null) {
+      state.data.user.dashboard = fixDashboard(
+        state.data.user.dashboard,
+        state.dataById.resources
+      )
+    }
   },
   SET_RESOURCE_TYPES(state, { resourceTypes }) {
     state.data.resourceTypes = resourceTypes
@@ -138,6 +164,14 @@ export const mutations = {
   ADD_AWAITING_EVENT(state, { awaitingEvent }) {
     state.awaitingEvents.push(awaitingEvent)
   },
+  ADD_DASHBOARD_ELEMENT(state, { element }) {
+    if (state.data.user === null) {
+      console.warn('No user data to add dashboard element')
+      return
+    }
+
+    state.data.user.dashboard.push(element)
+  },
 
   // REMOVE
   REMOVE_OBJECTIVE(state, { objective }) {
@@ -176,6 +210,20 @@ export const mutations = {
   },
   REMOVE_AWAITING_EVENT(state, { awaitingEvent }) {
     state.awaitingEvents.splice(state.awaitingEvents.indexOf(awaitingEvent), 1)
+  },
+  REMOVE_DASHBOARD_ELEMENT(state, { element }) {
+    if (state.data.user === null) {
+      console.warn('No user data to remove dashboard element')
+      return
+    }
+
+    const index = state.data.user.dashboard.indexOf(element)
+
+    if (index === -1) {
+      return
+    }
+
+    state.data.user.dashboard.splice(index, 1)
   },
 }
 
@@ -231,6 +279,7 @@ export const getters = {
     state.data.user
       ? DateTime.fromISO(state.data.user.created_at)
       : DateTime.local(),
+  dashboard: state => (state.data.user ? state.data.user.dashboard : []),
   clientName: state => (state.data.client ? state.data.client.name : '...'),
   clientNumber: state => (state.data.client ? state.data.client.number : '...'),
   clientEmail: state => (state.data.client ? state.data.client.email : '...'),

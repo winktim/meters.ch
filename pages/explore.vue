@@ -29,6 +29,7 @@
       </button>
       <button
         :title="$t('pages.explore.bookmark.title')"
+        :disabled="resources.length === 0"
         @click="showBookmarkPopup = true"
         class="rounded-bl-md p-4 bg-naito-blue-200 simple-action"
       >
@@ -117,6 +118,7 @@ import {
   reversePeriods,
   reverseAgregations,
   formatResource,
+  fixDashboard,
 } from '../assets/utils'
 
 import AppHeader from '../components/app-header.vue'
@@ -154,16 +156,18 @@ export default {
     }
   },
   async mounted() {
+    // only need resources to validate the query parameters
+    await Promise.all([this.$getResources()])
+
+    this.getQuery()
+    this.setQuery()
+
     await Promise.all([
-      this.$getResources(),
       this.$getResourceTypes(),
       this.$getSensors(),
       this.$getSites(),
       this.$getUser(),
     ])
-
-    this.getQuery()
-    this.setQuery()
   },
   methods: {
     setQuery() {
@@ -226,7 +230,13 @@ export default {
         resources: this.resources,
       }
 
-      // TODO: implement
+      this.$store.commit('ADD_DASHBOARD_ELEMENT', { element: payload })
+
+      this.$putUser(
+        { dashboard: JSON.stringify(this.$store.getters.dashboard) },
+        this.$t('api.dashboard_updated'),
+        3000
+      )
     },
   },
   watch: {

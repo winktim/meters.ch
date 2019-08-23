@@ -148,7 +148,7 @@ export default ({ app, store, redirect }, inject) => {
 
   // PUT
 
-  inject('putUser', async function(payload) {
+  inject('putUser', async function(payload, customMessage, customTime) {
     if (store.state.data.user === null) {
       return
     }
@@ -164,9 +164,9 @@ export default ({ app, store, redirect }, inject) => {
       store.commit('SET_USER', { user: parsed })
 
       store.dispatch('showMessage', {
-        message: app.i18n.t('api.user_updated'),
+        message: customMessage || app.i18n.t('api.user_updated'),
         isError: false,
-        time: 1500,
+        time: customTime || 1500,
       })
     } catch (e) {}
   })

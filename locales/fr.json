@@ -34,6 +34,7 @@
   },
   "api": {
     "user_updated": "Informations utilisateur enregistrées avec succès",
+    "dashboard_updated": "Tableau de bord enregistré avec succès",
     "objective_updated": "Objectif enregistré avec succès",
     "objective_created": "Nouvel objectif créé avec succès",
     "objective_deleted": "Objectif supprimé avec succès",
