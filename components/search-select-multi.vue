@@ -20,24 +20,27 @@
       <div class="wrapped-style w-full h-full pointer-events-none absolute"></div>
     </div>
     <div :class="optionsClasses">
-      <ul :class="optionsUlClasses">
-        <li class="flex-grow flex" v-for="option in filteredOptions" :key="option.id">
-          <!-- TODO: use shadow-outline, but croped by overflow-y-auto -->
-          <button
-            :tabindex="showOptions ? 0 : -1"
-            class="p-4 w-full hover:bg-gray-100 flex items-center"
-            @click="clickedOption(option)"
-            @keydown="checkForTab"
-          >
-            <i
-              class="material-icons select-none text-xl mr-2 text-naito-green-200"
-              v-text="checked.includes(option.id) ?  'check_box' : 'check_box_outline_blank'"
-            ></i>
-            <span v-text="option.value"></span>
-          </button>
-        </li>
-        <li class="flex-grow p-4" v-if="!hasFilteredOptions" v-text="$t('global.no_results')"></li>
-      </ul>
+      <!-- scroll div https://stackoverflow.com/questions/34249501/flexbox-column-reverse-in-firefox-edge-and-ie -->
+      <div ref="scrollDiv" class="max-h-32 lg:max-h-64 overflow-y-auto">
+        <ul :class="optionsUlClasses">
+          <li class="flex-grow flex" v-for="option in filteredOptions" :key="option.id">
+            <!-- TODO: use shadow-outline, but croped by overflow-y-auto -->
+            <button
+              :tabindex="showOptions ? 0 : -1"
+              class="p-4 w-full hover:bg-gray-100 flex items-center"
+              @click="clickedOption(option)"
+              @keydown="checkForTab"
+            >
+              <i
+                class="material-icons select-none text-xl mr-2 text-naito-green-200"
+                v-text="checked.includes(option.id) ?  'check_box' : 'check_box_outline_blank'"
+              ></i>
+              <span v-text="option.value"></span>
+            </button>
+          </li>
+          <li class="flex-grow p-4" v-if="!hasFilteredOptions" v-text="$t('global.no_results')"></li>
+        </ul>
+      </div>
       <!-- actions -->
       <div :class="actionsClasses">
         <button
@@ -64,6 +67,7 @@
   </div>
 </template>
 <script>
+import { scrollToBottom } from '../assets/utils'
 export default {
   name: 'SearchSelectMulti',
   props: {
@@ -125,6 +129,9 @@ export default {
       // trick to hide when the document recieves a mousedown event
       event.stopPropagation()
       this.showOptions = true
+      if (this.top) {
+        scrollToBottom(this.$refs.scrollDiv)
+      }
     },
     checkForTab(event) {
       if (event.keyCode === 9) {
@@ -219,9 +226,7 @@ export default {
         )
     },
     optionsUlClasses() {
-      return ['max-h-32', 'lg:max-h-64', 'overflow-y-auto', 'flex'].concat(
-        this.top ? ['flex-col-reverse'] : ['flex-col']
-      )
+      return ['flex'].concat(this.top ? ['flex-col-reverse'] : ['flex-col'])
     },
     actionsClasses() {
       return ['flex-grow', 'border-gray-300', 'flex'].concat(
