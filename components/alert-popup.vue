@@ -27,7 +27,7 @@
             <div class="flex items-center">
               <label class="w-1/2 select-none" for="min-input" v-text="$t('pages.alerts.form.min')"></label>
               <input
-                class="text-right flex-grow mx-2 py-2 transparent-input"
+                class="w-0 text-right flex-grow mx-2 py-2 transparent-input"
                 type="number"
                 min="-99"
                 max="99"
@@ -43,7 +43,7 @@
             <div class="flex items-center">
               <label class="w-1/2 select-none" for="max-input" v-text="$t('pages.alerts.form.max')"></label>
               <input
-                class="text-right flex-grow mx-2 py-2 transparent-input"
+                class="w-0 text-right flex-grow mx-2 py-2 transparent-input"
                 type="number"
                 min="-99"
                 max="99"
@@ -96,7 +96,7 @@
               >
                 <span v-text="$t('pages.alerts.form.tolerance_custom')"></span>
                 <input
-                  class="text-right flex-grow mx-2 py-2 transparent-input"
+                  class="w-0 text-right flex-grow mx-2 py-2 transparent-input"
                   type="number"
                   :disabled="!isCustomTolerance"
                   min="1"
