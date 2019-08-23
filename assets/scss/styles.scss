@@ -5,6 +5,9 @@ button {
   outline: 0;
   font-weight: normal;
 
+  // On firefox mobile, buttons are rounded by default
+  border-radius: 0;
+
   &:focus {
     outline: 0;
   }
