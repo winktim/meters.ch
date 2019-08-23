@@ -1,11 +1,11 @@
-// reset for buttons
 input,
-button {
+button,
+select {
   text-align: left;
   outline: 0;
   font-weight: normal;
 
-  // On firefox mobile, buttons are rounded by default
+  // remove default border radius in Chrome 62+ on macOS, Android & iOS, Firefox Mobile
   border-radius: 0;
 
   &:focus {
