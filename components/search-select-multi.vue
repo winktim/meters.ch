@@ -100,9 +100,13 @@ export default {
     }
   },
   watch: {
-    options(to) {
-      // reset the checked list when the options change
-      this.checked = []
+    options(to, from) {
+      const allOptions = to.map(option => option.id)
+
+      // filter out any currently checked option that doesn't exist in the new options
+      this.checked = this.checked.filter(option => {
+        return allOptions.includes(option)
+      })
     },
     value(to) {
       // update from an external change
