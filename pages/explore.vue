@@ -22,14 +22,14 @@
     <section class="fixed bottom-0 right-0 mb-60 text-gray-100 rounded-l-md flex flex-col">
       <button
         :title="$t('pages.explore.download.title')"
-        @click="download"
+        @click="showDownloadPopup = true"
         class="rounded-tl-md p-4 bg-naito-blue-200 simple-action"
       >
         <i class="material-icons text-xl">get_app</i>
       </button>
       <button
         :title="$t('pages.explore.bookmark.title')"
-        @click="bookmark"
+        @click="showBookmarkPopup = true"
         class="rounded-bl-md p-4 bg-naito-blue-200 simple-action"
       >
         <i class="material-icons text-xl">bookmark</i>
@@ -96,6 +96,19 @@
         </button>
       </div>
     </section>
+
+    <bookmark-popup
+      @cancel="showBookmarkPopup = false"
+      @confirm="bookmark"
+      :show="showBookmarkPopup"
+      :periodOffsetString="periodOffsetString"
+    ></bookmark-popup>
+
+    <download-popup
+      @cancel="showDownloadPopup = false"
+      @confirm="download"
+      :show="showDownloadPopup"
+    ></download-popup>
   </div>
 </template>
 <script>
@@ -108,6 +121,9 @@ import {
 
 import AppHeader from '../components/app-header.vue'
 import SearchSelectMulti from '../components/search-select-multi'
+
+import BookmarkPopup from '../components/bookmark-popup'
+import DownloadPopup from '../components/download-popup'
 
 export default {
   middleware: 'needs-auth',
@@ -126,13 +142,15 @@ export default {
       ],
     }
   },
-  components: { AppHeader, SearchSelectMulti },
+  components: { AppHeader, SearchSelectMulti, BookmarkPopup, DownloadPopup },
   data() {
     return {
       offset: 0,
       agregation: 0,
       period: 0,
       resources: [],
+      showBookmarkPopup: false,
+      showDownloadPopup: false,
     }
   },
   async mounted() {
@@ -141,6 +159,7 @@ export default {
       this.$getResourceTypes(),
       this.$getSensors(),
       this.$getSites(),
+      this.$getUser(),
     ])
 
     this.getQuery()
@@ -152,8 +171,8 @@ export default {
         name: this.$router.currentRoute.name,
         query: {
           offset: this.offset,
-          agregation: this.agregation,
-          period: this.period,
+          agregation: reverseAgregations[this.agregation],
+          period: reversePeriods[this.period],
           resources: this.resources,
         },
       }
@@ -163,17 +182,13 @@ export default {
     getQuery() {
       const query = this.$route.query
 
-      const period = parseInt(query.period)
-      if (!isNaN(period) && period >= 0 && period < reversePeriods.length) {
+      const period = reversePeriods.indexOf(query.period)
+      if (period !== -1) {
         this.period = period
       }
 
-      const agregation = parseInt(query.agregation)
-      if (
-        !isNaN(agregation) &&
-        agregation >= 0 &&
-        agregation < reverseAgregations.length
-      ) {
+      const agregation = reverseAgregations.indexOf(query.agregation)
+      if (agregation !== -1) {
         this.agregation = agregation
       }
 
@@ -196,8 +211,23 @@ export default {
           })
       }
     },
-    download() {},
-    bookmark() {},
+    download(payload) {
+      this.showDownloadPopup = false
+      // TODO: implement
+    },
+    bookmark({ name }) {
+      this.showBookmarkPopup = false
+
+      const payload = {
+        name,
+        offset: this.offset,
+        agregation: reverseAgregations[this.agregation],
+        period: reversePeriods[this.period],
+        resources: this.resources,
+      }
+
+      // TODO: implement
+    },
   },
   watch: {
     offset() {

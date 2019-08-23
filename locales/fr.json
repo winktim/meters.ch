@@ -10,7 +10,8 @@
     "select_none_results": "Déselectionner tous les résultats",
     "select_all": "Tout sélectionner",
     "select_none": "Tout déselectionner",
-    "selector_close": "Fermer les résultats du sélecteur"
+    "selector_close": "Fermer les résultats du sélecteur",
+    "optional": "Optionel"
   },
   "features": {
     "resource_types": {
@@ -100,10 +101,15 @@
       "period": "Période",
       "to": "au",
       "download": {
-        "title": "Télécharger les données affichées"
+        "title": "Télécharger les données affichées",
+        "format": "Format",
+        "confirm": "Télécharger"
       },
       "bookmark": {
-        "title": "Ajouter un signer pour le graphique actuel"
+        "title": "Ajouter un signer pour le graphique actuel",
+        "name": "Nom du graphique",
+        "relative_period": "La période relative choisie sera conservée:",
+        "confirm": "Ajouter"
       },
       "form": {
         "find_resources": "Sélectionnez des ressources"

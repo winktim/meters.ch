@@ -10,7 +10,8 @@
     "select_none_results": "Deselect all results",
     "select_all": "Select all",
     "select_none": "Deselect all",
-    "selector_close": "Close the selector's results"
+    "selector_close": "Close the selector's results",
+    "optional": "Optional"
   },
   "features": {
     "resource_types": {
@@ -100,10 +101,15 @@
       "period": "Period",
       "to": "to",
       "download": {
-        "title": "Download the displayed data"
+        "title": "Download the displayed data",
+        "format": "Format",
+        "confirm": "Download"
       },
       "bookmark": {
-        "title": "Bookmark the current chart"
+        "title": "Bookmark the current chart",
+        "name": "Chart name",
+        "relative_period": "The choosen relative period will be kept:",
+        "confirm": "Bookmark"
       },
       "form": {
         "find_resources": "Select resources"
