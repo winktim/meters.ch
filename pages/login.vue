@@ -61,7 +61,7 @@
       </div>
       <input
         :disabled="loggingIn"
-        :class="['action', loggingIn ? 'action__processing' : '', 'w-full', 'bg-naito-green-200', 'text-gray-100']"
+        :class="['text-center', 'action', loggingIn ? 'action__processing' : '', 'w-full', 'bg-naito-green-200', 'text-gray-100']"
         type="submit"
         :value="$t('pages.login.form.submit')"
       />

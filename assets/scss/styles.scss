@@ -1,15 +1,17 @@
 // reset for buttons
+input,
 button {
   text-align: left;
   outline: 0;
   font-weight: normal;
-}
-// Remove firefox & IE outline on all buttons/inputs/etc
-html :focus {
-  outline: 0;
-}
-html ::-moz-focus-inner {
-  border: 0;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &::-moz-focus-inner {
+    border: 0;
+  }
 }
 
 // remove ugly firefox dotted outline
