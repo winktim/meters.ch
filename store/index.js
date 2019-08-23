@@ -50,7 +50,6 @@ export const mutations = {
 
       this.app.i18n.locale = locale
       localStorage.setItem('locale', locale)
-      // document.documentElement.lang = locale
     }
   },
   SET_API_TOKEN(state, { apiToken }) {
