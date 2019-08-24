@@ -348,6 +348,34 @@ export function agregateData(data, agregation, agregationFunction) {
 }
 
 /**
+ * Insert missing datapoints as NaN and return a new array
+ * @param {{x: string, y: number}[]} completeData
+ * @param {{x: string, y: number}[]} dataToFix
+ */
+export function fixMissingData(completeData, dataToFix) {
+  const out = [...dataToFix]
+
+  for (let i = 0; i < completeData.length; ++i) {
+    const expectedX = completeData[i].x
+    const data = out[i]
+
+    // if we read the end of the data, it means it is missing data at the end, but we don't care about that
+    if (!data) {
+      break
+    }
+
+    // if there is a date mismatch, we know the data to fix is missing at least one value
+    if (data.x === expectedX) {
+      continue
+    }
+
+    out.splice(i, 0, { x: expectedX, y: NaN })
+  }
+
+  return out
+}
+
+/**
  *
  * @param {string} string
  */
@@ -359,4 +387,95 @@ export const chartDefaults = {
   fontColor: '#212121',
   fontSize: 16,
   fontFamily: 'Raleway, sans-serif',
+}
+
+/**
+ * Pluck only certain keys from the object
+ * @param {{[x:string] : any}} object
+ * @param  {...string} keys
+ */
+export function pluck(object, ...keys) {
+  const out = {}
+
+  for (const key of keys) {
+    out[key] = object[key]
+  }
+
+  return out
+}
+
+/**
+ * Keep only the relevent data for JSON-downloadable chart data
+ * @param {{label: string, data: {x: string, y: number}[], resource: {}, resourceType: {}}[]} datasets
+ */
+export function datasetsToJson(datasets) {
+  return datasets.map(dataset => ({
+    label: dataset.label,
+    // remove inserted NaN values to fix the chart
+    data: dataset.data
+      .filter(data => !isNaN(data.y))
+      .map(data => ({
+        x: data.x,
+        y: data.y.toFixed(2),
+      })),
+    resource: pluck(
+      dataset.resource,
+      'id',
+      'description',
+      'location',
+      'meter',
+      'lat',
+      'lon'
+    ),
+    resourceType: pluck(dataset.resourceType, 'id', 'name', 'symbol'),
+  }))
+}
+
+/**
+ *
+ * @param {{label: string, data: {x: string, y: string}[], resource: {}, resourceType: {symbol: string}}[]} json
+ */
+export function JsonToCsv(json) {
+  const data = [
+    ['"Date"'].concat(
+      json.map(
+        dataset =>
+          `"${dataset.label.replace(
+            '"',
+            '""'
+          )} (${dataset.resourceType.symbol.replace('"', '""')})"`
+      )
+    ),
+  ]
+
+  // some datasets might be missing values
+  // take the biggest dataset as reference for length and dates
+  const biggestDataset = json.reduce((carry, dataset) =>
+    dataset.data.length > carry.data.length ? dataset : carry
+  )
+  const numValues = biggestDataset.data.length
+
+  for (let i = 0; i < numValues; ++i) {
+    const date = biggestDataset.data[i].x
+    // remove the offset from the date string so it parses correctly once in a CSV software
+    const finalDate = `"${date.replace(/\+.*/g, '')}"`
+
+    const values = json.map(dataset => {
+      // take the value at the same date as the biggest dataset
+      // to account for potential missing values in the middle of the dataset
+      const value = dataset.data.find(value => value.x === date)
+
+      // missing value
+      if (value === undefined) {
+        return '""'
+      }
+
+      // replace dots with comas in the numbers so it is recognized as number in a CSV software
+      return `"${value.y.replace('.', ',')}"`
+    })
+
+    data.push([finalDate].concat(values))
+  }
+
+  return data.map(line => line.join(',')).join('\n')
 }

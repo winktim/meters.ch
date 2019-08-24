@@ -28,6 +28,7 @@
         :agregation="agregation"
         :offset="offset"
         :resources="resources"
+        @currentData="setCurrentData"
       ></graph>
       <div v-else class="w-full h-full flex items-center justify-center">
         <span
@@ -38,14 +39,16 @@
     </section>
 
     <section class="fixed bottom-0 right-0 mb-60 text-gray-100 rounded-l-md flex flex-col">
+      <!-- download -->
       <button
         :title="$t('pages.explore.download.title')"
-        :disabled="resources.length === 0"
+        :disabled="!hasData"
         @click="showDownloadPopup = true"
         class="rounded-tl-md p-4 bg-naito-blue-200 simple-action"
       >
         <i class="material-icons text-xl">get_app</i>
       </button>
+      <!-- bookmark -->
       <button
         :title="$t('pages.explore.bookmark.title')"
         :disabled="resources.length === 0"
@@ -129,6 +132,7 @@
       @confirm="download"
       :show="showDownloadPopup"
     ></download-popup>
+    <a ref="downloader" class="hidden"></a>
   </div>
 </template>
 <script>
@@ -138,6 +142,9 @@ import {
   reverseAgregations,
   formatResource,
   fixDashboard,
+  datasetsToJson,
+  JsonToCsv,
+  getPeriod,
 } from '../assets/utils'
 
 import AppHeader from '../components/app-header.vue'
@@ -179,6 +186,8 @@ export default {
       resources: [],
       showBookmarkPopup: false,
       showDownloadPopup: false,
+      currentData: null,
+      hasData: false,
     }
   },
   async mounted() {
@@ -259,9 +268,39 @@ export default {
         }
       }
     },
+    setCurrentData({ datasets, hasData }) {
+      this.currentData = datasets
+      this.hasData = hasData
+    },
     download(payload) {
       this.showDownloadPopup = false
-      // TODO: implement
+      console.log(this.currentData)
+
+      const jsonData = datasetsToJson(this.currentData)
+
+      let dataStr = ''
+
+      let name = `graph-period_${reversePeriods[this.period]}-offset_${
+        this.offset
+      }-agregation_${
+        reverseAgregations[this.agregation]
+      }-resources_${this.resources.join(',')}`
+
+      if (payload.format === 'json') {
+        dataStr =
+          'data:text/json;charset=utf-8,' +
+          encodeURIComponent(JSON.stringify(jsonData, null, 2))
+        name += '.json'
+      } else {
+        dataStr =
+          'data:text/csv;charset=utf-8,' +
+          encodeURIComponent(JsonToCsv(jsonData))
+        name += '.csv'
+      }
+
+      this.$refs.downloader.setAttribute('href', dataStr)
+      this.$refs.downloader.setAttribute('download', name)
+      this.$refs.downloader.click()
     },
     bookmark({ name }) {
       this.showBookmarkPopup = false

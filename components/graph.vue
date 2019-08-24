@@ -24,6 +24,7 @@ import {
   capitalize,
   reversePeriods,
   chartDefaults,
+  fixMissingData,
 } from '../assets/utils'
 
 export default {
@@ -45,6 +46,7 @@ export default {
           datasets: [],
         },
         options: {
+          spanGaps: true,
           maintainAspectRatio: false,
           animation: {
             duration: 0,
@@ -203,6 +205,9 @@ export default {
         return
       }
 
+      /**
+       * @type {{data: []}[]}
+       */
       const newDatasets = this.rawData.map(dataset => {
         return {
           ...dataset,
@@ -214,17 +219,42 @@ export default {
         }
       })
 
+      // fix any potential missing data points
+      // because Chart.js can't handle it and it messes the order
+      const completeDataset = newDatasets.reduce((carry, dataset) =>
+        dataset.data.length > carry.data.length ? dataset : carry
+      )
+
+      const fixedDatasets = newDatasets.map(dataset => {
+        // ignore the complete dataset
+        if (dataset === completeDataset) {
+          return dataset
+        }
+
+        // return a new dataset
+        return {
+          ...dataset,
+          data: fixMissingData(completeDataset.data, dataset.data),
+        }
+      })
+
       this.chart.options.scales.xAxes[0].time.unit =
         reverseAgregations[this.agregation]
       this.chart.options.scales.xAxes[0].time.round =
         reverseAgregations[this.agregation]
 
-      this.chart.data.datasets = newDatasets
+      // give it a deep copy because Chartjs likes to modify things
+      this.chart.data.datasets = JSON.parse(JSON.stringify(fixedDatasets))
       this.chart.update()
 
       this.hasData =
         this.chart.data.datasets.length > 0 &&
         this.chart.data.datasets.every(dataset => dataset.data.length > 0)
+
+      this.$emit('currentData', {
+        datasets: fixedDatasets,
+        hasData: this.hasData,
+      })
     },
     reTranslate() {
       this.chart.data.datasets.forEach(dataset => {
