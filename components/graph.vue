@@ -1,7 +1,7 @@
 <template>
   <!-- https://github.com/chartjs/Chart.js/issues/4156 -->
   <div class="relative min-w-0 w-full h-full select-none">
-    <canvas :class="hasData ? 'visible' : 'invisible'" ref="canvas"></canvas>
+    <canvas :class="hasData ? 'opacity-1' : 'opacity-25'" ref="canvas"></canvas>
     <div :class="noDataClasses">
       <span
         class="text-center text-gray-600 font-medium"
@@ -79,8 +79,8 @@ export default {
                   displayFormats: {
                     // custom formats to compat default non-swiss & try to make them compatible with luxon
                     hour: 'HH:mm',
-                    week: 'd MMM YYYY',
-                    day: 'd MMM',
+                    week: 'D MMM YYYY',
+                    day: 'D MMM',
                     month: 'MMM YYYY',
                   },
                 },
@@ -130,8 +130,9 @@ export default {
                 const format = this.chart.options.scales.xAxes[0].time.displayFormats[
                   reverseAgregations[this.agregation]
                 ]
-                  // replace YYYY to be compatible with luxon
+                  // replace YYYY & D to be compatible with luxon
                   .replace('YYYY', 'yyyy')
+                  .replace('D', 'd')
                   // use full month name
                   .replace('MMM', 'MMMM')
                 return capitalize(
