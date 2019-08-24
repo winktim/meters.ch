@@ -4,7 +4,7 @@
     <canvas :class="hasData ? 'opacity-1' : 'opacity-25'" ref="canvas"></canvas>
     <div :class="noDataClasses">
       <span
-        class="text-center text-gray-600 font-medium"
+        class="text-center font-medium"
         v-text="$t('global.no_data', { period: periodOffsetString })"
       ></span>
     </div>
@@ -25,6 +25,7 @@ import {
   reversePeriods,
   chartDefaults,
   fixMissingData,
+  resourceTypesToAxes,
 } from '../assets/utils'
 
 export default {
@@ -96,12 +97,9 @@ export default {
                 },
               },
             ],
-            // TODO: each unit has it's axis
             yAxes: [
               {
                 display: 'auto',
-                // order (higher = further)
-                weight: 0,
                 gridLines: false,
                 ticks: {
                   beginAtZero: true,
@@ -189,8 +187,11 @@ export default {
         newRawData.push({
           label: formatResource(this.$i18n, resource, resourceType, site),
           data: data.map(readingToXY),
-          // TODO: use id based on resource type
-          yAxisID: 0,
+          // use default axis if the axes are not yet created
+          yAxisID:
+            this.chart.options.scales.yAxes.length === 1
+              ? 0
+              : resourceType.symbol,
           resource,
           resourceType,
           site,
@@ -284,6 +285,15 @@ export default {
     locale() {
       this.reTranslate()
     },
+    resourceTypes() {
+      this.chart.options.scales.yAxes = resourceTypesToAxes(this.resourceTypes)
+
+      // update the axis used by each dataset
+      this.chart.data.datasets.forEach(dataset => {
+        dataset.yAxisID = dataset.resourceType.symbol
+      })
+      this.chart.update()
+    },
   },
   mounted() {
     this.chart = new Chart(this.$refs.canvas, this.defaultConfig)
@@ -315,6 +325,9 @@ export default {
         this.offset,
         { count: this.offset }
       )
+    },
+    resourceTypes() {
+      return this.$store.state.data.resourceTypes
     },
   },
 }

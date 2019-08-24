@@ -479,3 +479,33 @@ export function JsonToCsv(json) {
 
   return data.map(line => line.join(',')).join('\n')
 }
+
+/**
+ * Turn a list of resource types to a list of axes
+ * @param {{symbol: string}[]} resourceTypes
+ */
+export function resourceTypesToAxes(resourceTypes) {
+  const uniqueSymbols = resourceTypes
+    .map(resourceType => resourceType.symbol)
+    .filter((symbol, i, array) => array.indexOf(symbol) === i)
+  return uniqueSymbols.map((symbol, i) => ({
+    display: 'auto',
+    // order (higher = further)
+    weight: i,
+    position: i === 0 ? 'right' : 'left',
+    gridLines: false,
+    ticks: {
+      beginAtZero: true,
+      precision: 0,
+      maxTicksLimit: 7,
+      fontColor: chartDefaults.fontColor,
+      fontSize: chartDefaults.fontSize,
+      padding: 18,
+
+      callback: tick => {
+        return `${tick} ${symbol}`
+      },
+    },
+    id: symbol,
+  }))
+}

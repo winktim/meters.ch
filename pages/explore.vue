@@ -31,10 +31,7 @@
         @currentData="setCurrentData"
       ></graph>
       <div v-else class="w-full h-full flex items-center justify-center">
-        <span
-          class="text-center text-gray-600 font-medium"
-          v-text="$t('pages.explore.form.no_resources')"
-        ></span>
+        <span class="text-center font-medium" v-text="$t('pages.explore.form.no_resources')"></span>
       </div>
     </section>
 
@@ -274,7 +271,6 @@ export default {
     },
     download(payload) {
       this.showDownloadPopup = false
-      console.log(this.currentData)
 
       const jsonData = datasetsToJson(this.currentData)
 
