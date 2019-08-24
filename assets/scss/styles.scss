@@ -36,6 +36,30 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
+// remove blue highlight once a value is selected.
+// keep text color with "currentColor"
+select::-ms-value {
+  background: transparent;
+  color: currentColor;
+}
+
+// fix normilize for IE11
+input:-ms-input-placeholder,
+input::-ms-input-placeholder,
+textarea:-ms-input-placeholder,
+textarea::-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.4);
+  opacity: 1;
+}
+
+/* IE11 fix: https://github.com/philipwalton/flexbugs#flexbug-2 */
+.flex > p,
+.flex > h2,
+.flex > h3,
+.flex > span {
+  max-width: 100%;
+}
+
 .background-image {
   background: #e4e7e0;
   background-image: url(/images/background_low.jpg);
