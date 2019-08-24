@@ -23,6 +23,7 @@ import {
   formatResource,
   capitalize,
   reversePeriods,
+  chartDefaults,
 } from '../assets/utils'
 
 export default {
@@ -37,7 +38,7 @@ export default {
     return {
       chart: null,
       rawData: null,
-      hasData: false,
+      hasData: true,
       defaultConfig: {
         type: 'line',
         data: {
@@ -54,8 +55,8 @@ export default {
             labels: {
               padding: 25,
               boxWidth: 35,
-              fontSize: 16,
-              fontColor: 'black',
+              fontSize: chartDefaults.fontSize,
+              fontColor: chartDefaults.fontColor,
             },
           },
           elements: {
@@ -87,8 +88,8 @@ export default {
                 // TODO: vertical & horizontal single lines
                 gridLines: false,
                 ticks: {
-                  fontColor: 'black',
-                  fontSize: 16,
+                  fontColor: chartDefaults.fontColor,
+                  fontSize: chartDefaults.fontSize,
                   padding: 18,
                 },
               },
@@ -104,8 +105,8 @@ export default {
                   beginAtZero: true,
                   precision: 0,
                   maxTicksLimit: 7,
-                  fontColor: 'black',
-                  fontSize: 16,
+                  fontColor: chartDefaults.fontColor,
+                  fontSize: chartDefaults.fontSize,
                   padding: 18,
                 },
               },

@@ -354,3 +354,9 @@ export function agregateData(data, agregation, agregationFunction) {
 export function capitalize(string) {
   return string[0].toUpperCase() + string.substr(1)
 }
+
+export const chartDefaults = {
+  fontColor: '#212121',
+  fontSize: 16,
+  fontFamily: 'Raleway, sans-serif',
+}
