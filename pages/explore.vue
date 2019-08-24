@@ -186,6 +186,15 @@ export default {
     await Promise.all([this.$getResources()])
 
     this.getQuery()
+
+    // if we still don't have any resource shown, try to use the first one
+    if (
+      this.resources.length === 0 &&
+      this.$store.state.data.resources.length > 0
+    ) {
+      this.resources = [this.$store.state.data.resources[0].id]
+    }
+
     this.setQuery()
 
     await Promise.all([
