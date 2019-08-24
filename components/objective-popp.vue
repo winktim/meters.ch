@@ -166,7 +166,11 @@ export default {
 
       const readings = await this.$getReadings(this.resource_id, period)
 
-      if (readings.length < 2) {
+      // we need at leat 93% of the data we should have for the period to compute the comparison
+      // otherwise, the comparison isn't very usefull to the user
+      const expectedReadingsLength =
+        (this.type === 'weekly' ? 2 * 24 * 7 : 2 * 24 * 30) * 0.93
+      if (readings.length < expectedReadingsLength) {
         this.compareValue = -1
         return
       }
