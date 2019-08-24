@@ -6,19 +6,6 @@
       :back="true"
     ></app-header>
 
-    <!-- TODO: remove or not ?
-    <section
-      class="bg-gray-100 rounded-md p-4 mb-2 md:mb-8 sm:w-120 mx-auto flex flex-col sm:flex-row items-center justify-center"
-    >
-      <h2 class="text-lg font-bold mb-3 sm:mb-0 sm:mr-2" v-text="$t('pages.explore.period')"></h2>
-      <p class="text-center">
-        <span class="text-naito-green-200 font-medium" v-text="fromDateTime"></span>
-        <span v-text="$t('pages.explore.to')"></span>
-        <span class="text-naito-green-200 font-medium" v-text="toDateTime"></span>
-      </p>
-    </section>
-    -->
-
     <section
       class="bg-gray-100 rounded-md p-4 md:p-12 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5 graph-height"
     >
