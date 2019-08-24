@@ -40,6 +40,7 @@ export default {
     '~/assets/scss/components.scss',
     '~/assets/scss/fonts.scss',
     '~/assets/scss/styles.scss',
+    '~/assets/scss/chart.scss',
   ],
   /*
    ** Plugins to load before mounting the App

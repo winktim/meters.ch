@@ -10,7 +10,7 @@
         @change="SET_LOCALE($event)"
       ></language-selector>
     </div>
-    <main class="flex-grow text-gray-900 px-6">
+    <main class="flex-grow w-full text-gray-900 px-6">
       <nuxt />
     </main>
     <message-box></message-box>

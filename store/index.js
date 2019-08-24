@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { indexOnId, fixDashboard } from '../assets/utils'
+import moment from 'moment'
+import { indexOnId, fixDashboard, dateLocale } from '../assets/utils'
 
 export const state = () => ({
   api: `${process.env.API_ROOT}/${process.env.API_VERSION}`,
@@ -50,6 +51,9 @@ export const mutations = {
 
       this.app.i18n.locale = locale
       localStorage.setItem('locale', locale)
+
+      // Chart.js uses moment to display dates
+      moment.locale(dateLocale[locale])
     }
   },
   SET_API_TOKEN(state, { apiToken }) {

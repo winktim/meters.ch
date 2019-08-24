@@ -1,13 +1,14 @@
 <template>
-  <div>
+  <div class="w-full">
     <app-header
       :title="$t('pages.explore.title')"
       :description="$t('pages.explore.description')"
       :back="true"
     ></app-header>
 
+    <!-- TODO: remove or not ?
     <section
-      class="bg-gray-100 rounded-md p-4 mb-8 sm:w-120 mx-auto flex flex-col sm:flex-row items-center justify-center"
+      class="bg-gray-100 rounded-md p-4 mb-2 md:mb-8 sm:w-120 mx-auto flex flex-col sm:flex-row items-center justify-center"
     >
       <h2 class="text-lg font-bold mb-3 sm:mb-0 sm:mr-2" v-text="$t('pages.explore.period')"></h2>
       <p class="text-center">
@@ -16,12 +17,28 @@
         <span class="text-naito-green-200 font-medium" v-text="toDateTime"></span>
       </p>
     </section>
+    -->
 
-    <section>{{resources}}</section>
+    <section class="bg-gray-100 rounded-md p-4 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5 graph-height">
+      <graph
+        v-if="resources.length > 0"
+        :period="period"
+        :agregation="agregation"
+        :offset="offset"
+        :resources="resources"
+      ></graph>
+      <div v-else class="w-full h-full flex items-center justify-center">
+        <span
+          class="text-center text-gray-600 font-medium"
+          v-text="$t('pages.explore.form.no_resources')"
+        ></span>
+      </div>
+    </section>
 
     <section class="fixed bottom-0 right-0 mb-60 text-gray-100 rounded-l-md flex flex-col">
       <button
         :title="$t('pages.explore.download.title')"
+        :disabled="resources.length === 0"
         @click="showDownloadPopup = true"
         class="rounded-tl-md p-4 bg-naito-blue-200 simple-action"
       >
@@ -123,6 +140,7 @@ import {
 
 import AppHeader from '../components/app-header.vue'
 import SearchSelectMulti from '../components/search-select-multi'
+import Graph from '../components/graph'
 
 import BookmarkPopup from '../components/bookmark-popup'
 import DownloadPopup from '../components/download-popup'
@@ -144,7 +162,13 @@ export default {
       ],
     }
   },
-  components: { AppHeader, SearchSelectMulti, BookmarkPopup, DownloadPopup },
+  components: {
+    AppHeader,
+    SearchSelectMulti,
+    BookmarkPopup,
+    DownloadPopup,
+    Graph,
+  },
   data() {
     return {
       offset: 0,
@@ -203,7 +227,7 @@ export default {
       }
 
       const resources = query.resources
-      if (Array.isArray(resources) && resources.length > 0) {
+      if (Array.isArray(resources)) {
         // filter existing resources
         this.resources = resources
           .map(id => parseInt(id))
@@ -213,6 +237,15 @@ export default {
               this.$store.state.dataById.resources[id] !== undefined
             )
           })
+      } else {
+        // if is contains a single value, it will parse as a single number
+        const id = parseInt(resources)
+        if (
+          !isNaN(id) &&
+          this.$store.state.dataById.resources[id] !== undefined
+        ) {
+          this.resources = [id]
+        }
       }
     },
     download(payload) {
@@ -248,6 +281,10 @@ export default {
     },
     period() {
       this.setQuery()
+
+      // reset offset when the period changes
+      // #UX choice
+      this.offset = 0
     },
     resources() {
       this.setQuery()

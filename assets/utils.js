@@ -1,3 +1,23 @@
+import { DateTime } from 'luxon'
+
+/**
+ * Map from the simple language local to the full locale for number formatting
+ */
+export const numberLocale = {
+  en: 'en-ch',
+  fr: 'de-ch',
+  de: 'de-ch',
+}
+
+/**
+ * Map from the simple language local to the full locale for date formatting
+ */
+export const dateLocale = {
+  en: 'en-ch',
+  fr: 'fr-ch',
+  de: 'de-ch',
+}
+
 /**
  *
  * @param {import('vue-i18n').default} i18n
@@ -158,4 +178,179 @@ export function fixDashboard(dashboard, ownedResources) {
   }
 
   return out
+}
+
+/**
+ * Get a from-to period based on a reference time, period name and offset
+ * @param {import('luxon').DateTime} reference
+ * @param {number} period
+ * @param {number} offset
+ */
+export function getPeriod(reference, period, offset) {
+  const periodName = reversePeriods[period]
+
+  if (offset === 0) {
+    return {
+      from: reference.startOf(periodName).toUTC(),
+      to: reference.toUTC(),
+    }
+  }
+
+  const offseted = reference.minus({ [periodName]: offset })
+
+  return {
+    from: offseted.startOf(periodName).toUTC(),
+    to: offseted.endOf(periodName).toUTC(),
+  }
+}
+
+/**
+ * Transform a reading object from the API into an XY object for Chart.js
+ * @param {{read_at: string, value: number}} reading
+ */
+export function readingToXY(reading) {
+  return {
+    x: reading['read_at'],
+    y: reading['value'],
+  }
+}
+
+export const datasetColors = [
+  '#459090',
+  '#194242',
+  '#9C5A8A',
+  '#5C5323',
+  '#DBC75E',
+  '#173242',
+  '#9C5658',
+  '#41728F',
+  '#5C5B20',
+  '#74DBD5',
+  '#86A2A0',
+  '#4C8F8B',
+  '#B6DBD9',
+  '#315C59',
+]
+
+export const datasetStyle = datasetColors.map(color => ({
+  backgroundColor: 'transparent',
+  borderColor: color,
+  borderWidth: 3,
+  pointRadius: 0,
+  pointHoverRadius: 6,
+  pointBorderColor: 'transparent',
+  pointBackgroundColor: color,
+}))
+
+export const decimalDefaultFormat = {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+}
+
+const agregationFactors = {
+  [agregations['hour']]: ['hour', 'day', 'year'],
+  [agregations['day']]: ['day', 'year'],
+  // see https://momentjs.com/docs/#/get-set/week-year/
+  [agregations['week']]: ['weekNumber', 'weekYear'],
+  [agregations['month']]: ['month', 'year'],
+  // [agregations['quarter']]: [ 'quarter', 'year' ],
+  // [agregations['year']]: [ 'year' ],
+}
+
+/**
+ * Verifies if all values in `a` are the same as their corresponding indices in `b`
+ * @param {number[]} a an array of numbers
+ * @param {number[]} b an array of numbers of the same length as `a`
+ * @returns {boolean} true if all values in `a` are strictly equal to the values in `b`
+ */
+function allEqual(a, b) {
+  for (let i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false
+  }
+  return true
+}
+
+/**
+ *
+ * @param {{x: string, y: number}[]} array
+ * @param {number} agregation
+ */
+function chunkForAgregation(array, agregation) {
+  const chunks = []
+  const length = array.length
+
+  const factors = agregationFactors[agregation]
+
+  const retrievedFactors = array.map(value => {
+    const date = DateTime.fromISO(value.x)
+    return factors.map(factor => date.get(factor))
+  })
+
+  for (let i = 1, lastChunkEnd = 0; i <= length; ++i) {
+    // if we reached the end, just chunk what remains
+    // when the time period changes, cut from the last cut to the data point before this one
+    if (
+      i === length ||
+      !allEqual(retrievedFactors[i - 1], retrievedFactors[i])
+    ) {
+      // add a chunk. end is non-inclusive, so the current item is not in the chunk
+      chunks.push(array.slice(lastChunkEnd, i))
+      lastChunkEnd = i
+    }
+  }
+
+  return chunks
+}
+
+/**
+ *
+ * @param {{x: string, y: number}[]} data
+ * @param {number} agregation
+ * @param {'sum' | 'avg'} agregationFunction
+ */
+export function agregateData(data, agregation, agregationFunction) {
+  // nothing to do with zero or one data point
+  if (data.length <= 1) {
+    return data
+  }
+
+  let out = []
+  if (agregationFunction === 'sum') {
+    // turn the absolute data to relative data
+    for (let i = 1; i < data.length; ++i) {
+      out.push({ x: data[i].x, y: data[i].y - data[i - 1].y })
+    }
+  } else {
+    out = data
+  }
+
+  const chunks = chunkForAgregation(out, agregation)
+
+  const summedUp = chunks.map(chunk => {
+    return {
+      x: DateTime.fromISO(chunk[0].x)
+        .startOf(reverseAgregations[agregation])
+        .toISO(),
+      y: chunk.reduce((carry, chunk) => carry + chunk.y, 0),
+    }
+  })
+
+  if (agregationFunction === 'avg') {
+    return summedUp.map((value, i) => {
+      return {
+        x: value.x,
+        y: value.y !== 0 ? value.y / chunks[i].length : 0,
+      }
+    })
+  } else {
+    return summedUp
+  }
+}
+
+/**
+ *
+ * @param {string} string
+ */
+export function capitalize(string) {
+  return string[0].toUpperCase() + string.substr(1)
 }

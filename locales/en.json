@@ -11,7 +11,8 @@
     "select_all": "Select all",
     "select_none": "Deselect all",
     "selector_close": "Close the selector's results",
-    "optional": "Optional"
+    "optional": "Optional",
+    "no_data": "No data for the given period: {period}"
   },
   "features": {
     "resource_types": {
@@ -113,7 +114,8 @@
         "confirm": "Bookmark"
       },
       "form": {
-        "find_resources": "Select resources"
+        "find_resources": "Select resources",
+        "no_resources": "Please select at least one resource to start"
       }
     },
     "objectives": {

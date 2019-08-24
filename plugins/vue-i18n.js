@@ -1,25 +1,8 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+import { numberLocale, dateLocale } from '../assets/utils'
 
 Vue.use(VueI18n)
-
-/**
- * Map from the simple language local to the full locale for number formatting
- */
-const numberLocale = {
-  en: 'en-ch',
-  fr: 'de-ch',
-  de: 'de-ch',
-}
-
-/**
- * Map from the simple language local to the full locale for date formatting
- */
-const dateLocale = {
-  en: 'en-ch',
-  fr: 'fr-ch',
-  de: 'de-ch',
-}
 
 export default ({ app, store }, inject) => {
   // Set i18n instance on app
