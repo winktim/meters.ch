@@ -12,7 +12,8 @@
     "select_none": "Tout déselectionner",
     "selector_close": "Fermer les résultats du sélecteur",
     "optional": "Optionel",
-    "no_data": "Pas de données pour la période sélectionnée: {period}"
+    "no_data": "Pas de données pour la période sélectionnée: {period}",
+    "no_undoing": "Cette action ne peut pas être annulée. Veuillez confirmer."
   },
   "features": {
     "resource_types": {

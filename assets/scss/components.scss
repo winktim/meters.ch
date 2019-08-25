@@ -98,6 +98,21 @@
   @apply clickable flex items-center py-3 pr-4 font-semibold;
 }
 
+.confirmable {
+  &[data-confirmed='true'] {
+    @apply rounded-md bg-red-600 text-gray-100 relative shadow-lg;
+
+    &::after {
+      @apply z-10 absolute right-full mr-1 shadow-lg w-48 bg-gray-800 p-3 text-sm rounded-md text-center pointer-events-none;
+      content: attr(data-confirm-text);
+
+      @media (min-width: theme('screens.md')) {
+        @apply w-60;
+      }
+    }
+  }
+}
+
 .outline-action,
 .simple-action,
 .action,

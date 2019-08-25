@@ -12,7 +12,8 @@
     "select_none": "Deselect all",
     "selector_close": "Close the selector's results",
     "optional": "Optional",
-    "no_data": "No data for the given period: {period}"
+    "no_data": "No data for the given period: {period}",
+    "no_undoing": "This action cannot be undone. Please confirm."
   },
   "features": {
     "resource_types": {

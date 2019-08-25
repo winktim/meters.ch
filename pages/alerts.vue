@@ -24,8 +24,11 @@
         </button>
 
         <button
-          class="flex items-center text-naito-blue-200 text-lg py-4 px-5 clickable focus:shadow-outline"
-          @click="del(alert.id)"
+          class="flex items-center text-naito-blue-200 text-lg py-4 px-5 clickable focus:shadow-outline confirmable"
+          data-confirmed="false"
+          :data-confirm-text="$t('global.no_undoing')"
+          @click="confirmDelete($event, alert)"
+          @blur="$event.currentTarget.dataset.confirmed = 'false'"
           :title="$t('pages.alerts.modes.delete')"
         >
           <i class="material-icons">delete</i>
@@ -115,6 +118,18 @@ export default {
       this.$store.dispatch('hideMessage')
 
       this.$delAlert({ id })
+    },
+    /**
+     * @param {{ currentTarget: HTMLElement}} event
+     */
+    confirmDelete(event, alert) {
+      // need a second click to delete
+      if (event.currentTarget.dataset.confirmed === 'false') {
+        event.currentTarget.dataset.confirmed = 'true'
+      } else {
+        event.currentTarget.dataset.confirmed = 'false'
+        this.del(alert.id)
+      }
     },
     popupCancel() {
       this.show = false

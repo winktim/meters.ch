@@ -24,8 +24,11 @@
         </button>
 
         <button
-          class="flex items-center text-naito-blue-200 text-lg py-4 px-5 clickable focus:shadow-outline"
-          @click="del(objective.id)"
+          class="flex items-center text-naito-blue-200 text-lg py-4 px-5 clickable focus:shadow-outline confirmable"
+          data-confirmed="false"
+          :data-confirm-text="$t('global.no_undoing')"
+          @click="confirmDelete($event, objective)"
+          @blur="$event.currentTarget.dataset.confirmed = 'false'"
           :title="$t('pages.objectives.modes.delete')"
         >
           <i class="material-icons">delete</i>
@@ -115,6 +118,18 @@ export default {
       this.$store.dispatch('hideMessage')
 
       this.$delObjective({ id })
+    },
+    /**
+     * @param {{ currentTarget: HTMLElement}} event
+     */
+    confirmDelete(event, objective) {
+      // need a second click to delete
+      if (event.currentTarget.dataset.confirmed === 'false') {
+        event.currentTarget.dataset.confirmed = 'true'
+      } else {
+        event.currentTarget.dataset.confirmed = 'false'
+        this.del(objective.id)
+      }
     },
     popupCancel() {
       this.show = false
