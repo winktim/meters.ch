@@ -210,6 +210,10 @@ export default {
        * @type {{data: []}[]}
        */
       const newDatasets = this.rawData.map(dataset => {
+        if (!dataset.resourceType) {
+          return dataset
+        }
+
         return {
           ...dataset,
           data: agregateData(
