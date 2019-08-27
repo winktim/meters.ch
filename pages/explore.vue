@@ -316,8 +316,9 @@ export default {
       this.setQuery()
 
       // reset offset when the period changes
+      // TODO: maybe fix, because it prevents from setting an offset from URL
       // #UX choice
-      this.offset = 0
+      // this.offset = 0
     },
     resources() {
       this.setQuery()
