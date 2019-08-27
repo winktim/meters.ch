@@ -20,11 +20,11 @@
           :title="$t('pages.alerts.modes.edit')"
         >
           <span class="flex-grow" v-text="alert.value"></span>
-          <i class="material-icons text-naito-blue-200 text-lg px-5">edit</i>
+          <i class="material-icons text-naito-blue-300 text-lg px-5">edit</i>
         </button>
 
         <button
-          class="flex items-center text-naito-blue-200 text-lg py-4 px-5 clickable focus:shadow-outline confirmable"
+          class="flex items-center text-naito-blue-300 text-lg py-4 px-5 clickable focus:shadow-outline confirmable"
           data-confirmed="false"
           :data-confirm-text="$t('global.no_undoing')"
           @click="confirmDelete($event, alert)"
@@ -38,7 +38,7 @@
 
     <div class="mt-4 mb-24 md:mt-8 flex justify-center">
       <button
-        class="w-full lg:w-200 action bg-naito-blue-200 text-gray-100 text-center relative"
+        class="w-full lg:w-200 action bg-naito-blue-300 text-gray-100 text-center relative"
         @click="create"
       >
         <i class="material-icons absolute left-0 ml-4">add</i>

@@ -58,7 +58,9 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/users')
       store.commit('SET_USER', { user: parsed[0] })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('getResources', async function(force) {
@@ -69,7 +71,9 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/resources')
       store.commit('SET_RESOURCES', { resources: parsed })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('getResourceTypes', async function(force) {
@@ -80,7 +84,9 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/resourceTypes')
       store.commit('SET_RESOURCE_TYPES', { resourceTypes: parsed })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('getSites', async function(force) {
@@ -91,7 +97,9 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/sites')
       store.commit('SET_SITES', { sites: parsed })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('getSensors', async function(force) {
@@ -102,7 +110,9 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/sensors')
       store.commit('SET_SENSORS', { sensors: parsed })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('getObjectives', async function(force) {
@@ -113,7 +123,9 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/objectives')
       store.commit('SET_OBJECTIVES', { objectives: parsed })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('getAlerts', async function(force) {
@@ -124,7 +136,9 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/alerts')
       store.commit('SET_ALERTS', { alerts: parsed })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('getClient', async function(force) {
@@ -135,9 +149,12 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/clients')
       store.commit('SET_CLIENT', { client: parsed[0] })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
+  // TODO: caching ? for like 5 min
   inject('getReadings', async function(resource, payload) {
     try {
       return await classic('get', `/resources/${resource}/readings`, payload)
@@ -168,7 +185,9 @@ export default ({ app, store, redirect }, inject) => {
         isError: false,
         time: customTime || 1500,
       })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('putObjective', async function(payload) {
@@ -187,7 +206,9 @@ export default ({ app, store, redirect }, inject) => {
         isError: false,
         time: 2000,
       })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('putAlert', async function(payload) {
@@ -206,7 +227,9 @@ export default ({ app, store, redirect }, inject) => {
         isError: false,
         time: 2000,
       })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   // POST
@@ -227,7 +250,9 @@ export default ({ app, store, redirect }, inject) => {
         isError: false,
         time: 2000,
       })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('postAlert', async function(payload) {
@@ -246,7 +271,9 @@ export default ({ app, store, redirect }, inject) => {
         isError: false,
         time: 2000,
       })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   // DELETE
@@ -267,7 +294,9 @@ export default ({ app, store, redirect }, inject) => {
         isError: false,
         time: 2000,
       })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 
   inject('delAlert', async function(payload) {
@@ -285,6 +314,8 @@ export default ({ app, store, redirect }, inject) => {
         isError: false,
         time: 2000,
       })
-    } catch (e) {}
+    } catch (e) {
+      throw e
+    }
   })
 }

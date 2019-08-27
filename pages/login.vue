@@ -69,7 +69,7 @@
 
     <a
       v-if="!isProbablyClient"
-      class="my-8 w-full sm:w-120 action bg-naito-blue-200 text-gray-100 text-center"
+      class="my-8 w-full sm:w-120 action bg-naito-blue-300 text-gray-100 text-center"
       href="https://naito.one/meters"
       v-text="$t('pages.login.new-client')"
     ></a>

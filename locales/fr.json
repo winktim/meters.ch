@@ -11,9 +11,9 @@
     "select_all": "Tout sélectionner",
     "select_none": "Tout déselectionner",
     "selector_close": "Fermer les résultats du sélecteur",
-    "optional": "Optionel",
     "no_data": "Pas de données pour la période sélectionnée: {period}",
-    "no_undoing": "Cette action ne peut pas être annulée. Veuillez confirmer."
+    "no_undoing": "Cette action ne peut pas être annulée. Veuillez confirmer.",
+    "and_others": "et d'autres"
   },
   "features": {
     "resource_types": {
@@ -61,7 +61,7 @@
   "period_offsets": {
     "day": "Aujourd'hui | Hier | Il y a {count} jours",
     "week": "Cette semaine | La semaine dernière | Il y a {count} semaines",
-    "month": "Ce mois | Le mois dernier | Il y a {count} mois",
+    "month": "Ce mois-ci | Le mois dernier | Il y a {count} mois",
     "year": "Cette année | L'année dernière | Il y a {count} ans"
   },
   "menu": {
@@ -78,7 +78,13 @@
       "site": "site | sites",
       "summary-small": "<strong>{sensor}</strong> en ligne sur <strong>{site}</strong>.",
       "title": "Tableau de bord",
-      "description": "Visionnez les graphiques sauvegardés et accédez aux fonctionnalitées du site Meters"
+      "description": "Visionnez les graphiques sauvegardés et accédez aux fonctionnalitées du site Meters",
+      "open_chart": "Ouvrir le graphique",
+      "edit": {
+        "title": "Modifier le tableau de bord",
+        "cancel_last": "Annuler la dernière action",
+        "confirm_all": "Valider les changements"
+      }
     },
     "infos": {
       "title": "Informations",
@@ -110,7 +116,7 @@
       },
       "bookmark": {
         "title": "Ajouter un signer pour le graphique actuel",
-        "name": "Nom du graphique",
+        "name": "Nom du graphique (optionel)",
         "relative_period": "La période relative choisie sera conservée:",
         "confirm": "Ajouter"
       },

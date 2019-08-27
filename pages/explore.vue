@@ -28,7 +28,7 @@
         :title="$t('pages.explore.download.title')"
         :disabled="!hasData"
         @click="showDownloadPopup = true"
-        class="rounded-tl-md p-4 bg-naito-blue-200 simple-action"
+        class="rounded-tl-md p-4 bg-naito-blue-300 simple-action"
       >
         <i class="material-icons text-xl">get_app</i>
       </button>
@@ -37,7 +37,7 @@
         :title="$t('pages.explore.bookmark.title')"
         :disabled="resources.length === 0"
         @click="showBookmarkPopup = true"
-        class="rounded-bl-md p-4 bg-naito-blue-200 simple-action"
+        class="rounded-bl-md p-4 bg-naito-blue-300 simple-action"
       >
         <i class="material-icons text-xl">bookmark</i>
       </button>
@@ -109,6 +109,7 @@
       @confirm="bookmark"
       :show="showBookmarkPopup"
       :periodOffsetString="periodOffsetString"
+      :defaultChartName="defaultChartName"
     ></bookmark-popup>
 
     <download-popup
@@ -129,6 +130,7 @@ import {
   datasetsToJson,
   JsonToCsv,
   getPeriod,
+  generateName,
 } from '../assets/utils'
 
 import AppHeader from '../components/app-header.vue'
@@ -325,17 +327,6 @@ export default {
     },
   },
   computed: {
-    fromDateTime() {
-      return DateTime.local()
-        .minus({ days: 1 })
-        .setLocale(this.$dateLocale())
-        .toLocaleString(DateTime.DATETIME_SHORT)
-    },
-    toDateTime() {
-      return DateTime.local()
-        .setLocale(this.$dateLocale())
-        .toLocaleString(DateTime.DATETIME_SHORT)
-    },
     isLastPeriodOffset() {
       return this.offset === 0
     },
@@ -365,6 +356,25 @@ export default {
           value: formatResource(this.$i18n, resource, resourceType, site),
         }
       })
+    },
+    defaultChartName() {
+      if (this.resources.length === 0) {
+        return ''
+      }
+
+      if (!this.$store.state.dataById.resources) {
+        return ''
+      }
+
+      return generateName(
+        {
+          offset: this.offset,
+          period: reversePeriods[this.period],
+          resources: this.resources,
+        },
+        this.$store.state.dataById.resources,
+        this.$i18n
+      )
     },
   },
 }

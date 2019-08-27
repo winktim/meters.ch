@@ -28,6 +28,7 @@ export default {
     },
     parenClasses() {
       return [
+        'z-50',
         'fixed',
         'top-0',
         'mt-16',

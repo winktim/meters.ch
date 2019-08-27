@@ -495,7 +495,7 @@ export function resourceTypesToAxes(resourceTypes) {
     position: i === 0 ? 'right' : 'left',
     gridLines: false,
     ticks: {
-      beginAtZero: true,
+      // beginAtZero: true,
       precision: 0,
       maxTicksLimit: 7,
       fontColor: chartDefaults.fontColor,
@@ -508,4 +508,24 @@ export function resourceTypesToAxes(resourceTypes) {
     },
     id: symbol,
   }))
+}
+
+/**
+ * Get an auto generated name for the graph
+ * @param {{resources: number[], period: string, offset: number}} graph
+ * @param {{[x: number]: {description: string}}} resourcesById
+ * @param {import('vue-i18n').default} i18n
+ */
+export function generateName(graph, resourcesById, i18n) {
+  let resources = resourcesById[graph.resources[0]].description
+
+  if (graph.resources.length > 1) {
+    resources += ` ${i18n.t('global.and_others')}`
+  }
+
+  const period = i18n.tc('period_offsets.' + graph.period, graph.offset, {
+    count: graph.offset,
+  })
+
+  return `${resources}, ${period}`
 }

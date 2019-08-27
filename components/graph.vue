@@ -35,6 +35,10 @@ export default {
     agregation: Number,
     offset: Number,
     resources: Array,
+    legend: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -53,8 +57,19 @@ export default {
             duration: 0,
             easing: 'linear',
           },
+          layout: {
+            padding: {
+              // comppensate padding of labels on the left
+              left: 20,
+              right: 0,
+              top: 0,
+              bottom: 0,
+            },
+          },
+
           legend: {
             position: 'top',
+            display: this.legend,
             labels: {
               padding: 25,
               boxWidth: 35,
@@ -102,7 +117,7 @@ export default {
                 display: 'auto',
                 gridLines: false,
                 ticks: {
-                  beginAtZero: true,
+                  // beginAtZero: true,
                   precision: 0,
                   maxTicksLimit: 7,
                   fontColor: chartDefaults.fontColor,
@@ -288,19 +303,34 @@ export default {
     },
   },
   watch: {
-    period() {
+    period(to, from) {
+      if (to === from) {
+        return
+      }
       this.updateRawData().catch(console.error)
     },
-    offset() {
+    offset(to, from) {
+      if (to === from) {
+        return
+      }
       this.updateRawData().catch(console.error)
     },
-    resources() {
+    resources(to, from) {
+      if (JSON.stringify(to) === JSON.stringify(from)) {
+        return
+      }
       this.updateRawData().catch(console.error)
     },
-    agregation() {
+    agregation(to, from) {
+      if (to === from) {
+        return
+      }
       this.updateAgregation()
     },
-    locale() {
+    locale(to, from) {
+      if (to === from) {
+        return
+      }
       this.reTranslate()
     },
     resourceTypes() {

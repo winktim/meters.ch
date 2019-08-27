@@ -41,6 +41,10 @@ export const state = () => ({
     resources: null,
     resourceTypes: null,
   },
+
+  dashboardEdit: {
+    undoList: [],
+  },
 })
 
 export const mutations = {
@@ -154,6 +158,13 @@ export const mutations = {
     const current = state.dataById.alerts[alert.id]
     Object.assign(current, alert)
   },
+  UPDATE_DASHBOARD(state, { dashboard }) {
+    if (!state.data.user) {
+      return
+    }
+
+    state.data.user.dashboard = dashboard
+  },
 
   // ADD
   ADD_OBJECTIVE(state, { objective }) {
@@ -174,6 +185,9 @@ export const mutations = {
     }
 
     state.data.user.dashboard.push(element)
+  },
+  ADD_DASHBOARD_EDIT(state, { dashboard }) {
+    state.dashboardEdit.undoList.push(dashboard)
   },
 
   // REMOVE
@@ -228,6 +242,12 @@ export const mutations = {
 
     state.data.user.dashboard.splice(index, 1)
   },
+  REMOVE_LAST_DASHBOARD_EDIT(state) {
+    state.dashboardEdit.undoList.pop()
+  },
+  REMOVE_ALL_DASHBOARD_EDITS(state) {
+    state.dashboardEdit.undoList = []
+  },
 }
 
 export const actions = {
@@ -271,6 +291,18 @@ export const actions = {
       }
     })
   },
+  validateDashboardChanges({ commit, state }) {
+    // no changes
+    const numUndos = state.dashboardEdit.undoList.length
+    if (numUndos === 0) {
+      return
+    }
+
+    commit('UPDATE_DASHBOARD', {
+      dashboard: state.dashboardEdit.undoList[numUndos - 1],
+    })
+    commit('REMOVE_ALL_DASHBOARD_EDITS')
+  },
 }
 
 export const getters = {
@@ -292,6 +324,22 @@ export const getters = {
   numSites: state => (state.data.sites ? state.data.sites.length : 0),
   objectives: state => (state.data.objectives ? state.data.objectives : []),
   alerts: state => (state.data.alerts ? state.data.alerts : []),
+
+  // dashboard edit mode
+  dashboardUndoList: state => state.dashboardEdit.undoList,
+  dashboardEditCurrent: state => {
+    if (state.data.user === null) {
+      return []
+    }
+
+    const numUndos = state.dashboardEdit.undoList.length
+
+    if (numUndos === 0) {
+      return state.data.user.dashboard
+    }
+
+    return state.dashboardEdit.undoList[numUndos - 1]
+  },
 
   // Database relations getters
 

@@ -4,8 +4,10 @@ const _ = require('lodash')
 module.exports = {
   theme: {
     transform: (theme, { negative }) => ({
+      'none': '0',
       'screen': '100vw',
       '-screen': '-100vw',
+      'quarter': '90deg',
 
       ...theme('spacing'),
       ...negative(theme('spacing')),
@@ -57,7 +59,8 @@ module.exports = {
         },
         'naito-blue': {
           '100': '#4A90CF',
-          '200': '#3C6285',
+          '200': '#45799E',
+          '300': '#3C6285',
         },
       },
       spacing: {
@@ -73,6 +76,7 @@ module.exports = {
         '120': '30rem',
         '160': '40rem',
         '200': '50rem',
+        'fake1/2': '48%',
       },
       height: {
         '18': '4.5rem',
@@ -123,6 +127,9 @@ module.exports = {
           },
           [`.${e(`translate-z-${key}`)}`]: {
             transform: `translateZ(${value})`,
+          },
+          [`.${e(`rotate-${key}`)}`]: {
+            transform: `rotate(${value})`,
           },
         }
       })

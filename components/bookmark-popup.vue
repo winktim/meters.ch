@@ -13,7 +13,7 @@
             <input
               class="flex-grow mx-2 py-2 transparent-input"
               type="text"
-              :placeholder="$t('global.optional')"
+              :placeholder="defaultChartName"
               name="name-input"
               id="name-input"
               v-model="name"
@@ -50,6 +50,10 @@ export default {
   props: {
     show: Boolean,
     periodOffsetString: String,
+    defaultChartName: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {

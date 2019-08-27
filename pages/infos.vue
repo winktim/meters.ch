@@ -41,7 +41,7 @@
 
     <section class="mt-16 mb-24 md:mt-24 flex flex-col items-center">
       <a
-        class="mb-8 md:mb-12 w-full sm:w-120 action bg-naito-blue-200 text-gray-100 text-center relative"
+        class="mb-8 md:mb-12 w-full sm:w-120 action bg-naito-blue-300 text-gray-100 text-center relative"
         href="mailto:support@naito.one"
       >
         <i class="material-icons absolute left-0 ml-4">contact_support</i>
