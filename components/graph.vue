@@ -144,7 +144,7 @@ export default {
               },
 
               label: (tooltipItem, data) => {
-                const label = data.datasets[tooltipItem.datasetIndex].label
+                const label = data.datasets[tooltipItem.datasetIndex].resource.description
                 const symbol =
                   data.datasets[tooltipItem.datasetIndex].resourceType.symbol
                 const value = parseFloat(tooltipItem.value).toLocaleString(
