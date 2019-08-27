@@ -22,7 +22,7 @@
       </div>
       <div>
         <p v-html="$t('pages.index.hello', { name })"></p>
-        <p class="sm:hidden" v-html="$t('pages.index.summary-small', sensorAndSitParams)"></p>
+        <p class="sm:hidden" v-html="$t('pages.index.summary_small', sensorAndSitParams)"></p>
         <p class="hidden sm:block" v-html="$t('pages.index.summary', sensorAndSitParams)"></p>
       </div>
     </section>

@@ -1,7 +1,7 @@
 <template>
   <div class="mt-4 lg:mt-16 section">
     <section class="section">
-      <img src="/images/naito-900.svg" :alt="$t('alt.naito-one-logo')" class="w-16 sm:mb-2 md:w-32" />
+      <img src="/images/naito-900.svg" :alt="$t('alt.naito_one_logo')" class="w-16 sm:mb-2 md:w-32" />
       <h1 class="font-heading text-2xl text-center" v-text="$t('pages.login.title')"></h1>
     </section>
 
@@ -31,7 +31,7 @@
           tabindex="1"
           :to="{ path: 'reset', query: { email: email }}"
           class="green-link text-right ml-4 p-4 md:p-0"
-          v-text="$t('pages.login.form.forgotten-password')"
+          v-text="$t('pages.login.form.forgotten_password')"
         ></nuxt-link>
       </div>
       <input
@@ -47,7 +47,7 @@
         <label
           class="select-none"
           for="remember-me-input"
-          v-text="$t('pages.login.form.remember-me')"
+          v-text="$t('pages.login.form.remember_me')"
         ></label>
         <label class="material-checkbox text-naito-green-200" for="remember-me-input">
           <input
@@ -71,7 +71,7 @@
       v-if="!isProbablyClient"
       class="my-8 w-full sm:w-120 action bg-naito-blue-300 text-gray-100 text-center"
       href="https://naito.one/meters"
-      v-text="$t('pages.login.new-client')"
+      v-text="$t('pages.login.new_client')"
     ></a>
   </div>
 </template>

@@ -29,7 +29,7 @@
     }
   },
   "alt": {
-    "naito-one-logo": "Naito One Logo"
+    "naito_one_logo": "Naito One Logo"
   },
   "error": {
     "unknown": "An error occurred. Please try again later."
@@ -76,7 +76,7 @@
       "summary": "You have <strong>{sensor}</strong> online on <strong>{site}</strong>.",
       "sensor": "sensor | sensors",
       "site": "site | sites",
-      "summary-small": "<strong>{sensor}</strong> online on <strong>{site}</strong>.",
+      "summary_small": "<strong>{sensor}</strong> online on <strong>{site}</strong>.",
       "title": "Dashboard",
       "description": "View your saved charts and access the functionalities of the Meters website",
       "open_chart": "Open chart",
@@ -171,12 +171,12 @@
     },
     "login": {
       "form": {
-        "forgotten-password": "Forgotten password",
+        "forgotten_password": "Forgotten password",
         "password": "Password",
-        "remember-me": "Stay logged in",
+        "remember_me": "Stay logged in",
         "submit": "Login"
       },
-      "new-client": "Not a client yet ? Discover meters.ch !",
+      "new_client": "Not a client yet ? Discover meters.ch !",
       "title": "Login portal of Meters.ch",
       "description": "Login to the Meters online dashboard using your credentials"
     },

@@ -10,7 +10,7 @@
       v-else
       class="absolute left-0 top-0 w-10 mx-5 my-4"
       src="/images/naito-900.svg"
-      :alt="$t('alt.naito-one-logo')"
+      :alt="$t('alt.naito_one_logo')"
     />
 
     <h1 class="font-heading text-2xl" :title="description" v-text="title"></h1>

@@ -29,7 +29,7 @@
     }
   },
   "alt": {
-    "naito-one-logo": "Logo Naito One"
+    "naito_one_logo": "Logo Naito One"
   },
   "error": {
     "unknown": "Une erreur s'est produite. Veuillez réessayer plus tard."
@@ -76,7 +76,7 @@
       "summary": "Vous possédez <strong>{sensor}</strong> en ligne sur <strong>{site}</strong>.",
       "sensor": "capteur | capteurs",
       "site": "site | sites",
-      "summary-small": "<strong>{sensor}</strong> en ligne sur <strong>{site}</strong>.",
+      "summary_small": "<strong>{sensor}</strong> en ligne sur <strong>{site}</strong>.",
       "title": "Tableau de bord",
       "description": "Visionnez les graphiques sauvegardés et accédez aux fonctionnalitées du site Meters",
       "open_chart": "Ouvrir le graphique",
@@ -171,12 +171,12 @@
     },
     "login": {
       "form": {
-        "forgotten-password": "Mot de passe oublié",
+        "forgotten_password": "Mot de passe oublié",
         "password": "Mot de passe",
-        "remember-me": "Rester connecté",
+        "remember_me": "Rester connecté",
         "submit": "Connexion"
       },
-      "new-client": "Pas encore client ? Découvrez meters.ch !",
+      "new_client": "Pas encore client ? Découvrez meters.ch !",
       "title": "Portail de connexion Meters.ch",
       "description": "Connectez-vous au tableau de bord en ligne de Meters avec vos identifiants"
     },

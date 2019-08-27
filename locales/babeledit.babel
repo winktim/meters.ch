@@ -19,7 +19,7 @@
                 <name>alt</name>
                 <children>
                     <concept_node>
-                        <name>naito-one-logo</name>
+                        <name>naito_one_logo</name>
                         <definition_loaded>false</definition_loaded>
                         <description></description>
                         <comment></comment>
@@ -190,7 +190,7 @@
                                 </translations>
                             </concept_node>
                             <concept_node>
-                                <name>summary-small</name>
+                                <name>summary_small</name>
                                 <definition_loaded>false</definition_loaded>
                                 <description></description>
                                 <comment></comment>
@@ -249,7 +249,7 @@
                                         </translations>
                                     </concept_node>
                                     <concept_node>
-                                        <name>forgotten-password</name>
+                                        <name>forgotten_password</name>
                                         <definition_loaded>false</definition_loaded>
                                         <description></description>
                                         <comment></comment>
@@ -283,7 +283,7 @@
                                         </translations>
                                     </concept_node>
                                     <concept_node>
-                                        <name>remember-me</name>
+                                        <name>remember_me</name>
                                         <definition_loaded>false</definition_loaded>
                                         <description></description>
                                         <comment></comment>
@@ -319,7 +319,7 @@
                                 </children>
                             </folder_node>
                             <concept_node>
-                                <name>new-client</name>
+                                <name>new_client</name>
                                 <definition_loaded>false</definition_loaded>
                                 <description></description>
                                 <comment></comment>
