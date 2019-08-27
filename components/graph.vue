@@ -144,7 +144,8 @@ export default {
               },
 
               label: (tooltipItem, data) => {
-                const label = data.datasets[tooltipItem.datasetIndex].resource.description
+                const label =
+                  data.datasets[tooltipItem.datasetIndex].resource.description
                 const symbol =
                   data.datasets[tooltipItem.datasetIndex].resourceType.symbol
                 const value = parseFloat(tooltipItem.value).toLocaleString(
@@ -272,6 +273,19 @@ export default {
       })
       this.chart.update()
     },
+    updateAxes() {
+      if (!this.resourceTypes) {
+        return
+      }
+
+      this.chart.options.scales.yAxes = resourceTypesToAxes(this.resourceTypes)
+
+      // update the axis used by each dataset
+      this.chart.data.datasets.forEach(dataset => {
+        dataset.yAxisID = dataset.resourceType.symbol
+      })
+      this.chart.update()
+    },
   },
   watch: {
     period() {
@@ -290,17 +304,12 @@ export default {
       this.reTranslate()
     },
     resourceTypes() {
-      this.chart.options.scales.yAxes = resourceTypesToAxes(this.resourceTypes)
-
-      // update the axis used by each dataset
-      this.chart.data.datasets.forEach(dataset => {
-        dataset.yAxisID = dataset.resourceType.symbol
-      })
-      this.chart.update()
+      this.updateAxes()
     },
   },
   mounted() {
     this.chart = new Chart(this.$refs.canvas, this.defaultConfig)
+    this.updateAxes()
     this.updateRawData().catch(console.error)
   },
   beforeDestroy() {
