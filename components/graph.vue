@@ -42,6 +42,7 @@ export default {
   },
   data() {
     return {
+      previousResources: null,
       chart: null,
       rawData: null,
       hasData: true,
@@ -315,10 +316,15 @@ export default {
       }
       this.updateRawData().catch(console.error)
     },
-    resources(to, from) {
-      if (JSON.stringify(to) === JSON.stringify(from)) {
-        return
+    resources(to) {
+      // from & to array are the same object, so trick to be able to compare to the true old value
+      if (this.previousResources) {
+        if (JSON.stringify(to) === this.previousResources) {
+          return
+        }
       }
+
+      this.previousResources = JSON.stringify(to)
       this.updateRawData().catch(console.error)
     },
     agregation(to, from) {
