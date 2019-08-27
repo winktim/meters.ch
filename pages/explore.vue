@@ -7,7 +7,7 @@
     ></app-header>
 
     <section
-      class="bg-gray-100 rounded-md p-4 md:p-12 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5 graph-height"
+      class="bg-gray-100 rounded-md p-4 md:p-6 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5 graph-height"
     >
       <graph
         v-if="resources.length > 0"
