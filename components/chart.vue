@@ -271,7 +271,7 @@ export default {
 
       this.hasData =
         this.chart.data.datasets.length > 0 &&
-        this.chart.data.datasets.every(dataset => dataset.data.length > 0)
+        this.chart.data.datasets.some(dataset => dataset.data.length > 0)
 
       this.$emit('currentData', {
         datasets: fixedDatasets,
