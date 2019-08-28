@@ -7,4 +7,9 @@ import { chartDefaults } from './utils'
 Chart.defaults.global.defaultFontSize = chartDefaults.fontSize
 Chart.defaults.global.defaultFontFamily = chartDefaults.fontFamily
 
+// increase padding between legend and chart
+Chart.Legend.prototype.afterFit = function() {
+  this.height = this.height + 16
+}
+
 export default Chart
