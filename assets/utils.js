@@ -99,6 +99,14 @@ export function last7DaysPeriod(reference) {
 }
 
 /**
+ * Scroll an element to it's top
+ * @param {HTMLElement} el
+ */
+export function scrollToTop(el) {
+  el.scrollTop = 0
+}
+
+/**
  * Scroll an element to it's bottom
  * @param {HTMLElement} el
  */

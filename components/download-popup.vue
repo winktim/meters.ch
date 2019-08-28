@@ -2,7 +2,7 @@
   <div :class="backClasses" ref="back" @click="cancelOnBack">
     <div :class="parentClasses">
       <section :class="sectionClasses">
-        <div class="overflow-y-auto max-h-full px-4 sm:px-6">
+        <div ref="scrollZone" class="overflow-y-auto max-h-full px-4 sm:px-6">
           <h2
             class="text-center font-heading text-2xl my-3"
             v-text="$t('pages.explore.download.title')"
@@ -60,6 +60,7 @@
   </div>
 </template>
 <script>
+import { scrollToTop } from '../assets/utils'
 export default {
   name: 'DownloadPopup',
   props: {
@@ -75,6 +76,8 @@ export default {
       if (!show) {
         return
       }
+
+      scrollToTop(this.$refs.scrollZone)
 
       this.format = 'csv'
     },

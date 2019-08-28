@@ -2,7 +2,7 @@
   <div :class="backClasses" ref="back" @click="cancelOnBack">
     <div :class="parentClasses">
       <section :class="sectionClasses">
-        <div class="overflow-y-auto max-h-full px-4 sm:px-6">
+        <div ref="scrollZone" class="overflow-y-auto max-h-full px-4 sm:px-6">
           <h2
             class="text-center font-heading text-2xl my-3"
             v-text="$t('pages.objectives.modes.' + mode)"
@@ -107,6 +107,7 @@ import {
   formatResource,
   last7DaysPeriod,
   last30DaysPeriod,
+  scrollToTop,
 } from '../assets/utils'
 import { DateTime } from 'luxon'
 import SearchSelect from '../components/search-select'
@@ -132,6 +133,8 @@ export default {
       if (!show) {
         return
       }
+
+      scrollToTop(this.$refs.scrollZone)
 
       if (this.editMode) {
         // reset to the given current values
