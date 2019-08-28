@@ -1,7 +1,17 @@
+$breakpoint: 560px;
+
 .chart-height {
   height: 80vh;
 
-  @media (min-height: 560px) {
+  @media (min-height: $breakpoint) {
     height: 45vh;
+  }
+}
+
+.chart-height-explore {
+  height: 90vh;
+
+  @media (min-height: $breakpoint) {
+    height: 60vh;
   }
 }

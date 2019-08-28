@@ -10,7 +10,7 @@
       class="bg-gray-100 rounded-md p-4 pt-2 md:p-6 md:pt-3 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5"
     >
       <chart
-        class="chart-height"
+        class="chart-height-explore"
         v-if="resources.length > 0"
         :period="period"
         :agregation="agregation"
