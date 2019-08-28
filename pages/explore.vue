@@ -7,16 +7,16 @@
     ></app-header>
 
     <section
-      class="bg-gray-100 rounded-md p-4 md:p-6 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5 graph-height"
+      class="bg-gray-100 rounded-md p-4 md:p-6 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5 chart-height"
     >
-      <graph
+      <chart
         v-if="resources.length > 0"
         :period="period"
         :agregation="agregation"
         :offset="offset"
         :resources="resources"
         @currentData="setCurrentData"
-      ></graph>
+      ></chart>
       <div v-else class="w-full h-full flex items-center justify-center">
         <span class="text-center font-medium" v-text="$t('pages.explore.form.no_resources')"></span>
       </div>
@@ -135,7 +135,7 @@ import {
 
 import AppHeader from '../components/app-header.vue'
 import SearchSelectMulti from '../components/search-select-multi'
-import Graph from '../components/graph'
+import Chart from '../components/chart'
 
 import BookmarkPopup from '../components/bookmark-popup'
 import DownloadPopup from '../components/download-popup'
@@ -162,7 +162,7 @@ export default {
     SearchSelectMulti,
     BookmarkPopup,
     DownloadPopup,
-    Graph,
+    Chart,
   },
   data() {
     return {
@@ -265,7 +265,7 @@ export default {
 
       let dataStr = ''
 
-      let name = `graph-period_${reversePeriods[this.period]}-offset_${
+      let name = `chart-period_${reversePeriods[this.period]}-offset_${
         this.offset
       }-agregation_${
         reverseAgregations[this.agregation]

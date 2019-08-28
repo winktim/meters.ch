@@ -511,20 +511,20 @@ export function resourceTypesToAxes(resourceTypes) {
 }
 
 /**
- * Get an auto generated name for the graph
- * @param {{resources: number[], period: string, offset: number}} graph
+ * Get an auto generated name for the chart
+ * @param {{resources: number[], period: string, offset: number}} chart
  * @param {{[x: number]: {description: string}}} resourcesById
  * @param {import('vue-i18n').default} i18n
  */
-export function generateName(graph, resourcesById, i18n) {
-  let resources = resourcesById[graph.resources[0]].description
+export function generateName(chart, resourcesById, i18n) {
+  let resources = resourcesById[chart.resources[0]].description
 
-  if (graph.resources.length > 1) {
+  if (chart.resources.length > 1) {
     resources += ` ${i18n.t('global.and_others')}`
   }
 
-  const period = i18n.tc('period_offsets.' + graph.period, graph.offset, {
-    count: graph.offset,
+  const period = i18n.tc('period_offsets.' + chart.period, chart.offset, {
+    count: chart.offset,
   })
 
   return `${resources}, ${period}`

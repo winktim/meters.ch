@@ -29,7 +29,7 @@ import {
 } from '../assets/utils'
 
 export default {
-  name: 'Graph',
+  name: 'Chart',
   props: {
     period: Number,
     agregation: Number,

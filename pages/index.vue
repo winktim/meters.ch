@@ -29,17 +29,17 @@
 
     <!-- dashboard elements -->
     <div class="flex flex-col xl:flex-row xl:flex-wrap justify-center">
-      <section v-for="(graph, i) in dashboard" :key="graphKey(graph)" :class="chartClasses">
+      <section v-for="(chart, i) in dashboard" :key="chartKey(chart)" :class="chartClasses">
         <h2
           v-if="!editMode"
           class="text-lg font-bold mb-2 text-center"
-          v-text="graph.name || generateName(graph)"
+          v-text="chart.name || generateName(chart)"
         ></h2>
         <div v-else class="w-full flex mb-2">
           <input
             aria-label="Name"
-            :value="graph.name || generateName(graph)"
-            @change="nameEdit(i, graph.name, $event.target.value)"
+            :value="chart.name || generateName(chart)"
+            @change="nameEdit(i, chart.name, $event.target.value)"
             class="min-w-0 flex-grow px-4 py-2 transparent-input mr-8"
             type="text"
             :name="i + '-name-input'"
@@ -67,18 +67,18 @@
             <i class="material-icons text-lg">delete</i>
           </button>
         </div>
-        <graph
-          class="graph-height"
-          :period="periodNumber(graph.period)"
-          :agregation="agregationNumber(graph.agregation)"
-          :offset="graph.offset"
-          :resources="graph.resources"
+        <chart
+          class="chart-height"
+          :period="periodNumber(chart.period)"
+          :agregation="agregationNumber(chart.agregation)"
+          :offset="chart.offset"
+          :resources="chart.resources"
           :legend="false"
-        ></graph>
+        ></chart>
         <button
           class="mt-2 w-full sm:w-120 action bg-naito-green-200 text-gray-100 text-center"
           :disabled="editMode"
-          @click="$router.push({name: 'explore', query: graph})"
+          @click="$router.push({name: 'explore', query: chart})"
           v-text="$t('pages.index.open_chart')"
         ></button>
       </section>
@@ -124,7 +124,7 @@
 import AppHeader from '../components/app-header.vue'
 import AppMenu from '../components/app-menu.vue'
 
-import Graph from '../components/graph'
+import Chart from '../components/chart'
 import { periods, agregations, generateName } from '../assets/utils'
 
 export default {
@@ -144,7 +144,7 @@ export default {
       ],
     }
   },
-  components: { AppHeader, AppMenu, Graph },
+  components: { AppHeader, AppMenu, Chart },
   async mounted() {
     await Promise.all([
       this.$getUser(),
@@ -170,18 +170,18 @@ export default {
     agregationNumber(agregationName) {
       return agregations[agregationName]
     },
-    graphKey(graph) {
-      return `${graph.period}-${graph.agregation}-${
-        graph.offset
-      }-${graph.resources.join('_')}`
+    chartKey(chart) {
+      return `${chart.period}-${chart.agregation}-${
+        chart.offset
+      }-${chart.resources.join('_')}`
     },
-    generateName(graph) {
+    generateName(chart) {
       if (!this.$store.state.dataById.resources) {
         return '...'
       }
 
       return generateName(
-        graph,
+        chart,
         this.$store.state.dataById.resources,
         this.$i18n
       )
