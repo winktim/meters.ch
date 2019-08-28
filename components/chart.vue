@@ -253,13 +253,16 @@ export default {
           return dataset
         }
 
+        const data = agregateData(
+          dataset.data,
+          this.agregation,
+          dataset.resourceType.aggregation_function
+        )
+
         return {
           ...dataset,
-          data: agregateData(
-            dataset.data,
-            this.agregation,
-            dataset.resourceType.aggregation_function
-          ),
+          data,
+          pointRadius: data.length === 1 ? 4 : 0,
         }
       })
 
