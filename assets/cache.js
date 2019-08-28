@@ -31,7 +31,6 @@ export default function factory(cacheTimeout, cleanInterval) {
       return null
     }
 
-    console.log('cached!')
     return JSON.parse(current.value)
   }
 
