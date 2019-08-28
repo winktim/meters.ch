@@ -29,7 +29,7 @@
     </section>
 
     <!-- dashboard elements -->
-    <div class="flex flex-col xl:flex-row xl:flex-wrap justify-center mb-16">
+    <div :class="dashboardRootClasses">
       <section v-for="(chart, i) in dashboard" :key="chartKey(chart)" :class="chartParentClasses">
         <h2
           v-if="!editMode"
@@ -376,6 +376,15 @@ export default {
       ].concat(
         this.editMode ? ['pointer-events-auto'] : ['pointer-events-none']
       )
+    },
+    dashboardRootClasses() {
+      return [
+        'flex',
+        'flex-col',
+        'xl:flex-row',
+        'xl:flex-wrap',
+        'justify-center',
+      ].concat(this.editMode ? ['mb-28', 'sm:mb-15'] : ['mb-15'])
     },
     editHasPrevious() {
       return this.$store.getters.dashboardUndoList.length > 0
