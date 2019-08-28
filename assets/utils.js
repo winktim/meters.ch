@@ -81,9 +81,10 @@ export const reversePeriods = Object.keys(periods)
  * @param {import('luxon').DateTime} reference
  */
 export function last30DaysPeriod(reference) {
+  // to improve cache, round the times
   return {
-    from: reference.minus({ days: 30 }),
-    to: reference,
+    from: reference.minus({ days: 30 }).endOf('hour'),
+    to: reference.endOf('hour'),
   }
 }
 
@@ -92,9 +93,10 @@ export function last30DaysPeriod(reference) {
  * @param {import('luxon').DateTime} reference
  */
 export function last7DaysPeriod(reference) {
+  // to improve cache, round the times
   return {
-    from: reference.minus({ days: 7 }),
-    to: reference,
+    from: reference.minus({ days: 7 }).endOf('hour'),
+    to: reference.endOf('hour'),
   }
 }
 
@@ -197,10 +199,11 @@ export function fixDashboard(dashboard, ownedResources) {
 export function getPeriod(reference, period, offset) {
   const periodName = reversePeriods[period]
 
+  // round times to improve cache
   if (offset === 0) {
     return {
       from: reference.startOf(periodName).toUTC(),
-      to: reference.toUTC(),
+      to: reference.endOf('hour').toUTC(),
     }
   }
 

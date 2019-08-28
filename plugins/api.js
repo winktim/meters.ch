@@ -1,3 +1,11 @@
+import factory from '../assets/cache'
+import { Duration } from 'luxon'
+
+const cache = factory(
+  Duration.fromObject({ minutes: 5 }),
+  Duration.fromObject({ minutes: 5 })
+)
+
 export default ({ app, store, redirect }, inject) => {
   function classic(method, route, params) {
     return new Promise(async (resolve, reject) => {
@@ -154,13 +162,27 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  // TODO: caching ? for like 5 min
   inject('getReadings', async function(resource, payload) {
-    try {
-      return await classic('get', `/resources/${resource}/readings`, payload)
-    } catch (e) {
-      return []
+    const key = `${resource}-` + JSON.stringify(payload)
+    const cached = cache.get(key)
+
+    if (cached) {
+      return cached
     }
+
+    let readings = []
+
+    try {
+      readings = await classic(
+        'get',
+        `/resources/${resource}/readings`,
+        payload
+      )
+    } catch (e) {}
+
+    cache.set(key, readings)
+
+    return readings
   })
 
   // PUT

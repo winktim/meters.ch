@@ -40,14 +40,16 @@ function prepPath(path, state) {
  * @returns {{}} the modified parameters
  */
 function prepParams(params, state) {
+  const output = { ...params }
+
   // add locale
-  params['locale'] = state.locale
+  output['locale'] = state.locale
   // add token if exists
   if (state.apiToken) {
-    params['api_token'] = state.apiToken
+    output['api_token'] = state.apiToken
   }
 
-  return params
+  return output
 }
 
 export default ({ store }, inject) => {
