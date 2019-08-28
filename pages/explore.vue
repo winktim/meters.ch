@@ -127,10 +127,8 @@ import {
   reversePeriods,
   reverseAgregations,
   formatResource,
-  fixDashboard,
   datasetsToJson,
   JsonToCsv,
-  getPeriod,
   generateName,
 } from '../assets/utils'
 
