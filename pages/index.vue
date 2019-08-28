@@ -15,6 +15,7 @@
     >
       <div class="relative z-10">
         <button
+          :disabled="editMode"
           @click="toggleMenu"
           class="round-action material-icons bg-naito-blue-300 text-gray-100 mr-4"
         >menu</button>
@@ -28,7 +29,7 @@
     </section>
 
     <!-- dashboard elements -->
-    <div class="flex flex-col xl:flex-row xl:flex-wrap justify-center">
+    <div class="flex flex-col xl:flex-row xl:flex-wrap justify-center mb-16">
       <section v-for="(chart, i) in dashboard" :key="chartKey(chart)" :class="chartParentClasses">
         <h2
           v-if="!editMode"
@@ -88,16 +89,15 @@
 
     <section
       v-if="!editMode"
-      class="fixed bottom-0 right-0 mb-12 text-gray-100 rounded-l-md flex flex-col"
+      class="fixed bottom-0 w-full sm:w-auto right-0 sm:mb-12 text-gray-100 rounded-l-md flex flex-col"
     >
-      <!-- download -->
       <button
-        :title="$t('pages.index.edit.title')"
         :disabled="dashboard.length === 0"
         @click="editMode = true"
-        class="rounded-l-md p-4 bg-naito-blue-300 simple-action"
+        class="sm:rounded-l-md p-4 bg-naito-blue-300 simple-action shadow-lg-top sm:shadow-lg sm:flex-row-reverse"
       >
-        <i class="material-icons text-xl">build</i>
+        <i class="material-icons text-lg mr-4 sm:mr-0 sm:ml-4">build</i>
+        <span class="font-medium" v-text="$t('pages.index.edit.title')"></span>
       </button>
     </section>
 
@@ -105,19 +105,12 @@
     <div :class="backClasses"></div>
     <!-- actions -->
     <div :class="actionsClasses">
-      <button
-        @click="undoEdit"
-        :disabled="!editHasPrevious"
-        class="bg-gray-600 simple-action p-4 sm:ml-auto sm:px-8 sm:rounded-tl-md"
-      >
-        <i class="material-icons mr-4">undo</i>
+      <button @click="undoEdit" :disabled="!editHasPrevious" :class="cancelClasses">
+        <i class="material-icons text-lg mr-4">undo</i>
         <span v-text="$t('pages.index.edit.cancel_last')"></span>
       </button>
-      <button
-        @click="confirmEdit"
-        class="bg-naito-green-200 simple-action p-4 sm:mr-auto sm:px-8 sm:rounded-tr-md"
-      >
-        <i class="material-icons mr-4">done_all</i>
+      <button @click="confirmEdit" :class="confirmClasses">
+        <i class="material-icons text-lg mr-4">done_all</i>
         <span v-text="$t('pages.index.edit.confirm_all')"></span>
       </button>
     </div>
@@ -315,11 +308,8 @@ export default {
         'h-screen',
         'bg-gray-darken',
         'transition-opacity-100',
-      ].concat(
-        this.editMode
-          ? ['pointer-events-auto', 'opacity-1']
-          : ['pointer-events-none', 'opacity-0']
-      )
+        'pointer-events-none',
+      ].concat(this.editMode ? ['opacity-1'] : ['opacity-0'])
     },
     actionsClasses() {
       return [
@@ -334,11 +324,8 @@ export default {
         'sm:flex-row',
         'w-full',
         'transition-opacity-100',
-      ].concat(
-        this.editMode
-          ? ['pointer-events-auto', 'opacity-1']
-          : ['pointer-events-none', 'opacity-0']
-      )
+        'pointer-events-none',
+      ].concat(this.editMode ? ['opacity-1'] : ['opacity-0'])
     },
     chartParentClasses() {
       return [
@@ -362,6 +349,32 @@ export default {
         this.editMode
           ? ['pointer-events-none', 'opacity-50']
           : ['pointer-events-auto', 'opacity-1']
+      )
+    },
+    cancelClasses() {
+      return [
+        'bg-gray-600',
+        'simple-action',
+        'p-4',
+        'sm:ml-auto',
+        'sm:px-8',
+        'sm:rounded-tl-md',
+        'shadow-lg-top',
+      ].concat(
+        this.editMode ? ['pointer-events-auto'] : ['pointer-events-none']
+      )
+    },
+    confirmClasses() {
+      return [
+        'bg-naito-green-200',
+        'simple-action',
+        'p-4',
+        'sm:mr-auto',
+        'sm:px-8',
+        'sm:rounded-tr-md',
+        'shadow-lg-top',
+      ].concat(
+        this.editMode ? ['pointer-events-auto'] : ['pointer-events-none']
       )
     },
     editHasPrevious() {
