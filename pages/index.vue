@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      :class="['fixed', 'top-0', 'left-0', 'w-screen', 'h-screen', isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none']"
+      :class="['z-10', 'fixed', 'top-0', 'left-0', 'w-screen', 'h-screen', isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none']"
       @click="isMenuOpen = false"
     ></div>
     <app-header
