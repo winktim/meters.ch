@@ -62,7 +62,8 @@ export default {
             padding: {
               // comppensate padding of labels on the left
               left: 20,
-              right: 0,
+              // prevent overflow of graph on right
+              right: 20,
               top: 0,
               bottom: 0,
             },
