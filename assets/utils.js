@@ -309,9 +309,20 @@ function chunkForAgregation(array, agregation) {
  * @param {'sum' | 'avg'} agregationFunction
  */
 export function agregateData(data, agregation, agregationFunction) {
+  if (data.length === 0) {
+    return []
+  }
+
   // nothing to do with zero or one data point
-  if (data.length <= 1) {
-    return data
+  if (data.length === 1) {
+    return [
+      {
+        x: DateTime.fromISO(data[0].x)
+          .startOf(reverseAgregations[agregation])
+          .toISO(),
+        y: data[0].y,
+      },
+    ]
   }
 
   let out = []
