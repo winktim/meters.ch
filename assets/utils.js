@@ -353,7 +353,7 @@ export function agregateData(data, agregation, agregationFunction) {
       x: DateTime.fromISO(chunk[0].x)
         .startOf(reverseAgregations[agregation])
         .toISO(),
-      y: chunk.reduce((carry, chunk) => carry + chunk.y, 0),
+      y: +chunk.reduce((carry, chunk) => carry + chunk.y, 0).toFixed(2),
     }
   })
 
@@ -361,7 +361,7 @@ export function agregateData(data, agregation, agregationFunction) {
     return summedUp.map((value, i) => {
       return {
         x: value.x,
-        y: value.y !== 0 ? value.y / chunks[i].length : 0,
+        y: +(value.y !== 0 ? value.y / chunks[i].length : 0).toFixed(2),
       }
     })
   } else {
@@ -434,12 +434,7 @@ export function datasetsToJson(datasets) {
   return datasets.map(dataset => ({
     label: dataset.label,
     // remove inserted NaN values to fix the chart
-    data: dataset.data
-      .filter(data => !isNaN(data.y))
-      .map(data => ({
-        x: data.x,
-        y: data.y.toFixed(2),
-      })),
+    data: dataset.data.filter(data => !isNaN(data.y)),
     resource: pluck(
       dataset.resource,
       'id',
@@ -493,7 +488,7 @@ export function JsonToCsv(json) {
       }
 
       // replace dots with comas in the numbers so it is recognized as number in a CSV software
-      return `"${value.y.replace('.', ',')}"`
+      return `"${value.y.toString().replace('.', ',')}"`
     })
 
     data.push([finalDate].concat(values))
