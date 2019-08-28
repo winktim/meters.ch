@@ -127,7 +127,6 @@ export default {
                     month: 'MMM YYYY',
                   },
                 },
-                // TODO: vertical & horizontal single lines
                 gridLines: false,
                 ticks: {
                   fontColor: chartDefaults.fontColor,
