@@ -7,9 +7,10 @@
     ></app-header>
 
     <section
-      class="bg-gray-100 rounded-md p-4 md:p-6 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5 chart-height"
+      class="bg-gray-100 rounded-md p-4 pt-2 md:p-6 md:pt-3 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5"
     >
       <chart
+        class="chart-height"
         v-if="resources.length > 0"
         :period="period"
         :agregation="agregation"
@@ -17,7 +18,7 @@
         :resources="resources"
         @currentData="setCurrentData"
       ></chart>
-      <div v-else class="w-full h-full flex items-center justify-center">
+      <div v-else class="mt-2 md:mt-3 w-full h-full flex items-center justify-center">
         <span class="text-center font-medium" v-text="$t('pages.explore.form.no_resources')"></span>
       </div>
     </section>
