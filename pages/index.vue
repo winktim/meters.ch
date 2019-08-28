@@ -300,7 +300,7 @@ export default {
     backClasses() {
       return [
         'fixed',
-        'z-20',
+        'z-30',
         'top-0',
         'left-0',
         'right-0',
@@ -317,7 +317,7 @@ export default {
         'bottom-0',
         'left-0',
         'right-0',
-        'z-30',
+        'z-40',
         'text-gray-100',
         'flex',
         'flex-col',
@@ -342,7 +342,7 @@ export default {
         'flex',
         'flex-col',
         'items-center',
-      ].concat(this.editMode ? ['z-30'] : [])
+      ].concat(this.editMode ? ['z-40'] : [])
     },
     chartClasses() {
       return ['chart-height'].concat(

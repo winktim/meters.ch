@@ -8,7 +8,7 @@
     >arrow_back</button>
     <img
       v-else
-      class="absolute left-0 top-0 w-10 mx-5 my-4"
+      class="z-20 absolute left-0 top-0 w-10 mx-5 my-4"
       src="/images/naito-900.svg"
       :alt="$t('alt.naito_one_logo')"
     />
