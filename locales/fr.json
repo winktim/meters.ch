@@ -115,7 +115,8 @@
         "confirm": "Télécharger"
       },
       "bookmark": {
-        "title": "Ajouter un signet pour le graphique actuel",
+        "title": "Ajouter un signet",
+        "explain": "Le graphique actuellement configuré sera ajouté au tableau de bord afin que vous puissiez rapidement le consulter.",
         "name": "Nom du graphique (optionel)",
         "relative_period": "La période relative choisie sera conservée:",
         "confirm": "Ajouter"

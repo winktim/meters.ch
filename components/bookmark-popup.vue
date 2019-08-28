@@ -7,6 +7,7 @@
             class="text-center font-heading text-2xl my-3"
             v-text="$t('pages.explore.bookmark.title')"
           ></h2>
+          <p class="mb-2" v-text="$t('pages.explore.bookmark.explain')"></p>
           <!-- name -->
           <div class="flex flex-col mb-8">
             <h3 class="font-bold text-lg mb-2" v-text="$t('pages.explore.bookmark.name')"></h3>

@@ -115,8 +115,9 @@
         "confirm": "Download"
       },
       "bookmark": {
-        "title": "Bookmark the current chart",
+        "title": "Add bookmark",
         "name": "Chart name (optional)",
+        "explain": "The currently configured chart will be added to your dashboard for quick access.",
         "relative_period": "The choosen relative period will be kept:",
         "confirm": "Bookmark"
       },
