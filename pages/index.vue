@@ -86,7 +86,10 @@
 
     <!-- edit mode -->
 
-    <section class="fixed bottom-0 right-0 mb-12 text-gray-100 rounded-l-md flex flex-col">
+    <section
+      v-if="!editMode"
+      class="fixed bottom-0 right-0 mb-12 text-gray-100 rounded-l-md flex flex-col"
+    >
       <!-- download -->
       <button
         :title="$t('pages.index.edit.title')"
@@ -105,14 +108,14 @@
       <button
         @click="undoEdit"
         :disabled="!editHasPrevious"
-        class="bg-naito-blue-300 simple-action p-4 sm:ml-auto sm:px-8 sm:rounded-bl-md"
+        class="bg-gray-600 simple-action p-4 sm:ml-auto sm:px-8 sm:rounded-tl-md"
       >
         <i class="material-icons mr-4">undo</i>
         <span v-text="$t('pages.index.edit.cancel_last')"></span>
       </button>
       <button
         @click="confirmEdit"
-        class="bg-naito-blue-200 simple-action p-4 sm:mr-auto sm:px-8 sm:rounded-br-md"
+        class="bg-naito-green-200 simple-action p-4 sm:mr-auto sm:px-8 sm:rounded-tr-md"
       >
         <i class="material-icons mr-4">done_all</i>
         <span v-text="$t('pages.index.edit.confirm_all')"></span>
@@ -321,13 +324,13 @@ export default {
     actionsClasses() {
       return [
         'fixed',
-        'top-0',
+        'bottom-0',
         'left-0',
         'right-0',
         'z-30',
         'text-gray-100',
         'flex',
-        'flex-col-reverse',
+        'flex-col',
         'sm:flex-row',
         'w-full',
         'transition-opacity-100',
