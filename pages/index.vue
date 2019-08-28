@@ -29,7 +29,7 @@
 
     <!-- dashboard elements -->
     <div class="flex flex-col xl:flex-row xl:flex-wrap justify-center">
-      <section v-for="(chart, i) in dashboard" :key="chartKey(chart)" :class="chartClasses">
+      <section v-for="(chart, i) in dashboard" :key="chartKey(chart)" :class="chartParentClasses">
         <h2
           v-if="!editMode"
           class="text-lg font-bold mb-2 text-center"
@@ -68,7 +68,7 @@
           </button>
         </div>
         <chart
-          class="chart-height"
+          :class="chartClasses"
           :period="periodNumber(chart.period)"
           :agregation="agregationNumber(chart.agregation)"
           :offset="chart.offset"
@@ -337,7 +337,7 @@ export default {
           : ['pointer-events-none', 'opacity-0']
       )
     },
-    chartClasses() {
+    chartParentClasses() {
       return [
         'bg-gray-100',
         'rounded-md',
@@ -353,6 +353,13 @@ export default {
         'flex-col',
         'items-center',
       ].concat(this.editMode ? ['z-30'] : [])
+    },
+    chartClasses() {
+      return ['chart-height'].concat(
+        this.editMode
+          ? ['pointer-events-none', 'opacity-50']
+          : ['pointer-events-auto', 'opacity-1']
+      )
     },
     editHasPrevious() {
       return this.$store.getters.dashboardUndoList.length > 0
