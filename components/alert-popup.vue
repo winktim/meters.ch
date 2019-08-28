@@ -209,6 +209,20 @@ export default {
       this.$emit('confirm', payload)
     },
   },
+  mounted() {
+    this.escHandler = event => {
+      if (event.keyCode === 27) {
+        if (this.show) {
+          this.$emit('cancel')
+        }
+      }
+    }
+
+    document.addEventListener('keyup', this.escHandler)
+  },
+  beforeDestroy() {
+    document.removeEventListener('keyup', this.escHandler)
+  },
   computed: {
     isCustomTolerance() {
       return this.toleranceRadio === 'custom'
