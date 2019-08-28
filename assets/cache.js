@@ -42,14 +42,17 @@ export default function factory(cacheTimeout, cleanInterval) {
    */
   const set = (key, value) => {
     cache[key] = {
-      timeout: DateTime.local().plus({ milliseconds: cacheTimeout }),
+      timeout: DateTime.local().plus(cacheTimeout),
+
       value: JSON.stringify(value),
     }
+    console.log(cache[key].timeout.toString())
 
     return value
   }
 
   const clean = () => {
+    console.log('cleaning')
     const now = DateTime.local()
 
     const keys = Object.keys(cache)
@@ -69,7 +72,7 @@ export default function factory(cacheTimeout, cleanInterval) {
     cache = {}
   }
 
-  setInterval(clean, cleanInterval.milliseconds)
+  setInterval(clean, cleanInterval.as('milliseconds'))
 
   return {
     get,
