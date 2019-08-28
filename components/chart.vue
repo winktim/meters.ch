@@ -76,6 +76,28 @@ export default {
               boxWidth: 35,
               fontSize: chartDefaults.fontSize,
               fontColor: chartDefaults.fontColor,
+              generateLabels: chart => {
+                if (!Array.isArray(chart.data.datasets)) {
+                  return []
+                }
+
+                return chart.data.datasets.map((dataset, i) => ({
+                  text: dataset.label,
+                  fillStyle: dataset.borderColor, // use border color for background to always fill the legend
+                  hidden: !chart.isDatasetVisible(i),
+                  lineCap: dataset.borderCapStyle,
+                  lineDash: dataset.borderDash,
+                  lineDashOffset: dataset.borderDashOffset,
+                  lineJoin: dataset.borderJoinStyle,
+                  lineWidth: dataset.borderWidth,
+                  strokeStyle: dataset.borderColor,
+                  pointStyle: dataset.pointStyle,
+                  rotation: dataset.rotation,
+
+                  // Below is extra data used for toggling the datasets
+                  datasetIndex: i,
+                }))
+              },
             },
           },
           elements: {
