@@ -302,6 +302,11 @@ export default {
       })
       this.chart.update()
     },
+    forceCloseTooltip() {
+      this.chart.tooltip._active = []
+      this.chart.tooltip.update(true)
+      this.chart.draw()
+    },
   },
   watch: {
     period(to, from) {
@@ -347,11 +352,19 @@ export default {
     this.chart = new Chart(this.$refs.canvas, this.defaultConfig)
     this.updateAxes()
     this.updateRawData().catch(console.error)
+
+    this.touchEvent = e => {
+      this.forceCloseTooltip()
+    }
+
+    document.addEventListener('touchend', this.touchEvent)
   },
   beforeDestroy() {
     if (this.chart) {
       this.chart.destroy()
     }
+
+    document.removeEventListener('touchend', this.touchEvent)
   },
   computed: {
     locale() {

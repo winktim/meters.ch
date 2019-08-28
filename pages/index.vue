@@ -153,6 +153,23 @@ export default {
       this.$getSensors(),
       this.$getSites(),
     ])
+
+    /*
+    // code to hide tooltip only on touch & drag
+    // not used because choosen to hide tooltip when not pressing
+    const scrollElement = document.querySelector('#__layout > div')
+    let offset = 0
+    document.ontouchstart = e => {
+      offset = scrollElement.scrollTop
+    }
+
+    document.ontouchend = e => {
+      const hasScrolled = offset !== scrollElement.scrollTop
+      if (hasScrolled) {
+        EventBus.$emit('touchAndDrag')
+      }
+    }
+    */
   },
   data() {
     return {
