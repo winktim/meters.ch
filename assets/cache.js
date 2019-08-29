@@ -46,13 +46,11 @@ export default function factory(cacheTimeout, cleanInterval) {
 
       value: JSON.stringify(value),
     }
-    console.log(cache[key].timeout.toString())
 
     return value
   }
 
   const clean = () => {
-    console.log('cleaning')
     const now = DateTime.local()
 
     const keys = Object.keys(cache)
