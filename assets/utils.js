@@ -542,12 +542,13 @@ export function toClosestSuffixe(number) {
     }
   }
 
-  if (number < 1000000000)
+  if (number < 1000000000) {
     // mega
     return {
       number: number / 1000000,
       unit: 'M',
     }
+  }
 
   // giga
   return {
