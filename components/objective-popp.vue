@@ -61,7 +61,7 @@
               <label class="w-1/2" v-text="compareString"></label>
               <span
                 class="text-right flex-grow mx-2"
-                v-text="compareValue === -1 ? $t('pages.objectives.form.not_enough_data') : compareValue.toLocaleString($numberLocale())"
+                v-text="compareValue === -1 ? $t('pages.objectives.form.not_enough_data') : compareValue.toLocaleString($numberLocale(), decimalDefaultFormat)"
               ></span>
               <span v-if="compareValue !== -1" v-text="symbol"></span>
             </div>
@@ -75,6 +75,7 @@
                 class="text-right flex-grow mx-2 py-2 transparent-input"
                 type="number"
                 min="0"
+                step="0.1"
                 name="value-input"
                 id="value-input"
                 v-model="value"
@@ -108,6 +109,7 @@ import {
   last7DaysPeriod,
   last30DaysPeriod,
   scrollToTop,
+  decimalDefaultFormat,
 } from '../assets/utils'
 import { DateTime } from 'luxon'
 import SearchSelect from '../components/search-select'
@@ -126,6 +128,7 @@ export default {
       value: 0,
       resource_id: -1,
       compareValue: 0,
+      decimalDefaultFormat,
     }
   },
   watch: {
@@ -179,9 +182,8 @@ export default {
       }
 
       // to get the comsummption, subtract the absolute last from the absolute first
-      this.compareValue = Math.round(
+      this.compareValue =
         readings[readings.length - 1].value - readings[0].value
-      )
     },
     cancelOnBack(event) {
       if (event.target === this.$refs.back) {
