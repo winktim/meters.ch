@@ -96,6 +96,8 @@ export const mutations = {
         console.warn('Dashboard parsing error:', e)
         state.data.user.dashboard = []
       }
+    } else if (state.data.user.dashboard === null) {
+      state.data.user.dashboard = []
     }
 
     // fix dashboard if we have resources data
