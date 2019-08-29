@@ -26,6 +26,7 @@ import {
   chartDefaults,
   fixMissingData,
   resourceTypesToAxes,
+  toClosestSuffixe,
 } from '../assets/utils'
 
 export default {
@@ -186,10 +187,23 @@ export default {
                   data.datasets[tooltipItem.datasetIndex].resource.description
                 const symbol =
                   data.datasets[tooltipItem.datasetIndex].resourceType.symbol
-                const value = parseFloat(tooltipItem.value).toLocaleString(
+
+                const rawValue = parseFloat(tooltipItem.value)
+
+                if (symbol !== '°C') {
+                  const reuslt = toClosestSuffixe(rawValue)
+                  // add spaces before to make room between the color box and the text
+                  return `  ${label}: ${reuslt.number.toLocaleString(
+                    this.$numberLocale(),
+                    decimalDefaultFormat
+                  )} ${reuslt.unit + symbol}`
+                }
+
+                const value = rawValue.toLocaleString(
                   this.$numberLocale(),
                   decimalDefaultFormat
                 )
+
                 // add spaces before to make room between the color box and the text
                 return `  ${label}: ${value} ${symbol}`
               },

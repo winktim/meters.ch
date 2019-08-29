@@ -254,7 +254,7 @@ export const datasetStyle = datasetColors.map(color => ({
 }))
 
 export const decimalDefaultFormat = {
-  minimumFractionDigits: 2,
+  minimumFractionDigits: 0,
   maximumFractionDigits: 2,
 }
 
@@ -353,7 +353,7 @@ export function agregateData(data, agregation, agregationFunction) {
       x: DateTime.fromISO(chunk[0].x)
         .startOf(reverseAgregations[agregation])
         .toISO(),
-      y: +chunk.reduce((carry, chunk) => carry + chunk.y, 0).toFixed(2),
+      y: +chunk.reduce((carry, chunk) => carry + chunk.y, 0).toFixed(4),
     }
   })
 
@@ -361,7 +361,7 @@ export function agregateData(data, agregation, agregationFunction) {
     return summedUp.map((value, i) => {
       return {
         x: value.x,
-        y: +(value.y !== 0 ? value.y / chunks[i].length : 0).toFixed(2),
+        y: +(value.y !== 0 ? value.y / chunks[i].length : 0).toFixed(4),
       }
     })
   } else {
@@ -498,6 +498,65 @@ export function JsonToCsv(json) {
 }
 
 /**
+ * Get the scaled value and it's suffixe (centi/milli)
+ * @param {number} number
+ */
+export function toClosestSuffixe(number) {
+  if (number === 0) {
+    // no unit
+    return {
+      number,
+      unit: '',
+    }
+  }
+
+  if (number < 0.01) {
+    // mili
+    return {
+      number: number * 1000,
+      unit: 'm',
+    }
+  }
+
+  if (number < 0.1) {
+    // centi
+    return {
+      number: number * 100,
+      unit: 'c',
+    }
+  }
+
+  if (number < 1000) {
+    // no unit
+    return {
+      number,
+      unit: '',
+    }
+  }
+
+  if (number < 1000000) {
+    // kilo
+    return {
+      number: number / 1000,
+      unit: 'k',
+    }
+  }
+
+  if (number < 1000000000)
+    // mega
+    return {
+      number: number / 1000000,
+      unit: 'M',
+    }
+
+  // giga
+  return {
+    number: number / 1000000000,
+    unit: 'G',
+  }
+}
+
+/**
  * Turn a list of resource types to a list of axes
  * @param {{symbol: string}[]} resourceTypes
  */
@@ -513,13 +572,19 @@ export function resourceTypesToAxes(resourceTypes) {
     gridLines: false,
     ticks: {
       // beginAtZero: true,
-      precision: 0,
+      min: symbol === '°C' ? undefined : 0,
+      precision: 4,
       maxTicksLimit: 7,
       fontColor: chartDefaults.fontColor,
       fontSize: chartDefaults.fontSize,
       padding: 18,
 
       callback: tick => {
+        if (symbol !== '°C') {
+          const result = toClosestSuffixe(tick)
+          return `${result.number} ${result.unit + symbol}`
+        }
+
         return `${tick} ${symbol}`
       },
     },
