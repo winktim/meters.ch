@@ -526,19 +526,11 @@ export function toClosestSuffixe(number) {
     }
   }
 
-  if (number < 1000) {
+  if (number < 1000000) {
     // no unit
     return {
       number,
       unit: '',
-    }
-  }
-
-  if (number < 1000000) {
-    // kilo
-    return {
-      number: number / 1000,
-      unit: 'k',
     }
   }
 
