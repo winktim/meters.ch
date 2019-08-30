@@ -56,7 +56,11 @@
   </div>
 </template>
 <script>
-import { formatResource } from '../assets/utils'
+import {
+  formatResource,
+  toClosestSuffixe,
+  decimalDefaultFormat,
+} from '../assets/utils'
 import { DateTime } from 'luxon'
 
 import AppHeader from '../components/app-header'
@@ -174,9 +178,12 @@ export default {
         )
         const type = this.$t('features.objective_types.' + objective.type)
 
-        out.value = `${formattedResource}, ${objective.value.toLocaleString(
-          locale
-        )} ${resourceType.symbol}/${type}`
+        const result = toClosestSuffixe(objective.value)
+
+        out.value = `${formattedResource}, ${result.number.toLocaleString(
+          locale,
+          decimalDefaultFormat
+        )} ${result.unit + resourceType.symbol}/${type}`
 
         return out
       })
