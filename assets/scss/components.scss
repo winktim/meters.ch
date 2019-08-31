@@ -233,11 +233,6 @@
     &:focus {
       @apply outline-none shadow-outline;
     }
-
-    // remove select arrow on IE
-    &::-ms-expand {
-      display: none;
-    }
   }
 
   &::after {
@@ -313,17 +308,6 @@
       &:not(:checked) {
         @apply text-gray-900;
       }
-    }
-
-    // hide firefox outline
-    &:-moz-focusring {
-      color: transparent;
-      text-shadow: 0 0 0 theme('colors.gray.900');
-    }
-
-    // remove select arrow on IE
-    &::-ms-expand {
-      display: none;
     }
   }
 

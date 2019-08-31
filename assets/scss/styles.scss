@@ -27,6 +27,18 @@ select:-moz-focusring * {
   text-shadow: none;
 }
 
+// remove blue highlight once a value is selected.
+// keep text color with "currentColor"
+select::-ms-value {
+  background: transparent;
+  color: currentColor;
+}
+
+// remove select arrow on IE
+select::-ms-expand {
+  display: none;
+}
+
 // remove spinner on chrome and firefox
 input[type='number'] {
   -moz-appearance: textfield;
@@ -34,13 +46,6 @@ input[type='number'] {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
-}
-
-// remove blue highlight once a value is selected.
-// keep text color with "currentColor"
-select::-ms-value {
-  background: transparent;
-  color: currentColor;
 }
 
 // fix normilize for IE11
@@ -69,6 +74,7 @@ input::-ms-clear {
     max-width: 100%;
   }
 }
+
 .background-image {
   background: #e4e7e0;
   background-image: url(/images/background_low.jpg);
