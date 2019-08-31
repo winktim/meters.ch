@@ -94,7 +94,7 @@
       <button
         :disabled="dashboard.length === 0"
         @click="editMode = true"
-        class="sm:rounded-l-md p-4 bg-naito-blue-300 simple-action shadow-lg-top sm:shadow-lg sm:flex-row-reverse"
+        class="sm:rounded-l-md p-4 sm:pl-6 bg-naito-blue-300 simple-action shadow-lg-top sm:shadow-lg sm:flex-row-reverse"
       >
         <i class="material-icons text-lg mr-4 sm:mr-0 sm:ml-4">build</i>
         <span class="font-medium" v-text="$t('pages.index.edit.title')"></span>
