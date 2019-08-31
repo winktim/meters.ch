@@ -44,7 +44,7 @@
         class="mb-8 md:mb-12 w-full sm:w-120 action bg-naito-blue-300 text-gray-100 text-center relative"
         href="mailto:support@naito.one"
       >
-        <i class="material-icons absolute left-0 ml-4">contact_support</i>
+        <i class="material-icons absolute left-0 m-4 top-0">contact_support</i>
         <span v-text="$t('pages.infos.support')"></span>
       </a>
 
@@ -53,7 +53,7 @@
         @click="logout"
         href="/login"
       >
-        <i class="material-icons absolute left-0 ml-4">launch</i>
+        <i class="material-icons absolute left-0 m-4 top-0">launch</i>
         <span v-text="$t('pages.infos.logout')"></span>
       </a>
     </section>

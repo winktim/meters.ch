@@ -52,14 +52,23 @@ textarea::-ms-input-placeholder {
   opacity: 1;
 }
 
-/* IE11 fix: https://github.com/philipwalton/flexbugs#flexbug-2 */
-.flex > p,
-.flex > h2,
-.flex > h3,
-.flex > span {
-  max-width: 100%;
+// hide IE & Edge input clear button
+input::-ms-clear {
+  display: none;
 }
 
+/* IE11 fix: https://github.com/philipwalton/flexbugs#flexbug-2 */
+
+.flex,
+.action {
+  > p,
+  > h2,
+  > h3,
+  > span,
+  > i {
+    max-width: 100%;
+  }
+}
 .background-image {
   background: #e4e7e0;
   background-image: url(/images/background_low.jpg);

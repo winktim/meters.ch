@@ -1,3 +1,5 @@
+@import './icons.scss';
+
 .clickable {
   @apply cursor-pointer select-none outline-none;
 }
@@ -58,10 +60,6 @@
 
 .notice-me-senpai {
   animation: 300ms ease-in notice-me;
-}
-
-.section {
-  @apply flex flex-col items-center;
 }
 
 @keyframes pulse-saturation {
@@ -176,8 +174,7 @@
     &::after {
       content: 'check_box_outline_blank';
 
-      font-family: 'Material Icons';
-      @apply pointer-events-none select-none text-xl;
+      @apply material-icons-pseudo pointer-events-none select-none text-xl;
     }
   }
 
@@ -246,8 +243,7 @@
   &::after {
     content: 'arrow_drop_down';
 
-    font-family: 'Material Icons';
-    @apply absolute pointer-events-none top-0 bottom-0 right-0 px-3 flex items-center text-gray-900;
+    @apply material-icons-pseudo absolute pointer-events-none top-0 bottom-0 right-0 px-3 flex items-center text-gray-900;
   }
 
   // handle screens being too small
@@ -324,14 +320,18 @@
       color: transparent;
       text-shadow: 0 0 0 theme('colors.gray.900');
     }
+
+    // remove select arrow on IE
+    &::-ms-expand {
+      display: none;
+    }
   }
 
   &::after {
     content: 'arrow_drop_down';
 
-    font-family: 'Material Icons';
     top: theme('spacing.4');
     right: theme('spacing.4');
-    @apply absolute pointer-events-none;
+    @apply material-icons-pseudo absolute pointer-events-none;
   }
 }

@@ -5,7 +5,8 @@
   font-weight: 400;
   font-display: swap;
   src: local('Raleway'), local('Raleway-Regular'),
-    url(/fonts/Raleway-Regular.woff2) format('woff2');
+    url(/fonts/Raleway-Regular.woff2) format('woff2'),
+    url(/fonts/Raleway-Regular.woff) format('woff');
 }
 
 @font-face {
@@ -13,7 +14,8 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: local('Raleway-Medium'), url(/fonts/Raleway-Medium.woff2) format('woff2');
+  src: local('Raleway-Medium'), url(/fonts/Raleway-Medium.woff2) format('woff2'),
+    url(/fonts/Raleway-Medium.woff) format('woff');
 }
 
 @font-face {
@@ -22,7 +24,8 @@
   font-weight: 600;
   font-display: swap;
   src: local('Raleway-SemiBold'),
-    url(/fonts/Raleway-SemiBold.woff2) format('woff2');
+    url(/fonts/Raleway-SemiBold.woff2) format('woff2'),
+    url(/fonts/Raleway-SemiBold.woff) format('woff');
 }
 
 // Staatliches
@@ -32,5 +35,6 @@
   font-weight: 400;
   font-display: swap;
   src: local('Staatliches Regular'), local('Staatliches-Regular'),
-    url(/fonts/Staatliches-Regular.woff2) format('woff2');
+    url(/fonts/Staatliches-Regular.woff2) format('woff2'),
+    url(/fonts/Staatliches-Regular.woff) format('woff');
 }

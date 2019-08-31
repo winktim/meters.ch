@@ -3,6 +3,14 @@ import glob from 'glob-all'
 
 import config from './config'
 
+const features = [
+  'es2015',
+  'es2016',
+  'URL',
+  'Promise.prototype.finally',
+  'IntersectionObserver',
+].join('%2C')
+
 export default {
   mode: 'spa',
   /*
@@ -26,6 +34,13 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     noscript: [{ innerHTML: 'This website requires JavaScript.' }],
+
+    script: [
+      {
+        src: `https://polyfill.io/v3/polyfill.min.js?features=${features}`,
+        body: true,
+      },
+    ],
   },
   /*
    ** Customize the progress-bar color

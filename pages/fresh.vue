@@ -1,12 +1,12 @@
 <template>
-  <div class="mt-4 lg:mt-16 section">
-    <section class="section">
+  <div class="mt-4 lg:mt-16 flex flex-col items-center">
+    <section class="flex flex-col items-center">
       <img src="/images/naito-900.svg" :alt="$t('alt.naito_one_logo')" class="w-16 sm:mb-2 md:w-32" />
       <h1 class="font-heading text-2xl text-center" v-text="$t('pages.fresh.title')"></h1>
     </section>
 
     <form
-      class="my-8 section w-full sm:w-100 bg-gray-100 rounded-md px-4 py-8 font-medium"
+      class="my-8 flex flex-col items-center w-full sm:w-100 bg-gray-100 rounded-md px-4 py-8 font-medium"
       action="#"
       @submit="reset"
     >

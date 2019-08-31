@@ -5,6 +5,8 @@ import { indexOnId, fixDashboard, dateLocale } from '../assets/utils'
 export const state = () => ({
   api: `${process.env.API_ROOT}/${process.env.API_VERSION}`,
 
+  isIE: !!document.documentMode,
+
   locales: ['en', 'fr', 'de'],
   locale: 'en',
   apiToken: null,

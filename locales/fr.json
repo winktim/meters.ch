@@ -13,7 +13,8 @@
     "selector_close": "Fermer les résultats du sélecteur",
     "no_data": "Pas de données pour la période sélectionnée: {period}",
     "no_undoing": "Cette action ne peut pas être annulée. Veuillez confirmer.",
-    "and_others": "et d'autres"
+    "and_others": "et d'autres",
+    "browser_alert": "Pour tirer meilleur parti de ce site web, nous recommandons l'utilisation de <a class=\"{classes}\" href=\"https://www.google.ch/chrome/\">Google Chrome</a> ou <a class=\"{classes}\" href=\"https://www.mozilla.org/fr/firefox/\">Mozilla Firefox</a>. Si votre entreprise ne vous permet pas de les installer, pensez à <a class=\"{classes}\" href=\"https://www.microsoft.com/fr-ch/windows/microsoft-edge\">Microsoft Edge</a> qui devrait déjà se trouver sur votre ordinateur."
   },
   "features": {
     "resource_types": {

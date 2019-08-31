@@ -41,7 +41,7 @@
         class="w-full lg:w-200 action bg-naito-blue-300 text-gray-100 text-center relative"
         @click="create"
       >
-        <i class="material-icons absolute left-0 ml-4">add</i>
+        <i class="material-icons absolute left-0 m-4 top-0">add</i>
         <span v-text="$t('pages.alerts.modes.create')"></span>
       </button>
     </div>

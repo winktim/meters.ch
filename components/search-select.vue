@@ -17,7 +17,7 @@
         v-if="searchString !== ''"
         @click="clear"
       >backspace</i>
-      <div class="wrapped-style w-full h-full pointer-events-none absolute"></div>
+      <div class="wrapped-style top-0 left-0 w-full h-full pointer-events-none absolute"></div>
     </div>
     <ul :class="optionsClasses">
       <li class="flex-grow flex" v-for="option in filteredOptions" :key="option.id">

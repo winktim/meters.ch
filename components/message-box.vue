@@ -31,6 +31,7 @@ export default {
         'z-50',
         'fixed',
         'top-0',
+        'left-0',
         'mt-16',
         'flex',
         'justify-center',

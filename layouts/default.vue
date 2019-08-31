@@ -14,6 +14,13 @@
       <nuxt />
     </main>
     <message-box></message-box>
+    <div
+      v-if="isIE && !hideIEWarning"
+      class="fixed bottom-0 left-0 w-full bg-orange-300 text-gray-900 text-center flex flex-col"
+    >
+      <i @click="hideIEWarning = true" class="material-icons clickable w-full p-4">close</i>
+      <span class="p-4 pt-0" v-html="$t('global.browser_alert', { classes: 'green-link'})"></span>
+    </div>
   </div>
 </template>
 <script>
@@ -28,6 +35,11 @@ export default {
     ...mapMutations(['SET_LOCALE']),
   },
   components: { LanguageSelector, MessageBox, LoadingBar },
+  data() {
+    return {
+      hideIEWarning: false,
+    }
+  },
   computed: {
     locale() {
       return this.$store.state.locale
@@ -37,6 +49,9 @@ export default {
     },
     isAppLoading() {
       return this.$store.state.isAppLoading
+    },
+    isIE() {
+      return this.$store.state.isIE
     },
   },
 }
