@@ -29,7 +29,7 @@
         ></label>
         <nuxt-link
           tabindex="1"
-          :to="{ path: 'reset', query: { email: email }}"
+          :to="{ name: 'reset', query: { email }}"
           class="green-link text-right ml-4 p-4 md:p-0"
           v-text="$t('pages.login.form.forgotten_password')"
         ></nuxt-link>
