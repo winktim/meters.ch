@@ -31,7 +31,7 @@
       />
       <input
         :disabled="resetting"
-        class="action w-full bg-naito-green-200 text-gray-100"
+        class="text-center action w-full bg-naito-green-200 text-gray-100"
         type="submit"
         :value="$t('pages.fresh.form.submit')"
       />
