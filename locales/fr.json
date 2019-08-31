@@ -160,7 +160,7 @@
       },
       "form": {
         "resource": "Sonde thermique",
-        "range": "Températures attendus (inclusif)",
+        "range": "Températures attendues (inclusif)",
         "range_note": "Vous ne recevrez pas de nouvelles alertes jusqu'à ce que la température soit redevenue normale.",
         "min": "Minimum",
         "max": "Maximum",
