@@ -27,6 +27,7 @@ import {
   fixMissingData,
   resourceTypesToAxes,
   toClosestSuffixe,
+  getTooltipDateFormat,
 } from '../assets/utils'
 
 export default {
@@ -167,14 +168,10 @@ export default {
 
             callbacks: {
               title: (tooltipItems, data) => {
-                const format = this.chart.options.scales.xAxes[0].time.displayFormats[
-                  reverseAgregations[this.agregation]
-                ]
-                  // replace YYYY & D to be compatible with luxon
-                  .replace('YYYY', 'yyyy')
-                  .replace('D', 'd')
-                  // use full month name
-                  .replace('MMM', 'MMMM')
+                const format = getTooltipDateFormat(
+                  this.agregation,
+                  this.period
+                )
                 return capitalize(
                   DateTime.fromISO(tooltipItems[0].label)
                     .setLocale(this.$dateLocale())

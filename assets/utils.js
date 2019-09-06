@@ -612,3 +612,58 @@ export function generateName(chart, resourcesById, i18n) {
 
   return `${resources}, ${period}`
 }
+
+/**
+ * Get the format to use in the tooltip based on the agregation and period of the chart
+ * @param {number} agregation
+ * @param {number} period
+ */
+export function getTooltipDateFormat(agregation, period) {
+  switch (agregation) {
+    case agregations['hour']: {
+      switch (period) {
+        case periods['day']: {
+          return 'd LLL HH:mm'
+        }
+        case periods['week']: {
+          return 'ccc d LLL HH:mm'
+        }
+        // month or year
+        default: {
+          return 'dd.LL.yy HH:mm'
+        }
+      }
+    }
+    case agregations['day']: {
+      switch (period) {
+        case periods['day']: {
+          return 'd LLL'
+        }
+        case periods['week']: {
+          return 'cccc d LLL'
+        }
+        // month or year
+        default: {
+          return 'dd.LL.yy'
+        }
+      }
+    }
+    case agregations['week']: {
+      switch (period) {
+        case periods['day']: {
+          return 'd LLL'
+        }
+        case periods['week']: {
+          return 'd LLL'
+        }
+        // month or year
+        default: {
+          return 'd LLL y'
+        }
+      }
+    }
+    case agregations['month']: {
+      return 'LLLL y'
+    }
+  }
+}
