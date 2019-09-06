@@ -89,6 +89,7 @@ export default {
   purgeCSS: {
     paths: glob.sync([
       path.join(__dirname, './pages/**/*.vue'),
+      path.join(__dirname, './layouts/**/*.vue'),
       path.join(__dirname, './components/**/*.vue'),
     ]),
   },
