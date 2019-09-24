@@ -326,6 +326,12 @@ export function agregateData(data, agregation, agregationFunction) {
 
   // nothing to do with zero or one data point
   if (data.length === 1) {
+    // if it is a sum type and there is a single data point, we cannot determine the actual value
+    // in that case, return nothing
+    if (agregationFunction === 'sum') {
+      return []
+    }
+
     return [
       {
         x: DateTime.fromISO(data[0].x)
