@@ -210,7 +210,13 @@ export default {
         },
       }
 
-      this.$router.replace(route)
+      this.$router.replace(route).catch(e => {
+        // ignore navigation duplicated errors
+        if (e === undefined || e.name === 'NavigationDuplicated') {
+          return
+        }
+        throw e
+      })
     },
     getQuery() {
       const query = this.$route.query
