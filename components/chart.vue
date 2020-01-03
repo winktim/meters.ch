@@ -155,6 +155,7 @@ export default {
           hover: {
             mode: 'index',
             intersect: false,
+            animationDuration: 0,
           },
           tooltips: {
             mode: 'index',
