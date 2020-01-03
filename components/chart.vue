@@ -188,12 +188,12 @@ export default {
                 const rawValue = parseFloat(tooltipItem.value)
 
                 if (symbol !== '°C') {
-                  const reuslt = toClosestSuffixe(rawValue)
+                  const result = toClosestSuffixe(rawValue)
                   // add spaces before to make room between the color box and the text
-                  return `  ${label}: ${reuslt.number.toLocaleString(
+                  return `  ${label}: ${result.number.toLocaleString(
                     this.$numberLocale(),
                     decimalDefaultFormat
-                  )} ${reuslt.unit + symbol}`
+                  )} ${result.unit + symbol}`
                 }
 
                 const value = rawValue.toLocaleString(
