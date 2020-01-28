@@ -289,6 +289,13 @@ export default {
           this.resources = [id]
         }
       }
+
+      console.log('query saved', {
+        offset: this.offset,
+        agregation: this.agregation,
+        period: this.period,
+        resources: this.resources,
+      })
     },
     setCurrentData({ datasets, hasData }) {
       this.currentData = datasets
@@ -345,7 +352,19 @@ export default {
   },
   watch: {
     offset() {
+      console.log('query before set query', {
+        offset: this.offset,
+        agregation: this.agregation,
+        period: this.period,
+        resources: this.resources,
+      })
       this.setQuery()
+      console.log('query after set query', {
+        offset: this.offset,
+        agregation: this.agregation,
+        period: this.period,
+        resources: this.resources,
+      })
     },
     agregation() {
       this.setQuery()
