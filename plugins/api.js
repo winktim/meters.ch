@@ -39,7 +39,7 @@ export default ({ app, store, redirect }, inject) => {
 
           if (res.status === 401 || res.status === 403) {
             store.dispatch('logout')
-            redirect('/login')
+            redirect('/login?remember-me')
           }
 
           reject(res.status)

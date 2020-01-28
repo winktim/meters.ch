@@ -69,6 +69,7 @@
             type="checkbox"
             name="remember-me-input"
             id="remember-me-input"
+            v-model="rememberMe"
           />
           <div
             class="material-checkbox-fake material-checkbox-fake__large"
@@ -120,7 +121,37 @@ export default {
     return {
       loggingIn: false,
       email: '',
+      rememberMe: false,
     }
+  },
+  mounted() {
+    this.rememberMe = this.$route.query.hasOwnProperty('remember-me')
+  },
+  watch: {
+    rememberMe(to, from) {
+      if (to === from) {
+        return
+      }
+
+      const route = {
+        query: {},
+      }
+
+      if (to) {
+        route.query['remember-me'] = null
+      }
+      this.$router.replace(
+        route,
+        () => {},
+        e => {
+          // ignore this error because it is not important
+          if (e === undefined || e.name === 'NavigationDuplicated') {
+            return
+          }
+          console.error(e)
+        }
+      )
+    },
   },
   methods: {
     async login(event) {
