@@ -10,8 +10,10 @@
       class="bg-gray-100 rounded-md p-4 pt-2 md:p-6 md:pt-3 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5"
     >
       <chart
-        class="chart-height-explore"
-        v-if="resources.length > 0"
+        :class="[
+          'chart-height-explore',
+          resources.length > 0 ? 'block' : 'hidden',
+        ]"
         :period="period"
         :agregation="agregation"
         :offset="offset"
@@ -19,8 +21,16 @@
         @currentData="setCurrentData"
       ></chart>
       <div
-        v-else
-        class="mt-2 md:mt-3 w-full h-full flex items-center justify-center"
+        :class="[
+          'mt-2',
+          'md:mt-3',
+          'w-full',
+          'h-full',
+          'flex',
+          'items-center',
+          'justify-center',
+          resources.length > 0 ? 'hidden' : 'block',
+        ]"
       >
         <span
           class="text-center font-medium"
