@@ -94,6 +94,10 @@ module.exports = {
         '60': '15rem',
         '120': '30rem',
       },
+      minWidth: {
+        '64': '16rem',
+        '2/3': '66.66%',
+      },
       fontFamily: {
         content: ['Raleway', 'sans-serif'],
         heading: ['Staatliches', 'sans-serif'],

@@ -104,7 +104,7 @@
           ></span>
         </div>
         <button
-          class="mt-2 w-full action bg-naito-green-200 text-gray-100 text-center"
+          class="mt-2 action bg-naito-green-200 text-gray-100 text-center"
           :disabled="editMode"
           @click="
             $router.push({ name: 'explore', query: { resources: resource.id } })
@@ -552,6 +552,8 @@ export default {
         'flex',
         'flex-col',
         'items-center',
+        'min-w-2/3',
+        'sm:min-w-64',
       ].concat(this.editMode ? ['z-40'] : [])
     },
     chartClasses() {
