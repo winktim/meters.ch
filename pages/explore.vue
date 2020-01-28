@@ -232,7 +232,6 @@ export default {
   methods: {
     setQuery() {
       const route = {
-        name: this.$router.currentRoute.name,
         query: {
           offset: this.offset,
           agregation: reverseAgregations[this.agregation],
@@ -241,16 +240,22 @@ export default {
         },
       }
 
-      this.$router.replace(route).catch(e => {
-        console.error(e)
-        /*
+      this.$router.push(
+        route,
+        () => {
+          console.log('complete')
+        },
+        e => {
+          console.warn('abort', e)
+        }
+      )
+      /*
         // ignore navigation duplicated errors
         if (e === undefined || e.name === 'NavigationDuplicated') {
           return
         }
         throw e
         */
-      })
     },
     getQuery() {
       const query = this.$route.query
