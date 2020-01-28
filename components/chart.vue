@@ -253,7 +253,7 @@ export default {
       this.updateAgregation()
     },
     updateAgregation() {
-      if (this.rawData === null) {
+      if (this.rawData === null || this.rawData.length === 0) {
         return
       }
 
