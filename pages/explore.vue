@@ -18,12 +18,20 @@
         :resources="resources"
         @currentData="setCurrentData"
       ></chart>
-      <div v-else class="mt-2 md:mt-3 w-full h-full flex items-center justify-center">
-        <span class="text-center font-medium" v-text="$t('pages.explore.form.no_resources')"></span>
+      <div
+        v-else
+        class="mt-2 md:mt-3 w-full h-full flex items-center justify-center"
+      >
+        <span
+          class="text-center font-medium"
+          v-text="$t('pages.explore.form.no_resources')"
+        ></span>
       </div>
     </section>
 
-    <section class="fixed bottom-0 right-0 mb-60 text-gray-100 rounded-l-md flex flex-col">
+    <section
+      class="fixed bottom-0 right-0 mb-60 text-gray-100 rounded-l-md flex flex-col"
+    >
       <!-- download -->
       <button
         :title="$t('pages.explore.download.title')"
@@ -57,8 +65,15 @@
       ></search-select-multi>
       <div class="flex my-2">
         <div class="w-1/2 mr-1 material-select">
-          <label for="agregation-input" v-text="$t('agregations.short')"></label>
-          <select name="agregation-input" id="agregation-input" v-model="agregation">
+          <label
+            for="agregation-input"
+            v-text="$t('agregations.short')"
+          ></label>
+          <select
+            name="agregation-input"
+            id="agregation-input"
+            v-model="agregation"
+          >
             <option
               v-for="(option, i) in reverseAgregations"
               :key="i"
@@ -81,9 +96,15 @@
       </div>
       <!-- offset -->
       <div class="flex justify-end items-center">
-        <span class="text-gray-100 font-bold mr-4" v-text="periodOffsetString"></span>
+        <span
+          class="text-gray-100 font-bold mr-4"
+          v-text="periodOffsetString"
+        ></span>
         <!-- previous -->
-        <button class="w-10 h-10 bg-gray-100 rounded-l-md simple-action" @click="offset++">
+        <button
+          class="w-10 h-10 bg-gray-100 rounded-l-md simple-action"
+          @click="offset++"
+        >
           <i class="material-icons text-2xl text-gray-800">arrow_left</i>
         </button>
         <!-- next -->
@@ -303,7 +324,7 @@ export default {
         resources: this.resources,
       }
 
-      this.$store.commit('ADD_DASHBOARD_ELEMENT', { element: payload })
+      this.$store.commit('ADD_DASHBOARD_CHART', { element: payload })
 
       this.$putUser(
         { dashboard: JSON.stringify(this.$store.getters.dashboard) },
