@@ -291,7 +291,6 @@ export default {
   },
   methods: {
     updateCurrentTemperatures() {
-      console.log('fetching latest temperature values')
       this.temperatureResources.forEach(async ({ id }) => {
         /**
          * @type {{id: number, value: number, read_at: string}[]}
