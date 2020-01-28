@@ -226,6 +226,11 @@ export default {
           resource_id: this.resources[i],
         })
 
+        if (!resource) {
+          console.warn('resource is', resource)
+          return
+        }
+
         const resourceType = this.$store.getters.resourceType(resource)
 
         let site = null
