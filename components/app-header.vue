@@ -5,10 +5,12 @@
       :title="$t('global.back')"
       @click="goBack"
       class="clickable material-icons focus:shadow-outline hover:lighten-10 active:darken-10 absolute left-0 top-0 min-w-10 min-h-10 px-5 py-4 text-2xl"
-    >arrow_back</button>
+    >
+      arrow_back
+    </button>
     <img
       v-else
-      class="z-20 absolute left-0 top-0 w-10 mx-5 my-4"
+      class="z-20 absolute left-0 top-0 w-10 mx-5 my-4 select-none"
       src="/images/naito-900.svg"
       :alt="$t('alt.naito_one_logo')"
     />
