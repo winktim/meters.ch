@@ -6,10 +6,16 @@
       :back="true"
     ></app-header>
 
-    <section class="bg-gray-100 rounded-md p-4 mb-8 md:mx-20 lg:w-200 lg:mx-auto">
+    <section
+      class="bg-gray-100 rounded-md p-4 mb-8 md:mx-20 lg:w-200 lg:mx-auto"
+    >
       <h2 class="text-lg font-bold mb-3" v-text="$t('pages.infos.client')"></h2>
       <ul>
-        <li class="flex items-center my-1" v-for="(data, i) in clientData" :key="i">
+        <li
+          class="flex items-center my-1"
+          v-for="(data, i) in clientData"
+          :key="i"
+        >
           <p class="font-medium w-1/2 pr-2" v-text="$t(data.name)"></p>
           <p v-text="data.value"></p>
         </li>
@@ -19,12 +25,19 @@
     <section class="bg-gray-100 rounded-md p-4 md:mx-20 lg:w-200 lg:mx-auto">
       <h2 class="text-lg font-bold mb-3" v-text="$t('pages.infos.user')"></h2>
       <ul>
-        <li class="flex items-center my-1" v-for="(data, i) in userData" :key="i">
+        <li
+          class="flex items-center my-1"
+          v-for="(data, i) in userData"
+          :key="i"
+        >
           <p class="font-medium w-1/2 pr-2" v-text="$t(data.name)"></p>
           <p v-text="data.value"></p>
         </li>
         <li class="flex items-center mt-1">
-          <p class="font-medium w-1/2 pr-2" v-text="$t('pages.infos.data.locale')"></p>
+          <p
+            class="font-medium w-1/2 pr-2"
+            v-text="$t('pages.infos.data.locale')"
+          ></p>
           <language-selector
             :locale="userLocale"
             :locales="locales"
@@ -34,7 +47,10 @@
           ></language-selector>
         </li>
         <li>
-          <p class="text-gray-800 mb-1" v-text="$t('pages.infos.locale_explain')"></p>
+          <p
+            class="text-gray-800 mb-1"
+            v-text="$t('pages.infos.locale_explain')"
+          ></p>
         </li>
       </ul>
     </section>
@@ -51,7 +67,7 @@
       <a
         class="w-5/6 sm:w-100 action bg-naito-green-200 text-gray-100 text-center relative"
         @click="logout"
-        href="/login"
+        :href="loginUrl"
       >
         <i class="material-icons absolute left-0 m-4 top-0">launch</i>
         <span v-text="$t('pages.infos.logout')"></span>
@@ -84,6 +100,11 @@ export default {
     }
   },
   components: { AppHeader, LanguageSelector },
+  data() {
+    return {
+      loginUrl: '/login',
+    }
+  },
   async mounted() {
     await Promise.all([
       this.$getUser(),
@@ -91,6 +112,10 @@ export default {
       this.$getSites(),
       this.$getClient(),
     ])
+
+    if (this.$store.getters.rememberMe) {
+      this.loginUrl = '/login?remember-me'
+    }
   },
   methods: {
     saveUserLocale(payload) {

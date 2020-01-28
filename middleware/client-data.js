@@ -22,6 +22,8 @@ export default function({ store }) {
   const apiToken = localStorage.getItem('apiToken')
   if (apiToken) {
     store.commit('SET_API_TOKEN', { apiToken })
+    // if we found a token, that means the user wanted to be remembered
+    store.commit('SET_REMEMBER_ME', { rememberMe: true })
   }
 
   const hasConnected = localStorage.getItem('hasConnected')

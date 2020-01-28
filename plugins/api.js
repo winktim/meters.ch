@@ -38,8 +38,11 @@ export default ({ app, store, redirect }, inject) => {
           }
 
           if (res.status === 401 || res.status === 403) {
+            const url = store.getters.rememberMe
+              ? '/login?remember-me'
+              : '/login'
             store.dispatch('logout')
-            redirect('/login?remember-me')
+            redirect(url)
           }
 
           reject(res.status)

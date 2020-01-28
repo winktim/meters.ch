@@ -313,6 +313,7 @@ export const actions = {
 }
 
 export const getters = {
+  rememberMe: state => state.rememberMe,
   name: state => (state.data.user ? state.data.user.name : '...'),
   email: state => (state.data.user ? state.data.user.email : '...'),
   userLocale: state =>
