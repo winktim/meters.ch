@@ -95,7 +95,7 @@
             >↙</span
           >
           <span
-            class="text-4xl"
+            :class="['text-4xl', tempValueColorClass(resource.id)]"
             v-text="
               currentTemperatures[resource.id]
                 ? currentTemperatures[resource.id].value
@@ -226,6 +226,7 @@ import {
   formatResource,
   decimalTwoFormat,
   changeState,
+  alertState,
 } from '../assets/utils'
 import { Duration } from 'luxon'
 
@@ -254,6 +255,7 @@ export default {
       this.$getResourceTypes(),
       this.$getSensors(),
       this.$getSites(),
+      this.$getAlerts(),
     ])
 
     this.updateCurrentTemperatures()
@@ -315,7 +317,40 @@ export default {
         } else {
           this.currentTemperatures[id].state = changeState.SAME
         }
+
+        // check if there is an alert for the resource and if the value is outside the range
+        this.currentTemperatures[id].alert = alertState.NONE
+        const alerts = this.$store.getters.alerts
+        for (const alert of alerts) {
+          if (alert.resource_id !== id) {
+            continue
+          }
+
+          if (lastValue > alert.max) {
+            this.currentTemperatures[id].alert = alertState.ABOVE
+          } else if (lastValue < alert.min) {
+            this.currentTemperatures[id].alert = alertState.BELOW
+          }
+
+          // only consider the first corresponding alert
+          break
+        }
       })
+    },
+    tempValueColorClass(id) {
+      if (!this.currentTemperatures.hasOwnProperty(id)) {
+        return ''
+      }
+
+      if (this.currentTemperatures[id].alert === alertState.ABOVE) {
+        return 'text-red-600'
+      }
+
+      if (this.currentTemperatures[id].alert === alertState.BELOW) {
+        return 'text-blue-600'
+      }
+
+      return ''
     },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen

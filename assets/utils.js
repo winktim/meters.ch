@@ -24,6 +24,12 @@ export const changeState = {
   DECREASE: 2,
 }
 
+export const alertState = {
+  ABOVE: 0,
+  NONE: 1,
+  BELOW: 2,
+}
+
 /**
  *
  * @param {import('vue-i18n').default} i18n
