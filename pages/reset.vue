@@ -1,8 +1,24 @@
 <template>
   <div class="mt-4 lg:mt-16 flex flex-col items-center">
+    <div class="absolute left-0 top-0">
+      <nuxt-link
+        :title="$t('global.back')"
+        to="login"
+        class="clickable material-icons focus:shadow-outline hover:lighten-10 active:darken-10 absolute left-0 top-0 min-w-10 min-h-10 px-5 py-4 text-2xl"
+      >
+        arrow_back
+      </nuxt-link>
+    </div>
     <section class="flex flex-col items-center">
-      <img src="/images/naito-900.svg" :alt="$t('alt.naito_one_logo')" class="w-16 sm:mb-2 md:w-32" />
-      <h1 class="font-heading text-2xl text-center" v-text="$t('pages.reset.title')"></h1>
+      <img
+        src="/images/naito-900.svg"
+        :alt="$t('alt.naito_one_logo')"
+        class="w-16 sm:mb-2 md:w-32"
+      />
+      <h1
+        class="font-heading text-2xl text-center"
+        v-text="$t('pages.reset.title')"
+      ></h1>
     </section>
 
     <form
@@ -10,9 +26,19 @@
       action="#"
       @submit="reset"
     >
-      <p class="text-center text-gray-800" v-text="$t('pages.reset.form.explain')"></p>
-      <p class="text-center text-gray-600 mb-4" v-text="$t('pages.reset.form.note')"></p>
-      <label class="w-full" for="email-input" v-text="$t('global.email')"></label>
+      <p
+        class="text-center text-gray-800"
+        v-text="$t('pages.reset.form.explain')"
+      ></p>
+      <p
+        class="text-center text-gray-600 mb-4"
+        v-text="$t('pages.reset.form.note')"
+      ></p>
+      <label
+        class="w-full"
+        for="email-input"
+        v-text="$t('global.email')"
+      ></label>
       <input
         :disabled="resetting"
         v-model="email"
@@ -119,4 +145,3 @@ export default {
   },
 }
 </script>
-
