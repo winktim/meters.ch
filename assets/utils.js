@@ -622,10 +622,14 @@ export function resourceTypesToAxes(resourceTypes) {
     // order (higher = further)
     weight: i,
     position: i === 0 ? 'right' : 'left',
-    gridLines: false,
+    gridLines: {
+      color: 'rgba(230, 230, 230, 1)',
+      lineWidth: 2,
+      drawBorder: false,
+      zeroLineWidth: 0,
+    },
     ticks: {
-      // beginAtZero: true,
-      min: symbol === '°C' ? undefined : 0,
+      beginAtZero: symbol !== '°C',
       precision: 4,
       maxTicksLimit: 7,
       fontColor: chartDefaults.fontColor,
