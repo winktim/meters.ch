@@ -240,22 +240,18 @@ export default {
         },
       }
 
-      this.$router.push(
+      this.$router.replace(
         route,
-        () => {
-          console.log('complete')
-        },
+        () => {},
         e => {
-          console.warn('abort', e)
+          // ignore this error. we cannot easily check if the query is the same as the current
+          // which would avoid calling replace when not needed
+          if (e.name === 'NavigationDuplicated') {
+            return
+          }
+          console.error(e)
         }
       )
-      /*
-        // ignore navigation duplicated errors
-        if (e === undefined || e.name === 'NavigationDuplicated') {
-          return
-        }
-        throw e
-        */
     },
     getQuery() {
       const query = this.$route.query
@@ -297,13 +293,6 @@ export default {
           this.resources = [id]
         }
       }
-
-      console.log('query saved', {
-        offset: this.offset,
-        agregation: this.agregation,
-        period: this.period,
-        resources: this.resources,
-      })
     },
     setCurrentData({ datasets, hasData }) {
       this.currentData = datasets
@@ -360,19 +349,7 @@ export default {
   },
   watch: {
     offset() {
-      console.log('query before set query', {
-        offset: this.offset,
-        agregation: this.agregation,
-        period: this.period,
-        resources: this.resources,
-      })
       this.setQuery()
-      console.log('query after set query', {
-        offset: this.offset,
-        agregation: this.agregation,
-        period: this.period,
-        resources: this.resources,
-      })
     },
     agregation() {
       this.setQuery()
