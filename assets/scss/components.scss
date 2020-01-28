@@ -176,6 +176,10 @@
 
       @apply material-icons-pseudo pointer-events-none select-none text-xl;
     }
+
+    &.material-checkbox-fake__large::after {
+      @apply text-3xl;
+    }
   }
 
   // other icon for the radio
@@ -318,4 +322,21 @@
     right: theme('spacing.4');
     @apply material-icons-pseudo absolute pointer-events-none;
   }
+}
+
+$twitching-amount: 3deg;
+$arrow-correction: -45deg;
+
+@keyframes twitching-arrow-animation {
+  0% {
+    transform: rotate($arrow-correction - $twitching-amount);
+  }
+  100% {
+    transform: rotate($arrow-correction + $twitching-amount);
+  }
+}
+
+.twitching-arrow {
+  transform: rotate(-45deg);
+  animation: twitching-arrow-animation 150ms alternate infinite ease-in-out;
 }

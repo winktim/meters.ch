@@ -1,8 +1,15 @@
 <template>
   <div class="mt-4 lg:mt-16 flex flex-col items-center">
     <section class="flex flex-col items-center">
-      <img src="/images/naito-900.svg" :alt="$t('alt.naito_one_logo')" class="w-16 sm:mb-2 md:w-32" />
-      <h1 class="font-heading text-2xl text-center" v-text="$t('pages.login.title')"></h1>
+      <img
+        src="/images/naito-900.svg"
+        :alt="$t('alt.naito_one_logo')"
+        class="w-16 sm:mb-2 md:w-32"
+      />
+      <h1
+        class="font-heading text-2xl text-center"
+        v-text="$t('pages.login.title')"
+      ></h1>
     </section>
 
     <form
@@ -10,7 +17,11 @@
       action="#"
       @submit="login"
     >
-      <label class="w-full" for="email-input" v-text="$t('global.email')"></label>
+      <label
+        class="w-full"
+        for="email-input"
+        v-text="$t('global.email')"
+      ></label>
       <input
         :disabled="loggingIn"
         v-model="email"
@@ -29,7 +40,7 @@
         ></label>
         <nuxt-link
           tabindex="1"
-          :to="{ name: 'reset', query: { email }}"
+          :to="{ name: 'reset', query: { email } }"
           class="green-link text-right ml-4 p-4 md:p-0"
           v-text="$t('pages.login.form.forgotten_password')"
         ></nuxt-link>
@@ -49,19 +60,31 @@
           for="remember-me-input"
           v-text="$t('pages.login.form.remember_me')"
         ></label>
-        <label class="material-checkbox text-naito-green-200" for="remember-me-input">
+        <label
+          class="material-checkbox text-naito-green-200"
+          for="remember-me-input"
+        >
           <input
             :disabled="loggingIn"
             type="checkbox"
             name="remember-me-input"
             id="remember-me-input"
           />
-          <div class="material-checkbox-fake"></div>
+          <div
+            class="material-checkbox-fake material-checkbox-fake__large"
+          ></div>
         </label>
       </div>
       <input
         :disabled="loggingIn"
-        :class="['text-center', 'action', loggingIn ? 'action__processing' : '', 'w-full', 'bg-naito-green-200', 'text-gray-100']"
+        :class="[
+          'text-center',
+          'action',
+          loggingIn ? 'action__processing' : '',
+          'w-full',
+          'bg-naito-green-200',
+          'text-gray-100',
+        ]"
         type="submit"
         :value="$t('pages.login.form.submit')"
       />
@@ -173,4 +196,3 @@ export default {
   },
 }
 </script>
-
