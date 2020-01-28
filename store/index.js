@@ -1,6 +1,11 @@
 import { DateTime } from 'luxon'
 import moment from 'moment'
-import { indexOnId, fixDashboard, dateLocale } from '../assets/utils'
+import {
+  indexOnId,
+  fixDashboard,
+  dateLocale,
+  defaultDashboard,
+} from '../assets/utils'
 
 export const state = () => ({
   api: `${process.env.API_ROOT}/${process.env.API_VERSION}`,
@@ -96,19 +101,17 @@ export const mutations = {
         state.data.user.dashboard = JSON.parse(state.data.user.dashboard)
       } catch (e) {
         console.warn('Dashboard parsing error:', e)
-        state.data.user.dashboard = []
+        state.data.user.dashboard = defaultDashboard()
       }
     } else if (state.data.user.dashboard === null) {
-      state.data.user.dashboard = []
+      state.data.user.dashboard = defaultDashboard()
     }
 
-    // fix dashboard if we have resources data
-    if (state.dataById.resources !== null) {
-      state.data.user.dashboard = fixDashboard(
-        state.data.user.dashboard,
-        state.dataById.resources
-      )
-    }
+    // fix the daashboard in any case because it might be invalid
+    state.data.user.dashboard = fixDashboard(
+      state.data.user.dashboard,
+      state.dataById.resources
+    )
   },
   SET_CLIENT(state, { client }) {
     state.data.client = client
@@ -182,13 +185,13 @@ export const mutations = {
   ADD_AWAITING_EVENT(state, { awaitingEvent }) {
     state.awaitingEvents.push(awaitingEvent)
   },
-  ADD_DASHBOARD_ELEMENT(state, { element }) {
+  ADD_DASHBOARD_CHART(state, { element }) {
     if (state.data.user === null) {
       console.warn('No user data to add dashboard element')
       return
     }
 
-    state.data.user.dashboard.push(element)
+    state.data.user.dashboard.charts.push(element)
   },
   ADD_DASHBOARD_EDIT(state, { dashboard }) {
     state.dashboardEdit.undoList.push(dashboard)
@@ -232,19 +235,19 @@ export const mutations = {
   REMOVE_AWAITING_EVENT(state, { awaitingEvent }) {
     state.awaitingEvents.splice(state.awaitingEvents.indexOf(awaitingEvent), 1)
   },
-  REMOVE_DASHBOARD_ELEMENT(state, { element }) {
+  REMOVE_DASHBOARD_CHART(state, { element }) {
     if (state.data.user === null) {
       console.warn('No user data to remove dashboard element')
       return
     }
 
-    const index = state.data.user.dashboard.indexOf(element)
+    const index = state.data.user.dashboard.charts.indexOf(element)
 
     if (index === -1) {
       return
     }
 
-    state.data.user.dashboard.splice(index, 1)
+    state.data.user.dashboard.charts.splice(index, 1)
   },
   REMOVE_LAST_DASHBOARD_EDIT(state) {
     state.dashboardEdit.undoList.pop()
@@ -318,7 +321,8 @@ export const getters = {
     state.data.user
       ? DateTime.fromISO(state.data.user.created_at)
       : DateTime.local(),
-  dashboard: state => (state.data.user ? state.data.user.dashboard : []),
+  dashboard: state =>
+    state.data.user ? state.data.user.dashboard : defaultDashboard(),
   clientName: state => (state.data.client ? state.data.client.name : '...'),
   clientNumber: state => (state.data.client ? state.data.client.number : '...'),
   clientEmail: state => (state.data.client ? state.data.client.email : '...'),
@@ -333,7 +337,7 @@ export const getters = {
   dashboardUndoList: state => state.dashboardEdit.undoList,
   dashboardEditCurrent: state => {
     if (state.data.user === null) {
-      return []
+      return defaultDashboard()
     }
 
     const numUndos = state.dashboardEdit.undoList.length

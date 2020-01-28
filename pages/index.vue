@@ -1,7 +1,15 @@
 <template>
   <div>
     <div
-      :class="['z-10', 'fixed', 'top-0', 'left-0', 'w-screen', 'h-screen', isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none']"
+      :class="[
+        'z-10',
+        'fixed',
+        'top-0',
+        'left-0',
+        'w-screen',
+        'h-screen',
+        isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none',
+      ]"
       @click="isMenuOpen = false"
     ></div>
     <app-header
@@ -18,19 +26,101 @@
           :disabled="editMode"
           @click="toggleMenu"
           class="round-action material-icons bg-naito-blue-300 text-gray-100 mr-4"
-        >menu</button>
-        <app-menu v-if="isMenuOpen" class="absolute top-full w-60 mt-1"></app-menu>
+        >
+          menu
+        </button>
+        <app-menu
+          v-if="isMenuOpen"
+          class="absolute top-full w-60 mt-1"
+        ></app-menu>
       </div>
       <div>
         <p v-html="$t('pages.index.hello', { name })"></p>
-        <p class="sm:hidden" v-html="$t('pages.index.summary_small', sensorAndSitParams)"></p>
-        <p class="hidden sm:block" v-html="$t('pages.index.summary', sensorAndSitParams)"></p>
+        <p
+          class="sm:hidden"
+          v-html="$t('pages.index.summary_small', sensorAndSitParams)"
+        ></p>
+        <p
+          class="hidden sm:block"
+          v-html="$t('pages.index.summary', sensorAndSitParams)"
+        ></p>
       </div>
     </section>
 
+    <!-- temperature instant values -->
+    <div class="flex flex-wrap justify-center">
+      <section
+        v-for="(resource, i) in temperatureResources"
+        :key="i"
+        :class="temperatureParentClasses"
+      >
+        <h2
+          class="text-lg font-bold mb-2 text-center"
+          v-text="resource.title"
+        ></h2>
+
+        <!-- checkbox -->
+        <label
+          v-if="editMode"
+          class="material-checkbox text-naito-blue-300"
+          :for="i + '-enable-input'"
+        >
+          <input
+            type="checkbox"
+            :name="i + '-enable-input'"
+            :id="i + '-enable-input'"
+            :checked="isTempIncluded(resource.id)"
+            @change="tempToggleEdit(resource.id, $event.target.checked)"
+          />
+          <div
+            class="material-checkbox-fake material-checkbox-fake__large"
+          ></div>
+        </label>
+
+        <div v-else class="flex w-full justify-center items-center">
+          <span
+            v-if="
+              currentTemperatures[resource.id] &&
+                currentTemperatures[resource.id].state === changeState.INCREASE
+            "
+            class="mr-4 text-3xl text-red-600 twitching-arrow select-none"
+            >↗</span
+          >
+          <span
+            v-if="
+              currentTemperatures[resource.id] &&
+                currentTemperatures[resource.id].state === changeState.DECREASE
+            "
+            class="mr-4 text-3xl text-blue-600 twitching-arrow select-none"
+            >↙</span
+          >
+          <span
+            class="text-4xl"
+            v-text="
+              currentTemperatures[resource.id]
+                ? currentTemperatures[resource.id].value
+                : resource.value
+            "
+          ></span>
+        </div>
+        <button
+          class="mt-2 w-full action bg-naito-green-200 text-gray-100 text-center"
+          :disabled="editMode"
+          @click="
+            $router.push({ name: 'explore', query: { resources: resource.id } })
+          "
+          v-text="$t('pages.index.open_chart')"
+        ></button>
+      </section>
+    </div>
+
     <!-- dashboard elements -->
     <div :class="dashboardRootClasses">
-      <section v-for="(chart, i) in dashboard" :key="chartKey(chart)" :class="chartParentClasses">
+      <section
+        v-for="(chart, i) in dashboard.charts"
+        :key="chartKey(chart)"
+        :class="chartParentClasses"
+      >
         <h2
           v-if="!editMode"
           class="text-lg font-bold mb-2 text-center"
@@ -52,14 +142,18 @@
             @click="toFrontEdit(i)"
             class="w-12 h-12 bg-naito-blue-300 text-gray-100 simple-action rounded-l-md"
           >
-            <i class="material-icons text-2xl rotate-quarter xl:rotate-none">arrow_left</i>
+            <i class="material-icons text-2xl rotate-quarter xl:rotate-none"
+              >arrow_left</i
+            >
           </button>
           <button
-            :disabled="i === dashboard.length - 1"
+            :disabled="i === dashboard.charts.length - 1"
             @click="toBackEdit(i)"
             class="w-12 h-12 bg-naito-blue-300 text-gray-100 simple-action"
           >
-            <i class="material-icons text-2xl rotate-quarter xl:rotate-none">arrow_right</i>
+            <i class="material-icons text-2xl rotate-quarter xl:rotate-none"
+              >arrow_right</i
+            >
           </button>
           <button
             @click="deleteEdit(i)"
@@ -79,7 +173,7 @@
         <button
           class="mt-2 w-full sm:w-120 action bg-naito-green-200 text-gray-100 text-center"
           :disabled="editMode"
-          @click="$router.push({name: 'explore', query: chart})"
+          @click="$router.push({ name: 'explore', query: chart })"
           v-text="$t('pages.index.open_chart')"
         ></button>
       </section>
@@ -92,7 +186,7 @@
       class="fixed bottom-0 w-full sm:w-auto right-0 sm:mb-12 text-gray-100 rounded-l-md flex flex-col"
     >
       <button
-        :disabled="dashboard.length === 0"
+        :disabled="dashboard.charts.length === 0"
         @click="editMode = true"
         class="sm:rounded-l-md p-4 sm:pl-6 bg-naito-blue-300 simple-action shadow-lg-top sm:shadow-lg sm:flex-row-reverse"
       >
@@ -105,7 +199,11 @@
     <div :class="backClasses"></div>
     <!-- actions -->
     <div :class="actionsClasses">
-      <button @click="undoEdit" :disabled="!editHasPrevious" :class="cancelClasses">
+      <button
+        @click="undoEdit"
+        :disabled="!editHasPrevious"
+        :class="cancelClasses"
+      >
         <i class="material-icons text-lg mr-4">undo</i>
         <span v-text="$t('pages.index.edit.cancel_last')"></span>
       </button>
@@ -121,7 +219,15 @@ import AppHeader from '../components/app-header.vue'
 import AppMenu from '../components/app-menu.vue'
 
 import Chart from '../components/chart'
-import { periods, agregations, generateName } from '../assets/utils'
+import {
+  periods,
+  agregations,
+  generateName,
+  formatResource,
+  decimalTwoFormat,
+  changeState,
+} from '../assets/utils'
+import { Duration } from 'luxon'
 
 export default {
   middleware: 'needs-auth',
@@ -150,6 +256,12 @@ export default {
       this.$getSites(),
     ])
 
+    this.updateCurrentTemperatures()
+    setInterval(
+      () => this.updateCurrentTemperatures(),
+      Duration.fromObject({ minutes: 15 })
+    )
+
     /*
     // code to hide tooltip only on touch & drag
     // not used because choosen to hide tooltip when not pressing
@@ -169,11 +281,42 @@ export default {
   },
   data() {
     return {
+      changeState,
       isMenuOpen: false,
       editMode: false,
+      currentTemperatures: {},
     }
   },
   methods: {
+    updateCurrentTemperatures() {
+      console.log('fetching latest temperature values')
+      this.temperatureResources.forEach(async ({ id }) => {
+        /**
+         * @type {{id: number, value: number, read_at: string}[]}
+         */
+        const readings = await this.$getReadings(id, { last: 3 })
+        const last = readings[readings.length - 1]
+        if (!this.currentTemperatures.hasOwnProperty(id)) {
+          this.$set(this.currentTemperatures, id, { value: 0, state: 0 })
+        }
+        this.currentTemperatures[id].value = `${last.value.toLocaleString(
+          this.$numberLocale(),
+          decimalTwoFormat
+        )} °C`
+
+        const lastValue = last.value
+        const previous1 = readings[readings.length - 2].value
+        const previous2 = readings[readings.length - 3].value
+
+        if (lastValue > previous1 && lastValue > previous2) {
+          this.currentTemperatures[id].state = changeState.INCREASE
+        } else if (lastValue < previous1 && lastValue < previous2) {
+          this.currentTemperatures[id].state = changeState.DECREASE
+        } else {
+          this.currentTemperatures[id].state = changeState.SAME
+        }
+      })
+    },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen
     },
@@ -205,7 +348,7 @@ export default {
       }
 
       const newDashboard = JSON.parse(JSON.stringify(this.dashboard))
-      newDashboard[index].name = newName
+      newDashboard.charts[index].name = newName
 
       this.$store.commit('ADD_DASHBOARD_EDIT', { dashboard: newDashboard })
     },
@@ -213,7 +356,7 @@ export default {
       const newDashboard = JSON.parse(JSON.stringify(this.dashboard))
 
       const element = newDashboard.splice(index, 1)
-      newDashboard.splice(index - 1, 0, element[0])
+      newDashboard.charts.splice(index - 1, 0, element[0])
 
       this.$store.commit('ADD_DASHBOARD_EDIT', { dashboard: newDashboard })
     },
@@ -221,19 +364,42 @@ export default {
       const newDashboard = JSON.parse(JSON.stringify(this.dashboard))
 
       const element = newDashboard.splice(index, 1)
-      newDashboard.splice(index + 1, 0, element[0])
+      newDashboard.charts.splice(index + 1, 0, element[0])
 
       this.$store.commit('ADD_DASHBOARD_EDIT', { dashboard: newDashboard })
     },
     deleteEdit(index) {
       const newDashboard = JSON.parse(JSON.stringify(this.dashboard))
 
-      newDashboard.splice(index, 1)
+      newDashboard.charts.splice(index, 1)
 
       this.$store.commit('ADD_DASHBOARD_EDIT', { dashboard: newDashboard })
     },
     undoEdit() {
       this.$store.commit('REMOVE_LAST_DASHBOARD_EDIT')
+    },
+    tempToggleEdit(id, checked) {
+      // the resource is currently checked if not in the excluded list
+      const oldChecked = this.isTempIncluded(id)
+
+      if (checked === oldChecked) {
+        return
+      }
+
+      const newDashboard = JSON.parse(JSON.stringify(this.dashboard))
+
+      if (checked) {
+        // remove from exclude list
+        newDashboard.temps.exclude.splice(
+          newDashboard.temps.exclude.indexOf(id),
+          1
+        )
+      } else {
+        // add to exclude list
+        newDashboard.temps.exclude.push(id)
+      }
+
+      this.$store.commit('ADD_DASHBOARD_EDIT', { dashboard: newDashboard })
     },
     async confirmEdit() {
       // check if any changes have been made or not
@@ -255,7 +421,13 @@ export default {
         // don't quit edit mode if there was an error (to not loose the changes)
         this.$store.dispatch('validateDashboardChanges')
         this.editMode = false
+        // update data in case we selecteed a new temperature resource
+        this.updateCurrentTemperatures()
       } catch (e) {}
+    },
+
+    isTempIncluded(id) {
+      return this.dashboard.temps.exclude.indexOf(id) === -1
     },
   },
   computed: {
@@ -294,6 +466,31 @@ export default {
       return this.editMode
         ? this.$store.getters.dashboardEditCurrent
         : this.$store.getters.dashboard
+    },
+    temperatureResources() {
+      return (
+        this.$store.getters.resources
+          .filter(resource => {
+            const resourceType = this.$store.getters.resourceType(resource)
+            return resourceType && resourceType.name === 'Temperature'
+          })
+          .map(resource => {
+            let site = null
+
+            if (this.$store.getters.numSites > 1) {
+              const sensor = this.$store.getters.sensor(resource)
+              site = this.$store.getters.site(sensor)
+            }
+
+            return {
+              title: formatResource(this.$i18n, resource, null, site),
+              value: `... °C`,
+              id: resource.id,
+            }
+          })
+          // only show them all in edit mode, otherwise hide the exluded ones
+          .filter(resource => this.editMode || this.isTempIncluded(resource.id))
+      )
     },
 
     // edit mode stuff
@@ -339,6 +536,19 @@ export default {
         'lg:w-2/3',
         'xl:m-3',
         'xl:w-fake1/2',
+        'flex',
+        'flex-col',
+        'items-center',
+      ].concat(this.editMode ? ['z-40'] : [])
+    },
+    temperatureParentClasses() {
+      return [
+        'bg-gray-100',
+        'rounded-md',
+        'p-4',
+        'md:p-6',
+        'mb-3',
+        'mx-3',
         'flex',
         'flex-col',
         'items-center',

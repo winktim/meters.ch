@@ -90,6 +90,10 @@ module.exports = {
         '32': '8rem',
         '64': '16rem',
       },
+      maxWidth: {
+        '60': '15rem',
+        '120': '30rem',
+      },
       fontFamily: {
         content: ['Raleway', 'sans-serif'],
         heading: ['Staatliches', 'sans-serif'],

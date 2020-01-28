@@ -18,6 +18,12 @@ export const dateLocale = {
   de: 'de-ch',
 }
 
+export const changeState = {
+  INCREASE: 0,
+  SAME: 1,
+  DECREASE: 2,
+}
+
 /**
  *
  * @param {import('vue-i18n').default} i18n
@@ -129,63 +135,92 @@ export function clamp(value, min, max) {
 /**
  * Convert the given potential dashboard into a valid dashboard object
  * @param {any} dashboard The current dashboard as a parsed JSON string
- * @param {{[x:number]:{}}} ownedResources
+ * @param {{[x:number]:{}}} ownedResources the ressources owned if available
  * @returns {{name: string, offset: number, period: string, agregation: string, resources: number[]}[]}
  */
 export function fixDashboard(dashboard, ownedResources) {
-  const out = []
+  const out = defaultDashboard()
+
+  let inputCharts = []
 
   if (Array.isArray(dashboard)) {
-    dashboard.forEach(element => {
-      // check all elements are objects
-      if (typeof element !== 'object' || element === null) {
-        return
-      }
-
-      // check resources is an array
-      if (!Array.isArray(element['resources'])) {
-        return
-      }
-
-      // convert to numbers and filter resources that are not number or not owned resources
-      const resources = element['resources']
-        .map(id => parseInt(id))
-        .filter(id => {
-          return !isNaN(id) && ownedResources[id] !== undefined
-        })
-
-      // check we have at least one resource left
-      if (resources.length === 0) {
-        return
-      }
-
-      // take the period or the default if invalid
-      const period =
-        reversePeriods.indexOf(element['period']) === -1
-          ? reversePeriods[0]
-          : element['period']
-
-      // take the agregation or the default if invalid
-      const agregation =
-        reverseAgregations.indexOf(element['agregation']) === -1
-          ? reverseAgregations[0]
-          : element['agregation']
-
-      // clamp the offset or reset it to 0
-      const offset = clamp(parseInt(element['offset']), 0, 12) || 0
-
-      // get the name or use an empty string
-      const name = element.hasOwnProperty('name') ? String(element['name']) : ''
-
-      out.push({
-        name,
-        offset,
-        period,
-        agregation,
-        resources,
-      })
-    })
+    // if the dashboard is an array, it is the old version. update it
+    inputCharts = dashboard
+  } else if (
+    dashboard.hasOwnProperty('charts') &&
+    Array.isArray(dashboard.charts)
+  ) {
+    inputCharts = dashboard.charts
+  } else {
+    // given dashboard is invalid
+    return out
   }
+
+  // handle excluded temps
+  if (
+    dashboard.hasOwnProperty('temps') &&
+    Array.isArray(dashboard.temps.exclude)
+  ) {
+    const inputExcludedTemps = dashboard.temps.exclude
+      .map(id => parseInt(id))
+      .filter(id => !isNaN(id))
+
+    out.temps.exclude = inputExcludedTemps
+  }
+
+  // handle charts
+  inputCharts.forEach(element => {
+    // check all elements are objects
+    if (typeof element !== 'object' || element === null) {
+      return
+    }
+
+    // check resources is an array
+    if (!Array.isArray(element['resources'])) {
+      return
+    }
+
+    // convert to numbers and filter resources that are not number or not owned resources
+    // if the owned ressources are not available, ignore that check
+    const resources = element['resources']
+      .map(id => parseInt(id))
+      .filter(id => {
+        return (
+          !isNaN(id) && (!ownedResources || ownedResources[id] !== undefined)
+        )
+      })
+
+    // check we have at least one resource left
+    if (resources.length === 0) {
+      return
+    }
+
+    // take the period or the default if invalid
+    const period =
+      reversePeriods.indexOf(element['period']) === -1
+        ? reversePeriods[0]
+        : element['period']
+
+    // take the agregation or the default if invalid
+    const agregation =
+      reverseAgregations.indexOf(element['agregation']) === -1
+        ? reverseAgregations[0]
+        : element['agregation']
+
+    // clamp the offset or reset it to 0
+    const offset = clamp(parseInt(element['offset']), 0, 12) || 0
+
+    // get the name or use an empty string
+    const name = element.hasOwnProperty('name') ? String(element['name']) : ''
+
+    out.charts.push({
+      name,
+      offset,
+      period,
+      agregation,
+      resources,
+    })
+  })
 
   return out
 }
@@ -255,6 +290,11 @@ export const datasetStyle = datasetColors.map(color => ({
 
 export const decimalDefaultFormat = {
   minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+}
+
+export const decimalTwoFormat = {
+  minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 }
 
@@ -672,4 +712,8 @@ export function getTooltipDateFormat(agregation, period) {
       return 'LLLL y'
     }
   }
+}
+
+export function defaultDashboard() {
+  return { charts: [], temps: { exclude: [] } }
 }
