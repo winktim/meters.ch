@@ -246,7 +246,7 @@ export default {
         e => {
           // ignore this error. we cannot easily check if the query is the same as the current
           // which would avoid calling replace when not needed
-          if (e.name === 'NavigationDuplicated') {
+          if (e === undefined || e.name === 'NavigationDuplicated') {
             return
           }
           console.error(e)
