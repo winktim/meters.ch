@@ -6,7 +6,10 @@
       :back="true"
     ></app-header>
 
-    <p class="font-medium text-center mb-6" v-text="$t('pages.alerts.info')"></p>
+    <p
+      class="font-medium text-center mb-6"
+      v-text="$t('pages.alerts.info')"
+    ></p>
 
     <ul class="flex flex-col items-center">
       <li
@@ -96,13 +99,33 @@ export default {
       show: false,
     }
   },
+  watch: {
+    $route(to) {
+      if (!to.query.hasOwnProperty('popup') && this.show) {
+        this.show = false
+      }
+    },
+  },
   methods: {
+    navPopup() {
+      this.$router.push(
+        { query: { popup: null } },
+        () => {},
+        e => {
+          if (e === undefined || e.name === 'NavigationDuplicated') {
+            return
+          }
+          console.error(e)
+        }
+      )
+    },
     create() {
       // make sure to hide any messages
       this.$store.dispatch('hideMessage')
 
       this.mode = 'create'
       this.show = true
+      this.navPopup()
       return
     },
     update(id) {
@@ -112,6 +135,7 @@ export default {
       this.mode = 'edit'
       this.id = id
       this.show = true
+      this.navPopup()
     },
     del(id) {
       // make sure to hide any messages
@@ -133,9 +157,11 @@ export default {
     },
     popupCancel() {
       this.show = false
+      this.$router.go(-1)
     },
     popupConfirm(payload) {
       this.show = false
+      this.$router.go(-1)
 
       if (payload.id !== undefined) {
         // update existing

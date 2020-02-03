@@ -46,7 +46,10 @@
       <button
         :title="$t('pages.explore.download.title')"
         :disabled="!hasData"
-        @click="showDownloadPopup = true"
+        @click="
+          showDownloadPopup = true
+          navPopup()
+        "
         class="rounded-tl-md p-4 bg-naito-blue-300 simple-action"
       >
         <i class="material-icons text-xl">get_app</i>
@@ -55,7 +58,10 @@
       <button
         :title="$t('pages.explore.bookmark.title')"
         :disabled="resources.length === 0"
-        @click="showBookmarkPopup = true"
+        @click="
+          showBookmarkPopup = true
+          navPopup()
+        "
         class="rounded-bl-md p-4 bg-naito-blue-300 simple-action"
       >
         <i class="material-icons text-xl">bookmark</i>
@@ -137,7 +143,10 @@
     </section>
 
     <bookmark-popup
-      @cancel="showBookmarkPopup = false"
+      @cancel="
+        showBookmarkPopup = false
+        $router.go(-1)
+      "
       @confirm="bookmark"
       :show="showBookmarkPopup"
       :periodOffsetString="periodOffsetString"
@@ -145,7 +154,10 @@
     ></bookmark-popup>
 
     <download-popup
-      @cancel="showDownloadPopup = false"
+      @cancel="
+        showDownloadPopup = false
+        $router.go(-1)
+      "
       @confirm="download"
       :show="showDownloadPopup"
     ></download-popup>
@@ -230,6 +242,18 @@ export default {
     ])
   },
   methods: {
+    navPopup() {
+      this.$router.push(
+        { query: { popup: null } },
+        () => {},
+        e => {
+          if (e === undefined || e.name === 'NavigationDuplicated') {
+            return
+          }
+          console.error(e)
+        }
+      )
+    },
     setQuery() {
       const route = {
         query: {
@@ -300,6 +324,7 @@ export default {
     },
     download(payload) {
       this.showDownloadPopup = false
+      this.$router.go(-1)
 
       const jsonData = datasetsToJson(this.currentData)
 
@@ -329,6 +354,7 @@ export default {
     },
     bookmark({ name }) {
       this.showBookmarkPopup = false
+      this.$router.go(-1)
 
       const payload = {
         name,
@@ -359,6 +385,16 @@ export default {
     },
     resources() {
       this.setQuery()
+    },
+    $route(to) {
+      if (!to.query.hasOwnProperty('popup')) {
+        if (this.showBookmarkPopup) {
+          this.showBookmarkPopup = false
+        }
+        if (this.showDownloadPopup) {
+          this.showDownloadPopup = false
+        }
+      }
     },
   },
   computed: {
