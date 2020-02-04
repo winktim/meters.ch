@@ -228,7 +228,7 @@ import {
   changeState,
   alertState,
 } from '../assets/utils'
-import { Duration } from 'luxon'
+import { Duration, DateTime } from 'luxon'
 
 export default {
   middleware: 'needs-auth',
@@ -259,10 +259,44 @@ export default {
     ])
 
     this.updateCurrentTemperatures()
-    setInterval(
-      () => this.updateCurrentTemperatures(),
-      Duration.fromObject({ minutes: 15 })
-    )
+
+    // wait for the next 05 or 35 minute to update, then update every 30 minutes
+    // as the new readings arrive
+    const now = DateTime.local()
+    const updateAt5 = now.minute >= 35 || now.minute < 5
+    let nextUpdateTime = now.set({
+      minute: updateAt5 ? 5 : 35,
+      second: 0,
+      millisecond: 0,
+    })
+
+    if (nextUpdateTime <= now) {
+      nextUpdateTime = nextUpdateTime.plus({ hour: 1 })
+    }
+
+    const waitTime = nextUpdateTime.diff(now)
+
+    setTimeout(() => {
+      this.updateCurrentTemperatures()
+      if (this.temperatureResources.length > 0) {
+        this.$store.dispatch('showMessage', {
+          message: this.$t('pages.index.temps_updated'),
+          isError: false,
+          time: 2000,
+        })
+      }
+
+      setInterval(() => {
+        this.updateCurrentTemperatures()
+        if (this.temperatureResources.length > 0) {
+          this.$store.dispatch('showMessage', {
+            message: this.$t('pages.index.temps_updated'),
+            isError: false,
+            time: 2000,
+          })
+        }
+      }, Duration.fromObject({ minutes: 30 }).as('milliseconds'))
+    }, waitTime.as('milliseconds'))
 
     /*
     // code to hide tooltip only on touch & drag
@@ -295,7 +329,7 @@ export default {
         /**
          * @type {{id: number, value: number, read_at: string}[]}
          */
-        const readings = await this.$getReadings(id, { last: 3 })
+        const readings = await this.$getReadings(id, { last: 3 }, true)
         const last = readings[readings.length - 1]
         if (!this.currentTemperatures.hasOwnProperty(id)) {
           this.$set(this.currentTemperatures, id, { value: 0, state: 0 })

@@ -85,7 +85,8 @@
         "title": "Edit the dashboard",
         "cancel_last": "Cancel last action",
         "confirm_all": "Confirm all changes"
-      }
+      },
+      "temps_updated": "Temperatures updated"
     },
     "infos": {
       "title": "Information",

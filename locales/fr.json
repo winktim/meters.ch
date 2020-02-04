@@ -85,7 +85,8 @@
         "title": "Modifier le tableau de bord",
         "cancel_last": "Annuler la dernière action",
         "confirm_all": "Valider les changements"
-      }
+      },
+      "temps_updated": "Températures mises à jour"
     },
     "infos": {
       "title": "Informations",

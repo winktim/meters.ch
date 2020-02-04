@@ -165,11 +165,11 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getReadings', async function(resource, payload) {
+  inject('getReadings', async function(resource, payload, ignoreCache) {
     const key = `${resource}-` + JSON.stringify(payload)
     const cached = cache.get(key)
 
-    if (cached) {
+    if (cached && !ignoreCache) {
       return cached
     }
 
