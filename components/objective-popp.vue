@@ -9,7 +9,10 @@
           ></h2>
           <!-- resource -->
           <div class="mb-8">
-            <h3 class="font-bold text-lg mb-2" v-text="$t('pages.objectives.form.resource')"></h3>
+            <h3
+              class="font-bold text-lg mb-2"
+              v-text="$t('pages.objectives.form.resource')"
+            ></h3>
             <search-select
               name="resource"
               :placeholder="$t('pages.objectives.form.find_resource')"
@@ -18,10 +21,16 @@
             ></search-select>
           </div>
           <div class="flex flex-col mb-12">
-            <h3 class="font-bold text-lg mb-2" v-text="$t('pages.objectives.form.objective')"></h3>
+            <h3
+              class="font-bold text-lg mb-2"
+              v-text="$t('pages.objectives.form.objective')"
+            ></h3>
             <!-- type -->
             <div class="flex items-center">
-              <label class="material-radio text-naito-green-200" for="type-weekly-input">
+              <label
+                class="material-radio text-naito-green-200"
+                for="type-weekly-input"
+              >
                 <input
                   type="radio"
                   id="type-weekly-input"
@@ -39,7 +48,10 @@
             </div>
 
             <div class="flex items-center">
-              <label class="material-radio text-naito-green-200" for="type-monthly-input">
+              <label
+                class="material-radio text-naito-green-200"
+                for="type-monthly-input"
+              >
                 <input
                   type="radio"
                   id="type-monthly-input"
@@ -61,7 +73,14 @@
               <label class="w-1/2" v-text="compareString"></label>
               <span
                 class="text-right flex-grow mx-2"
-                v-text="compareValue === -1 ? $t('pages.objectives.form.not_enough_data') : compareValue.toLocaleString($numberLocale(), decimalDefaultFormat)"
+                v-text="
+                  compareValue === -1
+                    ? $t('pages.objectives.form.not_enough_data')
+                    : compareValue.toLocaleString(
+                        $numberLocale(),
+                        decimalDefaultFormat
+                      )
+                "
               ></span>
               <span v-if="compareValue !== -1" v-text="symbol"></span>
             </div>
@@ -93,7 +112,11 @@
           ></button>
           <button
             :disabled="resource_id === -1"
-            :title="resource_id === -1 ? $t('pages.objectives.form.missing_resource') : ''"
+            :title="
+              resource_id === -1
+                ? $t('pages.objectives.form.missing_resource')
+                : ''
+            "
             class="flex-grow ml-3 action bg-naito-green-200 text-gray-100 text-center"
             @click="confirm"
             v-text="$t('global.confirm')"
@@ -175,7 +198,7 @@ export default {
       // we need at leat 93% of the data we should have for the period to compute the comparison
       // otherwise, the comparison isn't very usefull to the user
       const expectedReadingsLength =
-        (this.type === 'weekly' ? 2 * 24 * 7 : 2 * 24 * 30) * 0.93
+        (this.type === 'weekly' ? 24 * 7 : 24 * 30) * 0.93
       if (readings.length < expectedReadingsLength) {
         this.compareValue = -1
         return
