@@ -213,15 +213,19 @@ export default {
   },
   methods: {
     async updateRawData() {
-      const fromTo = getPeriod(DateTime.local(), this.period, this.offset)
+      const now = DateTime.local()
+      const fromTo = getPeriod(now, this.period, this.offset)
+      const fromToSumResource = {
+        from: fromTo.from,
+        // adding a millisecond includes the value for the next round hour
+        to: fromTo.to.plus({ millisecond: 1 }),
+      }
 
       // set to null to prevent an agregation update while we download new data
       this.rawData = null
       const newRawData = []
 
       for (const i in this.resources) {
-        const data = await this.$getReadings(this.resources[i], fromTo)
-
         const resource = this.$store.getters.resource({
           resource_id: this.resources[i],
         })
@@ -232,6 +236,15 @@ export default {
         }
 
         const resourceType = this.$store.getters.resourceType(resource)
+
+        // get next hour for sum resources to compute diff
+        const isSumResource =
+          resourceType && resourceType.aggregation_function === 'sum'
+
+        const data = await this.$getReadings(
+          this.resources[i],
+          isSumResource ? fromToSumResource : fromTo
+        )
 
         let site = null
 

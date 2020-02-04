@@ -220,7 +220,9 @@ export default {
   },
   async mounted() {
     // only need resources to validate the query parameters
-    await Promise.all([this.$getResources()])
+    // get resource types because it is needed to download the correct
+    // readings in chart.vue (triggered on getting the query)
+    await Promise.all([this.$getResources(), this.$getResourceTypes()])
 
     this.getQuery()
 
@@ -234,12 +236,7 @@ export default {
 
     this.setQuery()
 
-    await Promise.all([
-      this.$getResourceTypes(),
-      this.$getSensors(),
-      this.$getSites(),
-      this.$getUser(),
-    ])
+    await Promise.all([this.$getSensors(), this.$getSites(), this.$getUser()])
   },
   methods: {
     navPopup() {
