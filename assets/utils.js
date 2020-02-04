@@ -391,8 +391,8 @@ export function agregateData(data, agregation, agregationFunction) {
   let out = []
   if (agregationFunction === 'sum') {
     // turn the absolute data to relative data
-    for (let i = 1; i < data.length; ++i) {
-      out.push({ x: data[i].x, y: data[i].y - data[i - 1].y })
+    for (let i = 0; i < data.length - 1; ++i) {
+      out.push({ x: data[i].x, y: data[i + 1].y - data[i].y })
     }
   } else {
     out = data
