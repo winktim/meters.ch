@@ -250,9 +250,9 @@ export default {
   components: { AppHeader, AppMenu, Chart },
   async mounted() {
     await Promise.all([
-      this.$getUser(),
       this.$getResources(),
       this.$getResourceTypes(),
+      this.$getUser(),
       this.$getSensors(),
       this.$getSites(),
       this.$getAlerts(),
