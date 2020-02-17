@@ -7,12 +7,13 @@
     ></app-header>
 
     <section
-      class="bg-gray-100 rounded-md p-4 pt-2 md:p-6 md:pt-3 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5"
+      class="relative bg-gray-100 rounded-md p-4 pt-2 md:p-6 md:pt-3 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5"
     >
       <chart
         :class="[
           'chart-height-explore',
-          resources.length > 0 ? 'block' : 'hidden',
+          'transition-opacity-100',
+          resources.length > 0 ? 'opacity-1' : 'opacity-0',
         ]"
         :period="period"
         :agregation="agregation"
@@ -22,14 +23,16 @@
       ></chart>
       <div
         :class="[
-          'mt-2',
-          'md:mt-3',
+          'absolute',
+          'top-0',
+          'left-0',
           'w-full',
           'h-full',
           'flex',
           'items-center',
           'justify-center',
-          resources.length > 0 ? 'hidden' : 'block',
+          'transition-opacity-100',
+          resources.length > 0 ? 'opacity-0' : 'opacity-1',
         ]"
       >
         <span

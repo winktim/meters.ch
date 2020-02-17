@@ -1,12 +1,33 @@
 <template>
   <!-- https://github.com/chartjs/Chart.js/issues/4156 -->
   <div class="relative min-w-0 w-full h-full select-none">
-    <canvas :class="hasData ? 'opacity-1' : 'opacity-25'" ref="canvas"></canvas>
-    <div :class="noDataClasses">
+    <canvas :class="canvasClasses" ref="canvas"></canvas>
+    <div
+      :class="
+        ['transition-opacity-100', ...coverClasses].concat(
+          hasData ? ['opacity-0'] : ['opacity-1']
+        )
+      "
+    >
       <span
         class="text-center font-medium"
         v-text="$t('global.no_data', { period: periodOffsetString })"
       ></span>
+    </div>
+    <!-- loading.io loader -->
+    <div
+      :class="
+        ['bg-gray-100', 'transition-opacity-400', ...coverClasses].concat(
+          waiting ? ['opacity-1'] : ['opacity-0']
+        )
+      "
+    >
+      <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   </div>
 </template>
@@ -28,7 +49,10 @@ import {
   resourceTypesToAxes,
   toClosestSuffixe,
   getTooltipDateFormat,
+  waitForMutations,
 } from '../assets/utils'
+
+import { SET_RESOURCES, SET_RESOURCE_TYPES } from '../assets/mutations'
 
 export default {
   name: 'Chart',
@@ -48,6 +72,7 @@ export default {
       chart: null,
       rawData: null,
       hasData: true,
+      waiting: true,
       defaultConfig: {
         type: 'line',
         data: {
@@ -230,11 +255,6 @@ export default {
           resource_id: this.resources[i],
         })
 
-        if (!resource) {
-          console.warn('resource is', resource)
-          return
-        }
-
         const resourceType = this.$store.getters.resourceType(resource)
 
         // get next hour for sum resources to compute diff
@@ -357,19 +377,45 @@ export default {
       })
       this.chart.update()
     },
+    waitForData() {
+      const mutationsToWaitFor = []
+
+      if (!this.$store.getters.hasResources) {
+        mutationsToWaitFor.push(SET_RESOURCES)
+      }
+
+      if (!this.$store.getters.hasResourceTypes) {
+        mutationsToWaitFor.push(SET_RESOURCE_TYPES)
+      }
+
+      if (mutationsToWaitFor.length === 0) {
+        this.waiting = false
+        return Promise.resolve()
+      }
+
+      this.waiting = true
+
+      return waitForMutations(this.$store, mutationsToWaitFor).then(() => {
+        this.waiting = false
+      })
+    },
   },
   watch: {
     period(to, from) {
       if (to === from) {
         return
       }
-      this.updateRawData().catch(console.error)
+      this.waitForData().then(() => {
+        this.updateRawData().catch(console.error)
+      })
     },
     offset(to, from) {
       if (to === from) {
         return
       }
-      this.updateRawData().catch(console.error)
+      this.waitForData().then(() => {
+        this.updateRawData().catch(console.error)
+      })
     },
     resources(to) {
       // from & to array are the same object, so trick to be able to compare to the true old value
@@ -380,7 +426,9 @@ export default {
       }
 
       this.previousResources = JSON.stringify(to)
-      this.updateRawData().catch(console.error)
+      this.waitForData().then(() => {
+        this.updateRawData().catch(console.error)
+      })
     },
     agregation(to, from) {
       if (to === from) {
@@ -400,8 +448,10 @@ export default {
   },
   mounted() {
     this.chart = new Chart(this.$refs.canvas, this.defaultConfig)
-    this.updateAxes()
-    this.updateRawData().catch(console.error)
+    this.waitForData().then(() => {
+      this.updateAxes()
+      this.updateRawData().catch(console.error)
+    })
   },
   beforeDestroy() {
     if (this.chart) {
@@ -412,7 +462,12 @@ export default {
     locale() {
       return this.$store.state.locale
     },
-    noDataClasses() {
+    canvasClasses() {
+      return ['transition-opacity-100'].concat(
+        this.hasData ? 'opacity-1' : 'opacity-25'
+      )
+    },
+    coverClasses() {
       return [
         'absolute',
         'top-0',
@@ -421,7 +476,7 @@ export default {
         'justify-center',
         'w-full',
         'h-full',
-      ].concat(this.hasData ? ['hidden'] : ['block'])
+      ]
     },
     periodOffsetString() {
       return this.$tc(

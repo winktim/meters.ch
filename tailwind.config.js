@@ -17,6 +17,7 @@ module.exports = {
       150: '150ms',
       200: '200ms',
       300: '300ms',
+      400: '400ms',
       1: '1s',
     },
     transitionProperties: {
