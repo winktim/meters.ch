@@ -6,6 +6,39 @@ import {
   dateLocale,
   defaultDashboard,
 } from '../assets/utils'
+import {
+  SET_LOCALE,
+  SET_API_TOKEN,
+  SET_REMEMBER_ME,
+  SET_IS_PROBABLY_CLIENT,
+  SET_MESSAGE,
+  SET_SHOW_MESSAGE,
+  SET_MESSAGE_TIMEOUT,
+  SET_USER,
+  SET_CLIENT,
+  SET_RESOURCES,
+  SET_RESOURCE_TYPES,
+  SET_SENSORS,
+  SET_SITES,
+  SET_OBJECTIVES,
+  SET_ALERTS,
+  SET_IS_APP_LOADING,
+  SET_READ_CLIENT_DATA,
+  UPDATE_OBJECTIVE,
+  UPDATE_ALERT,
+  UPDATE_DASHBOARD,
+  ADD_OBJECTIVE,
+  ADD_ALERT,
+  ADD_AWAITING_EVENT,
+  ADD_DASHBOARD_CHART,
+  ADD_DASHBOARD_EDIT,
+  REMOVE_OBJECTIVE,
+  REMOVE_ALERT,
+  REMOVE_AWAITING_EVENT,
+  REMOVE_DASHBOARD_CHART,
+  REMOVE_LAST_DASHBOARD_EDIT,
+  REMOVE_ALL_DASHBOARD_EDITS,
+} from '../assets/mutations'
 
 export const state = () => ({
   api: `${process.env.API_ROOT}/${process.env.API_VERSION}`,
@@ -56,7 +89,7 @@ export const state = () => ({
 
 export const mutations = {
   // SET
-  SET_LOCALE(state, { locale }) {
+  [SET_LOCALE](state, { locale }) {
     if (state.locales.indexOf(locale) !== -1) {
       state.locale = locale
 
@@ -67,7 +100,7 @@ export const mutations = {
       moment.locale(dateLocale[locale])
     }
   },
-  SET_API_TOKEN(state, { apiToken }) {
+  [SET_API_TOKEN](state, { apiToken }) {
     state.apiToken = apiToken
     state.isProbablyClient = true
 
@@ -75,24 +108,24 @@ export const mutations = {
       localStorage.setItem('apiToken', apiToken)
     }
   },
-  SET_REMEMBER_ME(state, { rememberMe }) {
+  [SET_REMEMBER_ME](state, { rememberMe }) {
     state.rememberMe = rememberMe
   },
-  SET_IS_PROBABLY_CLIENT(state, { isProbablyClient }) {
+  [SET_IS_PROBABLY_CLIENT](state, { isProbablyClient }) {
     state.isProbablyClient = isProbablyClient
   },
-  SET_MESSAGE(state, { message, isError }) {
+  [SET_MESSAGE](state, { message, isError }) {
     state.messageBox.lastMessage = message
     state.messageBox.isError = isError
   },
-  SET_SHOW_MESSAGE(state, { show }) {
+  [SET_SHOW_MESSAGE](state, { show }) {
     state.messageBox.show = show
   },
-  SET_MESSAGE_TIMEOUT(state, { timeout }) {
+  [SET_MESSAGE_TIMEOUT](state, { timeout }) {
     state.messageBox.timeout = timeout
   },
 
-  SET_USER(state, { user }) {
+  [SET_USER](state, { user }) {
     state.data.user = user
 
     // convert dashboard if JSON string
@@ -113,11 +146,11 @@ export const mutations = {
       state.dataById.resources
     )
   },
-  SET_CLIENT(state, { client }) {
+  [SET_CLIENT](state, { client }) {
     state.data.client = client
   },
 
-  SET_RESOURCES(state, { resources }) {
+  [SET_RESOURCES](state, { resources }) {
     state.data.resources = resources
     state.dataById.resources = indexOnId(resources)
 
@@ -129,43 +162,43 @@ export const mutations = {
       )
     }
   },
-  SET_RESOURCE_TYPES(state, { resourceTypes }) {
+  [SET_RESOURCE_TYPES](state, { resourceTypes }) {
     state.data.resourceTypes = resourceTypes
     state.dataById.resourceTypes = indexOnId(resourceTypes)
   },
-  SET_SENSORS(state, { sensors }) {
+  [SET_SENSORS](state, { sensors }) {
     state.data.sensors = sensors
     state.dataById.sensors = indexOnId(sensors)
   },
-  SET_SITES(state, { sites }) {
+  [SET_SITES](state, { sites }) {
     state.data.sites = sites
     state.dataById.sites = indexOnId(sites)
   },
-  SET_OBJECTIVES(state, { objectives }) {
+  [SET_OBJECTIVES](state, { objectives }) {
     state.data.objectives = objectives
     state.dataById.objectives = indexOnId(objectives)
   },
-  SET_ALERTS(state, { alerts }) {
+  [SET_ALERTS](state, { alerts }) {
     state.data.alerts = alerts
     state.dataById.alerts = indexOnId(alerts)
   },
-  SET_IS_APP_LOADING(state, { isAppLoading }) {
+  [SET_IS_APP_LOADING](state, { isAppLoading }) {
     state.isAppLoading = isAppLoading
   },
-  SET_READ_CLIENT_DATA(state, { readClientData }) {
+  [SET_READ_CLIENT_DATA](state, { readClientData }) {
     state.readClientData = readClientData
   },
 
   // UPDATE
-  UPDATE_OBJECTIVE(state, { objective }) {
+  [UPDATE_OBJECTIVE](state, { objective }) {
     const current = state.dataById.objectives[objective.id]
     Object.assign(current, objective)
   },
-  UPDATE_ALERT(state, { alert }) {
+  [UPDATE_ALERT](state, { alert }) {
     const current = state.dataById.alerts[alert.id]
     Object.assign(current, alert)
   },
-  UPDATE_DASHBOARD(state, { dashboard }) {
+  [UPDATE_DASHBOARD](state, { dashboard }) {
     if (!state.data.user) {
       return
     }
@@ -174,18 +207,18 @@ export const mutations = {
   },
 
   // ADD
-  ADD_OBJECTIVE(state, { objective }) {
+  [ADD_OBJECTIVE](state, { objective }) {
     state.data.objectives.push(objective)
     state.dataById.objectives[objective.id] = objective
   },
-  ADD_ALERT(state, { alert }) {
+  [ADD_ALERT](state, { alert }) {
     state.data.alerts.push(alert)
     state.dataById.alerts[alert.id] = alert
   },
-  ADD_AWAITING_EVENT(state, { awaitingEvent }) {
+  [ADD_AWAITING_EVENT](state, { awaitingEvent }) {
     state.awaitingEvents.push(awaitingEvent)
   },
-  ADD_DASHBOARD_CHART(state, { element }) {
+  [ADD_DASHBOARD_CHART](state, { element }) {
     if (state.data.user === null) {
       console.warn('No user data to add dashboard element')
       return
@@ -193,12 +226,12 @@ export const mutations = {
 
     state.data.user.dashboard.charts.push(element)
   },
-  ADD_DASHBOARD_EDIT(state, { dashboard }) {
+  [ADD_DASHBOARD_EDIT](state, { dashboard }) {
     state.dashboardEdit.undoList.push(dashboard)
   },
 
   // REMOVE
-  REMOVE_OBJECTIVE(state, { objective }) {
+  [REMOVE_OBJECTIVE](state, { objective }) {
     const current = state.dataById.objectives[objective.id]
 
     if (!current) {
@@ -215,7 +248,7 @@ export const mutations = {
 
     state.data.objectives.splice(index, 1)
   },
-  REMOVE_ALERT(state, { alert }) {
+  [REMOVE_ALERT](state, { alert }) {
     const current = state.dataById.alerts[alert.id]
 
     if (!current) {
@@ -232,10 +265,10 @@ export const mutations = {
 
     state.data.alerts.splice(index, 1)
   },
-  REMOVE_AWAITING_EVENT(state, { awaitingEvent }) {
+  [REMOVE_AWAITING_EVENT](state, { awaitingEvent }) {
     state.awaitingEvents.splice(state.awaitingEvents.indexOf(awaitingEvent), 1)
   },
-  REMOVE_DASHBOARD_CHART(state, { element }) {
+  [REMOVE_DASHBOARD_CHART](state, { element }) {
     if (state.data.user === null) {
       console.warn('No user data to remove dashboard element')
       return
@@ -249,10 +282,10 @@ export const mutations = {
 
     state.data.user.dashboard.charts.splice(index, 1)
   },
-  REMOVE_LAST_DASHBOARD_EDIT(state) {
+  [REMOVE_LAST_DASHBOARD_EDIT](state) {
     state.dashboardEdit.undoList.pop()
   },
-  REMOVE_ALL_DASHBOARD_EDITS(state) {
+  [REMOVE_ALL_DASHBOARD_EDITS](state) {
     state.dashboardEdit.undoList = []
   },
 }
@@ -293,9 +326,13 @@ export const actions = {
     awaitingEvent.finally(() => {
       commit('REMOVE_AWAITING_EVENT', { awaitingEvent })
 
-      if (state.awaitingEvents.length === 0 && state.isAppLoading) {
-        commit('SET_IS_APP_LOADING', { isAppLoading: false })
-      }
+      // wait a bit before trying to change the state
+      // that way we don't remove the loading to readd it immidiatly after
+      setTimeout(() => {
+        if (state.awaitingEvents.length === 0 && state.isAppLoading) {
+          commit('SET_IS_APP_LOADING', { isAppLoading: false })
+        }
+      }, 100)
     })
   },
   validateDashboardChanges({ commit, state }) {
@@ -328,6 +365,8 @@ export const getters = {
   clientNumber: state => (state.data.client ? state.data.client.number : '...'),
   clientEmail: state => (state.data.client ? state.data.client.email : '...'),
   resources: state => (state.data.resources ? state.data.resources : []),
+  hasResources: state => !!state.data.resources,
+  hasResourceTypes: state => !!state.data.resourceTypes,
   numResources: state =>
     state.data.resources ? state.data.resources.length : 0,
   numSites: state => (state.data.sites ? state.data.sites.length : 0),
