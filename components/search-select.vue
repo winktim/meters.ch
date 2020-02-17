@@ -1,7 +1,11 @@
 <template>
   <div ref="focusRoot" class="relative z-10" @mousedown="show">
-    <div class="w-full flex items-center text-gray-900 relative wrapped-transparent-input">
-      <label :for="inputName" class="material-icons py-2 pl-2 clickable">search</label>
+    <div
+      class="w-full flex items-center text-gray-900 relative wrapped-transparent-input"
+    >
+      <label :for="inputName" class="material-icons py-2 pl-2 clickable"
+        >search</label
+      >
       <input
         @focus="show"
         @keydown="checkForTab"
@@ -16,11 +20,18 @@
         class="material-icons py-2 pr-2 clickable text-gray-800"
         v-if="searchString !== ''"
         @click="clear"
-      >backspace</i>
-      <div class="wrapped-style top-0 left-0 w-full h-full pointer-events-none absolute"></div>
+        >backspace</i
+      >
+      <div
+        class="wrapped-style top-0 left-0 w-full h-full pointer-events-none absolute"
+      ></div>
     </div>
     <ul :class="optionsClasses">
-      <li class="flex-grow flex" v-for="option in filteredOptions" :key="option.id">
+      <li
+        class="flex-grow flex"
+        v-for="option in filteredOptions"
+        :key="option.id"
+      >
         <!-- TODO: use shadow-outline, but croped by overflow-y-auto -->
         <button
           :tabindex="showOptions ? 0 : -1"
@@ -130,6 +141,8 @@ export default {
       this.supposedSearchString = this.searchString
       this.currentValue = -1
       this.$emit('input', -1)
+      // refocus input
+      this.$refs.focusRoot.getElementsByTagName('input')[0].focus()
     },
     clickedOption(option) {
       this.searchString = option.value

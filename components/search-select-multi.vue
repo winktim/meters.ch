@@ -1,7 +1,11 @@
 <template>
   <div ref="focusRoot" class="relative z-10" @mousedown="show">
-    <div class="w-full flex items-center text-gray-900 relative wrapped-single-transparent-input">
-      <label :for="inputName" class="material-icons py-2 pl-2 clickable">search</label>
+    <div
+      class="w-full flex items-center text-gray-900 relative wrapped-single-transparent-input"
+    >
+      <label :for="inputName" class="material-icons py-2 pl-2 clickable"
+        >search</label
+      >
       <input
         @focus="show"
         @keydown="checkForTab"
@@ -16,14 +20,21 @@
         class="material-icons py-2 pr-2 clickable text-gray-800"
         v-if="searchString !== ''"
         @click="clear"
-      >backspace</i>
-      <div class="wrapped-style top-0 left-0 w-full h-full pointer-events-none absolute"></div>
+        >backspace</i
+      >
+      <div
+        class="wrapped-style top-0 left-0 w-full h-full pointer-events-none absolute"
+      ></div>
     </div>
     <div :class="optionsClasses">
       <!-- scroll div https://stackoverflow.com/questions/34249501/flexbox-column-reverse-in-firefox-edge-and-ie -->
       <div ref="scrollDiv" class="max-h-32 lg:max-h-64 overflow-y-auto">
         <ul :class="optionsUlClasses">
-          <li class="flex-grow flex" v-for="option in filteredOptions" :key="option.id">
+          <li
+            class="flex-grow flex"
+            v-for="option in filteredOptions"
+            :key="option.id"
+          >
             <!-- TODO: use shadow-outline, but croped by overflow-y-auto -->
             <button
               :tabindex="showOptions ? 0 : -1"
@@ -33,12 +44,20 @@
             >
               <i
                 class="material-icons select-none text-xl mr-2 text-naito-green-200"
-                v-text="checked.includes(option.id) ?  'check_box' : 'check_box_outline_blank'"
+                v-text="
+                  checked.includes(option.id)
+                    ? 'check_box'
+                    : 'check_box_outline_blank'
+                "
               ></i>
               <span v-text="option.value"></span>
             </button>
           </li>
-          <li class="flex-grow p-4" v-if="!hasFilteredOptions" v-text="$t('global.no_results')"></li>
+          <li
+            class="flex-grow p-4"
+            v-if="!hasFilteredOptions"
+            v-text="$t('global.no_results')"
+          ></li>
         </ul>
       </div>
       <!-- actions -->
@@ -51,7 +70,9 @@
         >
           <i
             class="material-icons text-xl mr-4"
-            v-text="anySelected ? 'remove_circle_outline' : 'check_circle_outline'"
+            v-text="
+              anySelected ? 'remove_circle_outline' : 'check_circle_outline'
+            "
           ></i>
           <span class="mr-2" v-text="selectAllNoneString"></span>
         </button>
@@ -61,7 +82,9 @@
           @click="showOptions = false"
           :title="$t('global.selector_close')"
           class="clickable material-icons focus:shadow-outline hover:lighten-10 active:darken-10 p-4 text-xl ml-auto"
-        >close</button>
+        >
+          close
+        </button>
       </div>
     </div>
   </div>
@@ -152,6 +175,8 @@ export default {
     },
     clear() {
       this.searchString = ''
+      // refocus input
+      this.$refs.focusRoot.getElementsByTagName('input')[0].focus()
     },
     clickedOption(option) {
       const alreadyIn = this.checked.indexOf(option.id)
