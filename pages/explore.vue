@@ -22,18 +22,23 @@
         @currentData="setCurrentData"
       ></chart>
       <div
-        :class="[
-          'absolute',
-          'top-0',
-          'left-0',
-          'w-full',
-          'h-full',
-          'flex',
-          'items-center',
-          'justify-center',
-          'transition-opacity-100',
-          resources.length > 0 ? 'opacity-0' : 'opacity-1',
-        ]"
+        :class="
+          [
+            'absolute',
+            'top-0',
+            'left-0',
+            'w-full',
+            'h-full',
+            'flex',
+            'items-center',
+            'justify-center',
+            'transition-opacity-100',
+          ].concat(
+            resources.length > 0
+              ? ['opacity-0', 'pointer-events-none']
+              : ['opacity-1', 'pointer-events-auto']
+          )
+        "
       >
         <span
           class="text-center font-medium"

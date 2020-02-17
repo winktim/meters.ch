@@ -5,7 +5,9 @@
     <div
       :class="
         ['transition-opacity-100', ...coverClasses].concat(
-          hasData ? ['opacity-0'] : ['opacity-1']
+          hasData
+            ? ['opacity-0', 'pointer-events-none']
+            : ['opacity-1', 'pointer-events-auto']
         )
       "
     >
@@ -18,7 +20,9 @@
     <div
       :class="
         ['bg-gray-100', 'transition-opacity-400', ...coverClasses].concat(
-          waiting ? ['opacity-1'] : ['opacity-0']
+          waiting
+            ? ['opacity-1', 'pointer-events-auto']
+            : ['opacity-0', 'pointer-events-none']
         )
       "
     >
