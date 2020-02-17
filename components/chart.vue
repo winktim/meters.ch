@@ -153,9 +153,14 @@ export default {
                   displayFormats: {
                     // custom formats to compat default non-swiss & try to make them compatible with luxon
                     hour: 'HH:mm',
-                    week: 'D MMM YYYY',
-                    day: 'D MMM',
-                    month: 'MMM YYYY',
+                    week: 'dd LLL yyyy',
+                    day: 'dd LLL',
+                    month: 'LLL yyyy',
+                  },
+                },
+                adapters: {
+                  date: {
+                    locale: this.$dateLocale(),
                   },
                 },
                 gridLines: false,
@@ -366,6 +371,10 @@ export default {
           dataset.site
         )
       })
+
+      // update locale for luxon adapter
+      this.chart.options.scales.xAxes[0].adapters.date.locale = this.$dateLocale()
+
       this.chart.update()
     },
     updateAxes() {
