@@ -214,7 +214,7 @@ export function fixDashboard(dashboard, ownedResources) {
         : element['agregation']
 
     // clamp the offset or reset it to 0
-    const offset = clamp(parseInt(element['offset']), 0, 12) || 0
+    const offset = clamp(parseInt(element['offset']), 0, 365) || 0
 
     // get the name or use an empty string
     const name = element.hasOwnProperty('name') ? String(element['name']) : ''
