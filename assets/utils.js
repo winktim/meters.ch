@@ -727,3 +727,26 @@ export function getTooltipDateFormat(agregation, period) {
 export function defaultDashboard() {
   return { charts: [], temps: { exclude: [] } }
 }
+
+/**
+ * Get a promise that reoslves only when all mutations occured at least once
+ * @param {import('vuex').Store} store
+ * @param {string[]} mutations
+ * @returns {Promise<void>} nothing
+ */
+export function waitForMutations(store, mutations) {
+  return new Promise(resolve => {
+    const mutationsLeft = mutations
+    store.subscribe(({ type }) => {
+      const index = mutationsLeft.indexOf(type)
+      if (index === -1) {
+        return
+      }
+
+      mutationsLeft.splice(index, 1)
+      if (mutationsLeft.length === 0) {
+        resolve()
+      }
+    })
+  })
+}
