@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import moment from 'moment'
+// import moment from 'moment'
 import {
   indexOnId,
   fixDashboard,
@@ -96,8 +96,10 @@ export const mutations = {
       this.app.i18n.locale = locale
       localStorage.setItem('locale', locale)
 
+      /*
       // Chart.js uses moment to display dates
       moment.locale(dateLocale[locale])
+      */
     }
   },
   [SET_API_TOKEN](state, { apiToken }) {

@@ -1,4 +1,5 @@
 import Chart from 'chart.js'
+import 'chartjs-adapter-luxon'
 import { chartDefaults } from './utils'
 
 // increase font size in the tooltips globally
