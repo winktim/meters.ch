@@ -2,6 +2,8 @@ import path from 'path'
 import glob from 'glob-all'
 
 import config from './config'
+// copy the correct env file into the static folder
+config()
 
 const features = [
   'es2015',
@@ -39,6 +41,10 @@ export default {
       {
         src: `https://polyfill.io/v3/polyfill.min.js?features=${features}`,
         body: true,
+      },
+      {
+        // import the env file directly
+        src: '/env.js',
       },
     ],
   },
@@ -109,6 +115,4 @@ export default {
      */
     extend(config, ctx) {},
   },
-
-  env: config.parsed,
 }

@@ -18,7 +18,9 @@ node_modules/
 dist
 
 # env variables
-.env*
+env.*.js
+!env.example.js
+static/env.js
 
 #Nuxt PWA
 sw.*

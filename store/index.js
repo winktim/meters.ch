@@ -41,7 +41,7 @@ import {
 } from '../assets/mutations'
 
 export const state = () => ({
-  api: `${process.env.API_ROOT}/${process.env.API_VERSION}`,
+  api: `${window.env.API_ROOT}/${window.env.API_VERSION}`,
 
   isIE: !!document.documentMode,
 
