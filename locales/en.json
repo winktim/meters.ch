@@ -126,7 +126,8 @@
       "form": {
         "find_resources": "Select resources",
         "no_resources": "Please select at least one resource to start"
-      }
+      },
+      "collapse_settings": "Collapse settings"
     },
     "objectives": {
       "title": "Objectives",

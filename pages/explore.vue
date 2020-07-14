@@ -79,74 +79,84 @@
     <!-- parameters -->
     <section
       class="fixed bottom-0 inset-x-0 w-full p-4 md:px-1/5 lg:px-1/4 xl:px-1/3 bg-naito-green-200 shadow-lg-top"
+      @click="revealIfCollapsed"
     >
-      <search-select-multi
-        name="resources"
-        :placeholder="$t('pages.explore.form.find_resources')"
-        :options="formattedResources"
-        :top="true"
-        v-model="resources"
-      ></search-select-multi>
-      <div class="flex my-2">
-        <div class="w-1/2 mr-1 material-select">
-          <label
-            for="agregation-input"
-            v-text="$t('agregations.short')"
-          ></label>
-          <select
-            name="agregation-input"
-            id="agregation-input"
-            v-model="agregation"
+      <!-- button to collapse parameters -->
+      <button
+        :title="$t('pages.explore.collapse_settings')"
+        @click="toggleCollapse($event)"
+        class="clickable material-icons focus:shadow-outline active:darken-10 absolute top-0 left-0 -mt-12 min-w-10 min-h-10 p-5 text-2xl bg-naito-green-200 rounded-t-full text-gray-100 z-bottom"
+        v-text="areSettingsCollapsed ? 'expand_less' : 'expand_more'"
+      ></button>
+      <div :class="areSettingsCollapsed ? 'hidden' : 'block'">
+        <search-select-multi
+          name="resources"
+          :placeholder="$t('pages.explore.form.find_resources')"
+          :options="formattedResources"
+          :top="true"
+          v-model="resources"
+        ></search-select-multi>
+        <div class="flex my-2">
+          <div class="w-1/2 mr-1 material-select">
+            <label
+              for="agregation-input"
+              v-text="$t('agregations.short')"
+            ></label>
+            <select
+              name="agregation-input"
+              id="agregation-input"
+              v-model="agregation"
+            >
+              <option
+                v-for="(option, i) in reverseAgregations"
+                :key="i"
+                :value="i"
+                v-text="$t('agregations.' + option)"
+              ></option>
+            </select>
+          </div>
+          <div class="w-1/2 ml-1 material-select">
+            <label for="period-input" v-text="$t('periods.short')"></label>
+            <select name="period-input" id="period-input" v-model="period">
+              <option
+                v-for="(option, i) in reversePeriods"
+                :key="i"
+                :value="i"
+                v-text="$t('periods.' + option)"
+              ></option>
+            </select>
+          </div>
+        </div>
+        <!-- offset -->
+        <div class="flex justify-end items-center">
+          <span
+            class="text-gray-100 font-bold mr-4"
+            v-text="periodOffsetString"
+          ></span>
+          <!-- previous -->
+          <button
+            class="w-10 h-10 bg-gray-100 rounded-l-md simple-action"
+            @click="offset++"
           >
-            <option
-              v-for="(option, i) in reverseAgregations"
-              :key="i"
-              :value="i"
-              v-text="$t('agregations.' + option)"
-            ></option>
-          </select>
+            <i class="material-icons text-2xl text-gray-800">arrow_left</i>
+          </button>
+          <!-- next -->
+          <button
+            class="w-10 h-10 bg-gray-100 simple-action"
+            @click="offset--"
+            :disabled="isLastPeriodOffset"
+          >
+            <i class="material-icons text-2xl text-gray-800">arrow_right</i>
+          </button>
+          <!-- last -->
+          <button
+            class="w-10 h-10 bg-gray-100 rounded-r-md simple-action"
+            @click="offset = 0"
+            :disabled="isLastPeriodOffset"
+          >
+            <i class="material-icons text-lg text-gray-800">fast_forward</i>
+          </button>
         </div>
-        <div class="w-1/2 ml-1 material-select">
-          <label for="period-input" v-text="$t('periods.short')"></label>
-          <select name="period-input" id="period-input" v-model="period">
-            <option
-              v-for="(option, i) in reversePeriods"
-              :key="i"
-              :value="i"
-              v-text="$t('periods.' + option)"
-            ></option>
-          </select>
-        </div>
-      </div>
-      <!-- offset -->
-      <div class="flex justify-end items-center">
-        <span
-          class="text-gray-100 font-bold mr-4"
-          v-text="periodOffsetString"
-        ></span>
-        <!-- previous -->
-        <button
-          class="w-10 h-10 bg-gray-100 rounded-l-md simple-action"
-          @click="offset++"
-        >
-          <i class="material-icons text-2xl text-gray-800">arrow_left</i>
-        </button>
-        <!-- next -->
-        <button
-          class="w-10 h-10 bg-gray-100 simple-action"
-          @click="offset--"
-          :disabled="isLastPeriodOffset"
-        >
-          <i class="material-icons text-2xl text-gray-800">arrow_right</i>
-        </button>
-        <!-- last -->
-        <button
-          class="w-10 h-10 bg-gray-100 rounded-r-md simple-action"
-          @click="offset = 0"
-          :disabled="isLastPeriodOffset"
-        >
-          <i class="material-icons text-lg text-gray-800">fast_forward</i>
-        </button>
       </div>
     </section>
 
@@ -224,6 +234,7 @@ export default {
       showDownloadPopup: false,
       currentData: null,
       hasData: false,
+      areSettingsCollapsed: false,
     }
   },
   async mounted() {
@@ -376,6 +387,15 @@ export default {
         this.$t('api.dashboard_updated'),
         3000
       )
+    },
+    toggleCollapse(event) {
+      this.areSettingsCollapsed = !this.areSettingsCollapsed
+      event.stopPropagation()
+    },
+    revealIfCollapsed() {
+      if (this.areSettingsCollapsed) {
+        this.areSettingsCollapsed = false
+      }
     },
   },
   watch: {
