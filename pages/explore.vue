@@ -85,7 +85,7 @@
       <button
         :title="$t('pages.explore.collapse_settings')"
         @click="toggleCollapse($event)"
-        class="clickable material-icons focus:shadow-outline active:darken-10 absolute top-0 left-0 -mt-12 min-w-10 min-h-10 p-5 text-2xl bg-naito-green-200 rounded-t-full text-gray-100 z-bottom"
+        class="clickable material-icons focus:shadow-outline active:darken-10 absolute top-0 left-0 -mt-12 min-w-10 min-h-10 p-5 text-2xl bg-naito-green-200 rounded-t-full text-gray-100"
         v-text="areSettingsCollapsed ? 'expand_less' : 'expand_more'"
       ></button>
       <div :class="areSettingsCollapsed ? 'hidden' : 'block'">
