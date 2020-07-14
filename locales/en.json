@@ -84,7 +84,8 @@
       "edit": {
         "title": "Edit the dashboard",
         "cancel_last": "Cancel last action",
-        "confirm_all": "Confirm all changes"
+        "confirm_all": "Confirm all changes",
+        "quit": "Quit"
       },
       "temps_updated": "Temperatures updated"
     },

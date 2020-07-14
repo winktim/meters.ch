@@ -209,7 +209,15 @@
       </button>
       <button @click="confirmEdit" :class="confirmClasses">
         <i class="material-icons text-lg mr-4">done_all</i>
-        <span v-text="$t('pages.index.edit.confirm_all')"></span>
+        <span
+          v-text="
+            $t(
+              editHasPrevious
+                ? 'pages.index.edit.confirm_all'
+                : 'pages.index.edit.quit'
+            )
+          "
+        ></span>
       </button>
     </div>
   </div>
