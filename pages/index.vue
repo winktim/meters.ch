@@ -423,7 +423,7 @@ export default {
     toFrontEdit(index) {
       const newDashboard = JSON.parse(JSON.stringify(this.dashboard))
 
-      const element = newDashboard.splice(index, 1)
+      const element = newDashboard.charts.splice(index, 1)
       newDashboard.charts.splice(index - 1, 0, element[0])
 
       this.$store.commit('ADD_DASHBOARD_EDIT', { dashboard: newDashboard })
@@ -431,7 +431,7 @@ export default {
     toBackEdit(index) {
       const newDashboard = JSON.parse(JSON.stringify(this.dashboard))
 
-      const element = newDashboard.splice(index, 1)
+      const element = newDashboard.charts.splice(index, 1)
       newDashboard.charts.splice(index + 1, 0, element[0])
 
       this.$store.commit('ADD_DASHBOARD_EDIT', { dashboard: newDashboard })
