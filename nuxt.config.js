@@ -79,7 +79,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['nuxt-purgecss', '@nuxtjs/pwa'],
+  modules: ['nuxt-purgecss', ['@nuxtjs/pwa', { workbox: false }]],
 
   // PWA
   manifest: {

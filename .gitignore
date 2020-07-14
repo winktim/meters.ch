@@ -21,6 +21,3 @@ dist
 env.*.js
 !env.example.js
 static/env.js
-
-#Nuxt PWA
-sw.*
