@@ -87,7 +87,9 @@
         "confirm_all": "Valider les changements",
         "quit": "Quitter"
       },
-      "temps_updated": "Températures mises à jour"
+      "manual_update": "Mettre le tableau de bord à jour manuellement",
+      "temps_updated": "Températures mises à jour",
+      "updated_manually": "Tableau de bord mis à jour"
     },
     "infos": {
       "title": "Informations",

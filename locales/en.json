@@ -87,7 +87,9 @@
         "confirm_all": "Confirm all changes",
         "quit": "Quit"
       },
-      "temps_updated": "Temperatures updated"
+      "manual_update": "Manually update dashboard",
+      "temps_updated": "Temperatures updated",
+      "updated_manually": "Dashboard updated"
     },
     "infos": {
       "title": "Information",

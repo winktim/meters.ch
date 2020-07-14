@@ -25,7 +25,7 @@
         <button
           :disabled="editMode"
           @click="toggleMenu"
-          class="round-action material-icons bg-naito-blue-300 text-gray-100 mr-4"
+          class="round-action material-icons bg-naito-blue-300 text-gray-100 mr-4 p-3"
         >
           menu
         </button>
@@ -46,6 +46,16 @@
         ></p>
       </div>
     </section>
+
+    <!-- dash manual update button -->
+    <button
+      :title="$t('pages.index.manual_update')"
+      @click="manualDashUpdate"
+      :disabled="editMode"
+      class="round-action material-icons bg-naito-blue-300 text-gray-100 absolute bottom-0 right-0 mb-20 sm:mb-32 mr-4 sm:mr-8 p-5 z-10"
+    >
+      cached
+    </button>
 
     <!-- temperature instant values -->
     <div class="flex flex-wrap justify-center">
@@ -163,6 +173,7 @@
           </button>
         </div>
         <chart
+          ref="charts"
           :class="chartClasses"
           :period="periodNumber(chart.period)"
           :agregation="agregationNumber(chart.agregation)"
@@ -332,6 +343,19 @@ export default {
     }
   },
   methods: {
+    manualDashUpdate() {
+      this.updateCurrentTemperatures()
+
+      Promise.all(this.$refs.charts.map(chart => chart.forceUpdate())).then(
+        () => {
+          this.$store.dispatch('showMessage', {
+            message: this.$t('pages.index.updated_manually'),
+            isError: false,
+            time: 2000,
+          })
+        }
+      )
+    },
     updateCurrentTemperatures() {
       this.temperatureResources.forEach(async ({ id }) => {
         /**

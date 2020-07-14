@@ -246,7 +246,7 @@ export default {
     }
   },
   methods: {
-    async updateRawData() {
+    async updateRawData(ignoreCache) {
       const now = DateTime.local()
       const fromTo = getPeriod(now, this.period, this.offset)
       const fromToSumResource = {
@@ -272,7 +272,8 @@ export default {
 
         const data = await this.$getReadings(
           this.resources[i],
-          isSumResource ? fromToSumResource : fromTo
+          isSumResource ? fromToSumResource : fromTo,
+          ignoreCache
         )
 
         let site = null
@@ -410,6 +411,12 @@ export default {
 
       return waitForMutations(this.$store, mutationsToWaitFor).then(() => {
         this.waiting = false
+      })
+    },
+    forceUpdate() {
+      return this.waitForData().then(() => {
+        this.updateAxes()
+        return this.updateRawData(true).catch(console.error)
       })
     },
   },
