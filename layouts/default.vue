@@ -12,7 +12,7 @@
         @change="SET_LOCALE($event)"
       ></language-selector>
     </div>
-    <main class="flex-grow w-full text-gray-900 px-6">
+    <main class="flex-grow w-full text-gray-900 px-2 sm:px-6">
       <nuxt />
     </main>
     <message-box></message-box>
@@ -64,6 +64,7 @@ export default {
     },
   },
   mounted() {
+    // show loading bar when changing page
     let navFrom = null
     let navTo = null
     let resolveFunc = null
@@ -91,6 +92,11 @@ export default {
         }
       }
     })
+
+    // handle chart axes when resizing
+    window.onresize = () => {
+      this.$store.dispatch('updateSmallScreen')
+    }
   },
 }
 </script>

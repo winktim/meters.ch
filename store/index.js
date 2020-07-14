@@ -5,6 +5,7 @@ import {
   fixDashboard,
   dateLocale,
   defaultDashboard,
+  SMALL_SCREEN_BREAKPOINT,
 } from '../assets/utils'
 import {
   SET_LOCALE,
@@ -24,6 +25,7 @@ import {
   SET_ALERTS,
   SET_IS_APP_LOADING,
   SET_READ_CLIENT_DATA,
+  SET_SMALL_SCREEN,
   UPDATE_OBJECTIVE,
   UPDATE_ALERT,
   UPDATE_DASHBOARD,
@@ -51,6 +53,7 @@ export const state = () => ({
   rememberMe: false,
   isProbablyClient: false,
   readClientData: false,
+  smallScreen: window.innerWidth < SMALL_SCREEN_BREAKPOINT,
 
   messageBox: {
     show: false,
@@ -190,6 +193,9 @@ export const mutations = {
   [SET_READ_CLIENT_DATA](state, { readClientData }) {
     state.readClientData = readClientData
   },
+  [SET_SMALL_SCREEN](state, { smallScreen }) {
+    state.smallScreen = smallScreen
+  },
 
   // UPDATE
   [UPDATE_OBJECTIVE](state, { objective }) {
@@ -300,39 +306,39 @@ export const actions = {
 
     // let the CSS update so that the animation for the message box may trigger again
     requestAnimationFrame(() => {
-      commit('SET_SHOW_MESSAGE', { show: true })
+      commit(SET_SHOW_MESSAGE, { show: true })
 
       const timeout = setTimeout(() => {
-        commit('SET_SHOW_MESSAGE', { show: false })
+        commit(SET_SHOW_MESSAGE, { show: false })
       }, time || 10000)
 
-      commit('SET_MESSAGE_TIMEOUT', { timeout })
+      commit(SET_MESSAGE_TIMEOUT, { timeout })
     })
   },
   hideMessage({ commit, state }) {
     clearTimeout(state.messageBox.timeout)
 
-    commit('SET_SHOW_MESSAGE', { show: false })
+    commit(SET_SHOW_MESSAGE, { show: false })
   },
   logout({ commit }) {
-    commit('SET_REMEMBER_ME', { rememberMe: false })
-    commit('SET_API_TOKEN', { apiToken: null })
+    commit(SET_REMEMBER_ME, { rememberMe: false })
+    commit(SET_API_TOKEN, { apiToken: null })
     localStorage.removeItem('apiToken')
   },
   addAwaitingEvent({ commit, state }, { awaitingEvent }) {
     if (!state.isAppLoading) {
-      commit('SET_IS_APP_LOADING', { isAppLoading: true })
+      commit(SET_IS_APP_LOADING, { isAppLoading: true })
     }
-    commit('ADD_AWAITING_EVENT', { awaitingEvent })
+    commit(ADD_AWAITING_EVENT, { awaitingEvent })
 
     awaitingEvent.finally(() => {
-      commit('REMOVE_AWAITING_EVENT', { awaitingEvent })
+      commit(REMOVE_AWAITING_EVENT, { awaitingEvent })
 
       // wait a bit before trying to change the state
       // that way we don't remove the loading to readd it immidiatly after
       setTimeout(() => {
         if (state.awaitingEvents.length === 0 && state.isAppLoading) {
-          commit('SET_IS_APP_LOADING', { isAppLoading: false })
+          commit(SET_IS_APP_LOADING, { isAppLoading: false })
         }
       }, 100)
     })
@@ -349,9 +355,15 @@ export const actions = {
     })
     commit('REMOVE_ALL_DASHBOARD_EDITS')
   },
+  updateSmallScreen({ commit }) {
+    commit(SET_SMALL_SCREEN, {
+      smallScreen: window.innerWidth < SMALL_SCREEN_BREAKPOINT,
+    })
+  },
 }
 
 export const getters = {
+  smallScreen: state => state.smallScreen,
   rememberMe: state => state.rememberMe,
   name: state => (state.data.user ? state.data.user.name : '...'),
   email: state => (state.data.user ? state.data.user.email : '...'),

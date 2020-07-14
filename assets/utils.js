@@ -30,6 +30,8 @@ export const alertState = {
   BELOW: 2,
 }
 
+export const SMALL_SCREEN_BREAKPOINT = 640
+
 /**
  *
  * @param {import('vue-i18n').default} i18n
@@ -619,6 +621,7 @@ export function resourceTypesToAxes(resourceTypes) {
     .filter((symbol, i, array) => array.indexOf(symbol) === i)
   return uniqueSymbols.map((symbol, i) => ({
     display: 'auto',
+    offset: true,
     // order (higher = further)
     weight: i,
     position: i === 0 ? 'right' : 'left',

@@ -56,7 +56,11 @@ import {
   waitForMutations,
 } from '../assets/utils'
 
-import { SET_RESOURCES, SET_RESOURCE_TYPES } from '../assets/mutations'
+import {
+  SET_RESOURCES,
+  SET_RESOURCE_TYPES,
+  SET_SMALL_SCREEN,
+} from '../assets/mutations'
 
 export default {
   name: 'Chart',
@@ -175,6 +179,7 @@ export default {
               {
                 display: 'auto',
                 gridLines: false,
+                offset: true,
                 ticks: {
                   // beginAtZero: true,
                   precision: 0,
@@ -378,6 +383,16 @@ export default {
 
       this.chart.update()
     },
+    hideYTicks() {
+      this.chart.options.scales.yAxes.forEach(axes => {
+        axes.ticks.display = false
+      })
+    },
+    showYTicks() {
+      this.chart.options.scales.yAxes.forEach(axes => {
+        axes.ticks.display = true
+      })
+    },
     updateAxes() {
       if (!this.resourceTypes) {
         return
@@ -389,6 +404,12 @@ export default {
       this.chart.data.datasets.forEach(dataset => {
         dataset.yAxisID = dataset.resourceType.symbol
       })
+
+      // by default ticks are shown
+      if (this.$store.getters.smallScreen) {
+        this.hideYTicks()
+      }
+
       this.chart.update()
     },
     waitForData() {
@@ -471,6 +492,17 @@ export default {
     this.waitForData().then(() => {
       this.updateAxes()
       this.updateRawData().catch(console.error)
+    })
+
+    // show Y ticks only when the screen is large enough
+    this.$store.subscribe(({ type }) => {
+      if (type === SET_SMALL_SCREEN) {
+        if (this.$store.getters.smallScreen) {
+          this.hideYTicks()
+        } else {
+          this.showYTicks()
+        }
+      }
     })
   },
   beforeDestroy() {
