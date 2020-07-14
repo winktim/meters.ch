@@ -52,7 +52,7 @@
       :title="$t('pages.index.manual_update')"
       @click="manualDashUpdate"
       :disabled="editMode"
-      class="round-action material-icons bg-naito-blue-300 text-gray-100 absolute bottom-0 right-0 mb-20 sm:mb-32 mr-4 sm:mr-8 p-5 z-10"
+      class="round-action material-icons shadow-lg bg-naito-blue-300 text-gray-100 absolute bottom-0 right-0 mb-20 sm:mb-32 mr-4 sm:mr-8 p-5 z-10"
     >
       cached
     </button>
