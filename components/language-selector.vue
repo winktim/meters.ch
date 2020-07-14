@@ -1,5 +1,5 @@
 <template>
-  <div class="relative transparent-select">
+  <div class="z-20 relative transparent-select">
     <select
       :aria-label="$t(label)"
       :title="$t(label)"
@@ -9,7 +9,12 @@
       @change="$emit('change', { locale: $event.target.value })"
       :value="locale"
     >
-      <option v-for="(locale, i) in locales" :key="i" :value="locale" v-text="locale.toUpperCase()"></option>
+      <option
+        v-for="(locale, i) in locales"
+        :key="i"
+        :value="locale"
+        v-text="locale.toUpperCase()"
+      ></option>
     </select>
   </div>
 </template>
@@ -32,4 +37,3 @@ export default {
   },
 }
 </script>
-

@@ -4,7 +4,7 @@
       v-if="back"
       :title="$t('global.back')"
       @click="goBack"
-      class="clickable material-icons focus:shadow-outline hover:lighten-10 active:darken-10 absolute left-0 top-0 min-w-10 min-h-10 px-5 py-4 text-2xl"
+      class="z-20 clickable material-icons focus:shadow-outline hover:lighten-10 active:darken-10 absolute left-0 top-0 min-w-10 min-h-10 px-5 py-4 text-2xl"
     >
       arrow_back
     </button>
