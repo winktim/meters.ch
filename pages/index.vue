@@ -118,7 +118,7 @@
               currentTemperatures[resource.id] &&
                 currentTemperatures[resource.id].isOld
             "
-            class="p-4 text-3xl popup select-none"
+            class="flex items-center p-4 text-3xl popup select-none"
             data-popup-show="false"
             :data-popup-text="
               $t('pages.index.temp_outdated', {
