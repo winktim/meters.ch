@@ -260,7 +260,7 @@ export default {
   methods: {
     navPopup() {
       this.$router.push(
-        { query: { popup: null } },
+        { query: { ...this.$route.query, popup: null } },
         () => {},
         e => {
           if (e === undefined || e.name === 'NavigationDuplicated') {
