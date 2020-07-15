@@ -112,6 +112,29 @@
                 : resource.value
             "
           ></span>
+          <!-- warning if value is old -->
+          <button
+            v-if="
+              currentTemperatures[resource.id] &&
+                currentTemperatures[resource.id].isOld
+            "
+            class="p-4 text-3xl popup select-none"
+            data-popup-show="false"
+            :data-popup-text="
+              $t('pages.index.temp_outdated', {
+                time: currentTemperatures[resource.id].read_at,
+              })
+            "
+            :title="
+              $t('pages.index.temp_outdated', {
+                time: currentTemperatures[resource.id].read_at,
+              })
+            "
+            @click="$event.currentTarget.dataset.popupShow = 'true'"
+            @blur="$event.currentTarget.dataset.popupShow = 'false'"
+          >
+            <i class="material-icons text-orange-600"> warning</i>
+          </button>
         </div>
         <button
           class="mt-2 action bg-naito-green-200 text-gray-100 text-center"
@@ -246,6 +269,7 @@ import {
   decimalTwoFormat,
   changeState,
   alertState,
+  OUTDATED_TEMP_THRESHOLD,
 } from '../assets/utils'
 import { Duration, DateTime } from 'luxon'
 
@@ -339,6 +363,9 @@ export default {
       changeState,
       isMenuOpen: false,
       editMode: false,
+      /**
+       * @type {{[x: string]: {value: number, read_at: string, isOld: boolean, state: number, alert: number}}}
+       */
       currentTemperatures: {},
     }
   },
@@ -357,6 +384,8 @@ export default {
       )
     },
     updateCurrentTemperatures() {
+      const now = DateTime.local()
+
       this.temperatureResources.forEach(async ({ id }) => {
         /**
          * @type {{id: number, value: number, read_at: string}[]}
@@ -364,12 +393,27 @@ export default {
         const readings = await this.$getReadings(id, { last: 3 }, true)
         const last = readings[readings.length - 1]
         if (!this.currentTemperatures.hasOwnProperty(id)) {
-          this.$set(this.currentTemperatures, id, { value: 0, state: 0 })
+          this.$set(this.currentTemperatures, id, {
+            value: 0,
+            read_at: '',
+            isOld: false,
+            state: 0,
+            alert: 0,
+          })
         }
         this.currentTemperatures[id].value = `${last.value.toLocaleString(
           this.$numberLocale(),
           decimalTwoFormat
         )} °C`
+
+        const read_at = DateTime.fromISO(last.read_at)
+
+        this.currentTemperatures[id].read_at = read_at
+          .setLocale(this.$dateLocale())
+          .toFormat('dd.LL.yy HH:mm')
+
+        this.currentTemperatures[id].isOld =
+          now.minus(OUTDATED_TEMP_THRESHOLD) > read_at
 
         const lastValue = last.value
         const previous1 = readings[readings.length - 2].value

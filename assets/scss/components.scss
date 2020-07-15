@@ -97,13 +97,19 @@
   @apply clickable flex items-center py-3 pr-4 font-semibold;
 }
 
-.confirmable {
-  &[data-confirmed='true'] {
-    @apply rounded-md bg-red-600 text-gray-100 relative shadow-lg;
+.popup {
+  &.confirmable {
+    &[data-popup-show='true'] {
+      @apply rounded-md bg-red-600 text-gray-100 shadow-lg;
+    }
+  }
+
+  &[data-popup-show='true'] {
+    @apply relative;
 
     &::after {
-      @apply z-10 absolute right-full mr-1 shadow-lg w-48 bg-gray-800 p-3 text-sm rounded-md text-center pointer-events-none;
-      content: attr(data-confirm-text);
+      @apply z-10 absolute right-full mr-1 shadow-lg w-48 bg-gray-800 text-gray-100 p-3 text-sm rounded-md text-center pointer-events-none;
+      content: attr(data-popup-text);
 
       @media (min-width: theme('screens.md')) {
         @apply w-60;

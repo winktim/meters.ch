@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import { DateTime, Duration } from 'luxon'
 
 /**
  * Map from the simple language local to the full locale for number formatting
@@ -31,6 +31,11 @@ export const alertState = {
 }
 
 export const SMALL_SCREEN_BREAKPOINT = 640
+
+/**
+ * How old must the dashboard teemp be before it is considered outdated
+ */
+export const OUTDATED_TEMP_THRESHOLD = Duration.fromObject({ hours: 1 })
 
 /**
  *

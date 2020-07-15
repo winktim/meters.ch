@@ -27,11 +27,11 @@
         </button>
 
         <button
-          class="flex items-center text-naito-blue-300 text-lg py-4 px-5 clickable focus:shadow-outline confirmable"
-          data-confirmed="false"
-          :data-confirm-text="$t('global.no_undoing')"
+          class="flex items-center text-naito-blue-300 text-lg py-4 px-5 clickable focus:shadow-outline popup confirmable"
+          data-popup-show="false"
+          :data-popup-text="$t('global.no_undoing')"
           @click="confirmDelete($event, objective)"
-          @blur="$event.currentTarget.dataset.confirmed = 'false'"
+          @blur="$event.currentTarget.dataset.popupShow = 'false'"
           :title="$t('pages.objectives.modes.delete')"
         >
           <i class="material-icons">delete</i>
@@ -152,10 +152,10 @@ export default {
      */
     confirmDelete(event, objective) {
       // need a second click to delete
-      if (event.currentTarget.dataset.confirmed === 'false') {
-        event.currentTarget.dataset.confirmed = 'true'
+      if (event.currentTarget.dataset.popupShow === 'false') {
+        event.currentTarget.dataset.popupShow = 'true'
       } else {
-        event.currentTarget.dataset.confirmed = 'false'
+        event.currentTarget.dataset.popupShow = 'false'
         this.del(objective.id)
       }
     },

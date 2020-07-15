@@ -89,7 +89,8 @@
       },
       "manual_update": "Mettre le tableau de bord à jour manuellement",
       "temps_updated": "Températures mises à jour",
-      "updated_manually": "Tableau de bord mis à jour"
+      "updated_manually": "Tableau de bord mis à jour",
+      "temp_outdated": "La dernière valeur a été relevée le {time}"
     },
     "infos": {
       "title": "Informations",
