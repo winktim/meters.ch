@@ -58,7 +58,7 @@
     </button>
 
     <!-- temperature instant values -->
-    <div class="flex flex-wrap justify-center">
+    <div v-if="!isAdmin" class="flex flex-wrap justify-center">
       <section
         v-for="(resource, i) in temperatureResources"
         :key="i"
@@ -373,6 +373,10 @@ export default {
     manualDashUpdate() {
       this.updateCurrentTemperatures()
 
+      if (!Array.isArray(this.$refs.charts)) {
+        return
+      }
+
       Promise.all(this.$refs.charts.map(chart => chart.forceUpdate())).then(
         () => {
           this.$store.dispatch('showMessage', {
@@ -384,6 +388,11 @@ export default {
       )
     },
     updateCurrentTemperatures() {
+      // don't show current temperature to admins to avoid overhead
+      if (this.isAdmin) {
+        return
+      }
+
       const now = DateTime.local()
 
       this.temperatureResources.forEach(async ({ id }) => {
@@ -744,6 +753,9 @@ export default {
     },
     editHasPrevious() {
       return this.$store.getters.dashboardUndoList.length > 0
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin
     },
   },
 }

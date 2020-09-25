@@ -116,6 +116,11 @@ export default {
     if (this.$store.getters.rememberMe) {
       this.loginUrl = '/login?remember-me'
     }
+
+    if (this.isAdmin) {
+      // download list of users to display to admins
+      this.$getUsers()
+    }
   },
   methods: {
     saveUserLocale(payload) {
@@ -172,6 +177,9 @@ export default {
     },
     locales() {
       return this.$store.state.locales
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin
     },
   },
 }

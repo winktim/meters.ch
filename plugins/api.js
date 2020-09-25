@@ -74,6 +74,19 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
+  inject('getUsers', async function(force) {
+    if (store.state.data.users !== null && !force) {
+      return
+    }
+
+    try {
+      const parsed = await classic('get', '/users')
+      store.commit('SET_USERS', { users: parsed })
+    } catch (e) {
+      throw e
+    }
+  })
+
   inject('getResources', async function(force) {
     if (store.state.data.resources !== null && !force) {
       return

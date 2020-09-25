@@ -16,7 +16,9 @@ import {
   SET_SHOW_MESSAGE,
   SET_MESSAGE_TIMEOUT,
   SET_USER,
+  SET_USERS,
   SET_CLIENT,
+  SET_CLIENTS,
   SET_RESOURCES,
   SET_RESOURCE_TYPES,
   SET_SENSORS,
@@ -67,6 +69,8 @@ export const state = () => ({
 
   data: {
     user: null,
+    // for admin only
+    users: null,
     alerts: null,
     objectives: null,
     sites: null,
@@ -74,15 +78,21 @@ export const state = () => ({
     resources: null,
     resourceTypes: null,
     client: null,
+    // for admin only
+    clients: null,
     readings: [],
   },
   dataById: {
+    // for admin only
+    users: null,
     alerts: null,
     objectives: null,
     sites: null,
     sensors: null,
     resources: null,
     resourceTypes: null,
+    // for admin only
+    clients: null,
   },
 
   dashboardEdit: {
@@ -151,10 +161,15 @@ export const mutations = {
       state.dataById.resources
     )
   },
+  [SET_USERS](state, { users }) {
+    state.data.users = users
+  },
   [SET_CLIENT](state, { client }) {
     state.data.client = client
   },
-
+  [SET_CLIENTS](state, { clients }) {
+    state.data.clients = clients
+  },
   [SET_RESOURCES](state, { resources }) {
     state.data.resources = resources
     state.dataById.resources = indexOnId(resources)
@@ -375,6 +390,8 @@ export const getters = {
       : DateTime.local(),
   dashboard: state =>
     state.data.user ? state.data.user.dashboard : defaultDashboard(),
+  isAdmin: state =>
+    state.data.user ? Boolean(state.data.user.is_admin) : false,
   clientName: state => (state.data.client ? state.data.client.name : '...'),
   clientNumber: state => (state.data.client ? state.data.client.number : '...'),
   clientEmail: state => (state.data.client ? state.data.client.email : '...'),
