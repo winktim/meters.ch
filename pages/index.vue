@@ -244,7 +244,10 @@
         <span v-text="$t('pages.index.edit.cancel_last')"></span>
       </button>
       <button @click="confirmEdit" :class="confirmClasses">
-        <i class="material-icons text-lg mr-4">done_all</i>
+        <i
+          class="material-icons text-lg mr-4"
+          v-text="editHasPrevious ? 'done_all' : 'close'"
+        ></i>
         <span
           v-text="
             $t(
