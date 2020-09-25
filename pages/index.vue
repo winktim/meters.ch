@@ -60,7 +60,7 @@
     <!-- temperature instant values -->
     <div v-if="!isAdmin" class="flex flex-wrap justify-center">
       <section
-        v-for="(resource, i) in temperatureResources"
+        v-for="(resource, i) in prepedTemperatureResources"
         :key="i"
         :class="temperatureParentClasses"
       >
@@ -220,7 +220,9 @@
       class="fixed bottom-0 w-full sm:w-auto right-0 sm:mb-12 text-gray-100 rounded-l-md flex flex-col"
     >
       <button
-        :disabled="dashboard.charts.length === 0"
+        :disabled="
+          dashboard.charts.length === 0 && temperatureResources.length === 0
+        "
         @click="editMode = true"
         class="sm:rounded-l-md p-4 sm:pl-6 bg-naito-blue-300 simple-action shadow-lg-top sm:shadow-lg sm:flex-row-reverse"
       >
@@ -321,7 +323,7 @@ export default {
 
     setTimeout(() => {
       this.updateCurrentTemperatures()
-      if (this.temperatureResources.length > 0) {
+      if (this.prepedTemperatureResources.length > 0) {
         this.$store.dispatch('showMessage', {
           message: this.$t('pages.index.temps_updated'),
           isError: false,
@@ -331,7 +333,7 @@ export default {
 
       setInterval(() => {
         this.updateCurrentTemperatures()
-        if (this.temperatureResources.length > 0) {
+        if (this.prepedTemperatureResources.length > 0) {
           this.$store.dispatch('showMessage', {
             message: this.$t('pages.index.temps_updated'),
             isError: false,
@@ -395,7 +397,7 @@ export default {
 
       const now = DateTime.local()
 
-      this.temperatureResources.forEach(async ({ id }) => {
+      this.prepedTemperatureResources.forEach(async ({ id }) => {
         /**
          * @type {{id: number, value: number, read_at: string}[]}
          */
@@ -621,12 +623,14 @@ export default {
         : this.$store.getters.dashboard
     },
     temperatureResources() {
+      return this.$store.getters.resources.filter(resource => {
+        const resourceType = this.$store.getters.resourceType(resource)
+        return resourceType && resourceType.name === 'Temperature'
+      })
+    },
+    prepedTemperatureResources() {
       return (
-        this.$store.getters.resources
-          .filter(resource => {
-            const resourceType = this.$store.getters.resourceType(resource)
-            return resourceType && resourceType.name === 'Temperature'
-          })
+        this.temperatureResources
           .map(resource => {
             let site = null
 
