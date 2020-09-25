@@ -94,6 +94,7 @@
                 class="text-right flex-grow mx-2 py-2 transparent-input"
                 type="number"
                 min="0"
+                max="9999999999.9"
                 step="0.1"
                 name="value-input"
                 id="value-input"
