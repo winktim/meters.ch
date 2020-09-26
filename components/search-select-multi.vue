@@ -1,7 +1,11 @@
 <template>
   <div ref="focusRoot" class="relative z-10" @mousedown="show">
     <div
-      class="w-full flex items-center text-gray-900 relative wrapped-single-transparent-input"
+      :class="
+        `w-full flex items-center text-gray-900 relative wrapped${
+          single ? '-single' : ''
+        }-transparent-input`
+      "
     >
       <label :for="inputName" class="material-icons py-2 pl-2 clickable"
         >search</label
@@ -111,6 +115,10 @@ export default {
       default: () => [],
     },
     top: {
+      type: Boolean,
+      default: false,
+    },
+    single: {
       type: Boolean,
       default: false,
     },

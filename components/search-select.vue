@@ -1,7 +1,11 @@
 <template>
   <div ref="focusRoot" class="relative z-10" @mousedown="show">
     <div
-      class="w-full flex items-center text-gray-900 relative wrapped-transparent-input"
+      :class="
+        `w-full flex items-center text-gray-900 relative wrapped${
+          single ? '-single' : ''
+        }-transparent-input`
+      "
     >
       <label :for="inputName" class="material-icons py-2 pl-2 clickable"
         >search</label
@@ -26,30 +30,36 @@
         class="wrapped-style top-0 left-0 w-full h-full pointer-events-none absolute"
       ></div>
     </div>
-    <ul :class="optionsClasses">
-      <li
-        class="flex-grow flex"
-        v-for="option in filteredOptions"
-        :key="option.id"
-      >
-        <!-- TODO: use shadow-outline, but croped by overflow-y-auto -->
-        <button
-          :tabindex="showOptions ? 0 : -1"
-          class="p-4 w-full hover:bg-gray-100"
-          @click="clickedOption(option)"
-          @keydown="checkForTab"
-          v-text="option.value"
-        ></button>
-      </li>
-      <li
-        class="flex-grow p-4"
-        v-if="filteredOptions.length === 0"
-        v-text="$t('global.no_results')"
-      ></li>
-    </ul>
+    <div :class="optionsClasses">
+      <!-- scroll div https://stackoverflow.com/questions/34249501/flexbox-column-reverse-in-firefox-edge-and-ie -->
+      <div ref="scrollDiv" class="max-h-32 lg:max-h-64 overflow-y-auto">
+        <ul :class="optionsUlClasses">
+          <li
+            class="flex-grow flex"
+            v-for="option in filteredOptions"
+            :key="option.id"
+          >
+            <!-- TODO: use shadow-outline, but croped by overflow-y-auto -->
+            <button
+              :tabindex="showOptions ? 0 : -1"
+              class="p-4 w-full hover:bg-gray-100"
+              @click="clickedOption(option)"
+              @keydown="checkForTab"
+              v-text="option.value"
+            ></button>
+          </li>
+          <li
+            class="flex-grow p-4"
+            v-if="filteredOptions.length === 0"
+            v-text="$t('global.no_results')"
+          ></li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 <script>
+import { scrollToBottom } from '../assets/utils'
 export default {
   name: 'SearchSelect',
   props: {
@@ -68,6 +78,14 @@ export default {
     value: {
       type: Number,
       default: -1,
+    },
+    top: {
+      type: Boolean,
+      default: false,
+    },
+    single: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -122,7 +140,13 @@ export default {
     show(event) {
       // trick to hide when the document recieves a mousedown event
       event.stopPropagation()
-      this.showOptions = true
+
+      if (!this.showOptions) {
+        this.showOptions = true
+        if (this.top) {
+          scrollToBottom(this.$refs.scrollDiv)
+        }
+      }
     },
     checkForTab(event) {
       if (event.keyCode === 9) {
@@ -171,20 +195,24 @@ export default {
       return [
         'absolute',
         'bg-gray-200',
-        'rounded-b-md',
         'shadow-md',
         'w-full',
         'transition-opacity-100',
-        'max-h-32',
-        'lg:max-h-64',
-        'overflow-y-auto',
         'flex',
-        'flex-col',
-      ].concat(
-        this.showOptions
-          ? ['opacity-1', 'pointer-events-auto']
-          : ['opacity-0', 'pointer-events-none']
-      )
+      ]
+        .concat(
+          this.showOptions
+            ? ['opacity-1', 'pointer-events-auto']
+            : ['opacity-0', 'pointer-events-none']
+        )
+        .concat(
+          this.top
+            ? ['flex-col-reverse', 'bottom-full', 'rounded-t-md']
+            : ['flex-col', 'rounded-b-md']
+        )
+    },
+    optionsUlClasses() {
+      return ['flex'].concat(this.top ? ['flex-col-reverse'] : ['flex-col'])
     },
   },
 }

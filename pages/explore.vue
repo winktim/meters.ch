@@ -95,6 +95,7 @@
           :placeholder="$t('pages.explore.form.find_resources')"
           :options="formattedResources"
           :top="true"
+          :single="true"
           v-model="resources"
         ></search-select-multi>
         <div class="flex my-2">
