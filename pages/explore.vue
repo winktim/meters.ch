@@ -89,6 +89,7 @@
         v-text="areSettingsCollapsed ? 'expand_less' : 'expand_more'"
       ></button>
       <div :class="areSettingsCollapsed ? 'hidden' : 'block'">
+        <!-- resources multi select list -->
         <search-select-multi
           name="resources"
           :placeholder="$t('pages.explore.form.find_resources')"
@@ -97,6 +98,7 @@
           v-model="resources"
         ></search-select-multi>
         <div class="flex my-2">
+          <!-- agregation -->
           <div class="w-1/2 mr-1 material-select">
             <label
               for="agregation-input"
@@ -115,6 +117,7 @@
               ></option>
             </select>
           </div>
+          <!-- period -->
           <div class="w-1/2 ml-1 material-select">
             <label for="period-input" v-text="$t('periods.short')"></label>
             <select name="period-input" id="period-input" v-model="period">
