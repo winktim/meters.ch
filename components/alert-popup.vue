@@ -10,7 +10,10 @@
 
           <!-- resource -->
           <div class="mb-8">
-            <h3 class="font-bold text-lg mb-2" v-text="$t('pages.alerts.form.resource')"></h3>
+            <h3
+              class="font-bold text-lg mb-2"
+              v-text="$t('pages.alerts.form.resource')"
+            ></h3>
             <search-select
               name="resource"
               :placeholder="$t('pages.objectives.form.find_resource')"
@@ -20,12 +23,22 @@
           </div>
 
           <div class="flex flex-col mb-8">
-            <h3 class="font-bold text-lg" v-text="$t('pages.alerts.form.range')"></h3>
-            <p class="mb-2 text-gray-800" v-text="$t('pages.alerts.form.range_note')"></p>
+            <h3
+              class="font-bold text-lg"
+              v-text="$t('pages.alerts.form.range')"
+            ></h3>
+            <p
+              class="mb-2 text-gray-800"
+              v-text="$t('pages.alerts.form.range_note')"
+            ></p>
 
             <!-- min -->
             <div class="flex items-center">
-              <label class="w-1/2 select-none" for="min-input" v-text="$t('pages.alerts.form.min')"></label>
+              <label
+                class="w-1/2 select-none"
+                for="min-input"
+                v-text="$t('pages.alerts.form.min')"
+              ></label>
               <input
                 class="w-0 text-right flex-grow mx-2 py-2 transparent-input"
                 type="number"
@@ -41,7 +54,11 @@
 
             <!-- max -->
             <div class="flex items-center">
-              <label class="w-1/2 select-none" for="max-input" v-text="$t('pages.alerts.form.max')"></label>
+              <label
+                class="w-1/2 select-none"
+                for="max-input"
+                v-text="$t('pages.alerts.form.max')"
+              ></label>
               <input
                 class="w-0 text-right flex-grow mx-2 py-2 transparent-input"
                 type="number"
@@ -58,11 +75,20 @@
 
           <!-- tolerance -->
           <div class="flex flex-col mb-12">
-            <h3 class="font-bold text-lg" v-text="$t('pages.alerts.form.tolerance')"></h3>
-            <p class="mb-2 text-gray-800" v-text="$t('pages.alerts.form.tolerance_note')"></p>
+            <h3
+              class="font-bold text-lg"
+              v-text="$t('pages.alerts.form.tolerance')"
+            ></h3>
+            <p
+              class="mb-2 text-gray-800"
+              v-text="$t('pages.alerts.form.tolerance_note')"
+            ></p>
 
             <div class="flex items-center">
-              <label class="material-radio text-naito-green-200" for="tolerance-none-input-radio">
+              <label
+                class="material-radio text-naito-green-200"
+                for="tolerance-none-input-radio"
+              >
                 <input
                   type="radio"
                   id="tolerance-none-input-radio"
@@ -80,7 +106,10 @@
             </div>
 
             <div class="flex items-center">
-              <label class="material-radio text-naito-green-200" for="tolerance-custom-input-radio">
+              <label
+                class="material-radio text-naito-green-200"
+                for="tolerance-custom-input-radio"
+              >
                 <input
                   type="radio"
                   id="tolerance-custom-input-radio"
@@ -123,7 +152,11 @@
           ></button>
           <button
             :disabled="resource_id === -1"
-            :title="resource_id === -1 ? $t('pages.objectives.form.missing_resource') : ''"
+            :title="
+              resource_id === -1
+                ? $t('pages.objectives.form.missing_resource')
+                : ''
+            "
             class="flex-grow ml-3 action bg-naito-green-200 text-gray-100 text-center"
             @click="confirm"
             v-text="$t('global.confirm')"
