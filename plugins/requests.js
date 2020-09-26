@@ -42,8 +42,10 @@ function prepPath(path, state) {
 function prepParams(params, state) {
   const output = { ...params }
 
-  // add locale
-  output['locale'] = state.locale
+  // add locale if not already included
+  if (!output.hasOwnProperty('locale')) {
+    output['locale'] = state.locale
+  }
   // add token if exists
   if (state.apiToken) {
     output['api_token'] = state.apiToken
