@@ -36,7 +36,9 @@
     "unknown": "An error occurred. Please try again later."
   },
   "api": {
-    "user_updated": "User information successfully saved",
+    "user_updated": "User successfully saved",
+    "user_created": "New user successfully created",
+    "user_deleted": "User successfully deleted",
     "dashboard_updated": "Dashboard successfully saved",
     "objective_updated": "Objective successfully saved",
     "objective_created": "New objective successfully created",
@@ -66,6 +68,7 @@
     "year": "This year | Last year | {count} years ago"
   },
   "menu": {
+    "admin": "Administration",
     "alerts": "Alerts",
     "explore": "Explore the data",
     "infos": "Information",
@@ -91,6 +94,27 @@
       "temps_updated": "Temperatures updated",
       "updated_manually": "Dashboard updated",
       "temp_outdated": "The latest value was recorded on {time}"
+    },
+    "admin": {
+      "title": "Administration",
+      "description": "Manage metadata of this Meters instance",
+      "info": "Create, edit and delete users. No action can be undone.",
+      "modes": {
+        "create": "New user",
+        "edit": "Edit user",
+        "delete": "Delete user"
+      },
+      "form": {
+        "name": "Name",
+        "email": "Email address",
+        "password": "Password",
+        "password_confirmation": "Confirm password",
+        "is_disabled": "Disable account",
+        "locale": "Contact language",
+        "client": "Client",
+        "find_client": "Search for a client",
+        "incomplete_data": "Incomplete data"
+      }
     },
     "infos": {
       "title": "Information",

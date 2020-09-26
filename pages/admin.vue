@@ -1,28 +1,28 @@
 <template>
-  <div>
+  <div v-if="isAdmin">
     <app-header
-      :title="$t('pages.alerts.title')"
-      :description="$t('pages.alerts.description')"
+      :title="$t('pages.admin.title')"
+      :description="$t('pages.admin.description')"
       :back="true"
     ></app-header>
 
-    <p
-      class="font-medium text-center mb-6"
-      v-text="$t('pages.alerts.info')"
-    ></p>
+    <p class="font-medium text-center mb-6" v-text="$t('pages.admin.info')"></p>
 
     <ul class="flex flex-col items-center">
       <li
         class="w-full lg:w-200 my-1 flex justify-between bg-gray-100 rounded-md hover:shadow-lg"
-        v-for="(alert, i) in alerts"
+        v-for="(user, i) in users"
         :key="i"
       >
         <button
           class="font-bold flex-grow py-4 pl-4 clickable focus:shadow-outline flex items-center"
-          @click="update(alert.id)"
-          :title="$t('pages.alerts.modes.edit')"
+          @click="() => update(user.id)"
+          :title="$t('pages.admin.modes.edit')"
         >
-          <span class="flex-grow" v-text="alert.value"></span>
+          <span
+            class="flex-grow"
+            v-text="`${user.name}, ${user.client}`"
+          ></span>
           <i class="material-icons text-naito-blue-300 text-lg px-5">edit</i>
         </button>
 
@@ -30,9 +30,9 @@
           class="flex items-center text-naito-blue-300 text-lg py-4 px-5 clickable focus:shadow-outline popup confirmable"
           data-popup-show="false"
           :data-popup-text="$t('global.no_undoing')"
-          @click="confirmDelete($event, alert)"
+          @click="confirmDelete($event, user)"
           @blur="$event.currentTarget.dataset.popupShow = 'false'"
-          :title="$t('pages.alerts.modes.delete')"
+          :title="$t('pages.admin.modes.delete')"
         >
           <i class="material-icons">delete</i>
         </button>
@@ -45,31 +45,30 @@
         @click="create"
       >
         <i class="material-icons absolute left-0 m-4 top-0">add</i>
-        <span v-text="$t('pages.alerts.modes.create')"></span>
+        <span v-text="$t('pages.admin.modes.create')"></span>
       </button>
     </div>
 
-    <alert-popup
+    <admin-user-popup
       :show="show"
       :mode="mode"
-      :current="$store.getters.alert({ alert_id: id })"
+      :current="id === -1 ? null : $store.getters.user({ user_id: id })"
       @cancel="popupCancel"
       @confirm="popupConfirm"
-    ></alert-popup>
+    ></admin-user-popup>
   </div>
 </template>
 <script>
-import { formatResource } from '../assets/utils'
 import { DateTime } from 'luxon'
 
 import AppHeader from '../components/app-header'
-import AlertPopup from '../components/alert-popup'
+import AdminUserPopup from '../components/admin-user-popup'
 
 export default {
   middleware: 'needs-auth',
   head() {
     return {
-      title: `${this.$t('pages.alerts.title')} - Meters`,
+      title: `${this.$t('pages.admin.title')} - Meters`,
       htmlAttrs: {
         lang: this.$store.state.locale,
       },
@@ -77,20 +76,18 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: this.$t('pages.alerts.description'),
+          content: this.$t('pages.admin.description'),
         },
       ],
     }
   },
-  components: { AppHeader, AlertPopup },
+  components: { AppHeader, AdminUserPopup },
   async mounted() {
-    await Promise.all([
-      this.$getResources(),
-      this.$getAlerts(),
-      this.$getResourceTypes(),
-      this.$getSensors(),
-      this.$getSites(),
-    ])
+    await Promise.all([this.$getUsers(), this.$getClients()])
+
+    if (!this.isAdmin) {
+      this.$router.replace('/')
+    }
   },
   data() {
     return {
@@ -137,67 +134,69 @@ export default {
       this.show = true
       this.navPopup()
     },
-    del(id) {
+    async del(id) {
       // make sure to hide any messages
       this.$store.dispatch('hideMessage')
 
-      this.$delAlert({ id })
+      try {
+        await this.$delUser({ id })
+      } catch (e) {}
+
+      // fetch up to date user list
+      this.$getUsers(true)
     },
     /**
      * @param {{ currentTarget: HTMLElement}} event
      */
-    confirmDelete(event, alert) {
+    confirmDelete(event, user) {
       // need a second click to delete
       if (event.currentTarget.dataset.popupShow === 'false') {
         event.currentTarget.dataset.popupShow = 'true'
       } else {
         event.currentTarget.dataset.popupShow = 'false'
-        this.del(alert.id)
+        this.del(user.id)
       }
     },
     popupCancel() {
       this.show = false
       this.$router.go(-1)
     },
-    popupConfirm(payload) {
+    async popupConfirm(payload) {
       this.show = false
       this.$router.go(-1)
 
       if (payload.id !== undefined) {
         // update existing
-        this.$putAlert(payload)
+        try {
+          await this.$putUser(payload)
+        } catch (e) {}
       } else {
         // create new
-        this.$postAlert(payload)
+        try {
+          await this.$postUser(payload)
+        } catch (e) {}
       }
+
+      // fetch up to date user list
+      this.$getUsers(true)
     },
   },
   computed: {
-    alerts() {
-      const locale = this.$numberLocale()
-      return this.$store.getters.alerts.map(alert => {
-        const out = {
-          id: alert.id,
-          value: '',
+    isAdmin() {
+      return this.$store.getters.isAdmin
+    },
+    users() {
+      return this.$store.getters.users.map(user => {
+        const client = this.$store.getters.client(user)
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          created_at: DateTime.fromISO(user.created_at)
+            .setLocale(this.$dateLocale())
+            .toLocaleString(DateTime.DATE_FULL),
+          client: client ? client.name : user.client_id,
         }
-
-        const resource = this.$store.getters.resource(alert)
-
-        if (resource === null) {
-          return out
-        }
-
-        const formattedResource = formatResource(this.$i18n, resource)
-
-        out.value = `${formattedResource}, ${alert.min.toLocaleString(
-          locale
-        )} — ${alert.max.toLocaleString(locale)} °C`
-
-        if (alert.tolerance > 0) {
-          out.value += `, ${alert.tolerance}h`
-        }
-
-        return out
       })
     },
   },

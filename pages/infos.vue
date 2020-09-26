@@ -107,19 +107,14 @@ export default {
   },
   async mounted() {
     await Promise.all([
-      this.$getUser(),
+      this.$getUsers(),
       this.$getResources(),
       this.$getSites(),
-      this.$getClient(),
+      this.$getClients(),
     ])
 
     if (this.$store.getters.rememberMe) {
       this.loginUrl = '/login?remember-me'
-    }
-
-    if (this.isAdmin) {
-      // download list of users to display to admins
-      this.$getUsers()
     }
   },
   methods: {
@@ -177,9 +172,6 @@ export default {
     },
     locales() {
       return this.$store.state.locales
-    },
-    isAdmin() {
-      return this.$store.getters.isAdmin
     },
   },
 }

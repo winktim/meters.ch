@@ -61,7 +61,7 @@ export default ({ app, store, redirect }, inject) => {
     })
   }
 
-  inject('getUser', async function(force) {
+  inject('getUsers', async function(force) {
     if (store.state.data.user !== null && !force) {
       return
     }
@@ -69,19 +69,11 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/users')
       store.commit('SET_USER', { user: parsed[0] })
-    } catch (e) {
-      throw e
-    }
-  })
 
-  inject('getUsers', async function(force) {
-    if (store.state.data.users !== null && !force) {
-      return
-    }
-
-    try {
-      const parsed = await classic('get', '/users')
-      store.commit('SET_USERS', { users: parsed })
+      // admin will be able to query all users. first user will still be himself
+      if (parsed.length > 1) {
+        store.commit('SET_USERS', { users: parsed })
+      }
     } catch (e) {
       throw e
     }
@@ -165,7 +157,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getClient', async function(force) {
+  inject('getClients', async function(force) {
     if (store.state.data.client !== null && !force) {
       return
     }
@@ -173,6 +165,11 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/clients')
       store.commit('SET_CLIENT', { client: parsed[0] })
+
+      // admin will be able to query all clients. first client will still be his own
+      if (parsed.length > 1) {
+        store.commit('SET_CLIENTS', { clients: parsed })
+      }
     } catch (e) {
       throw e
     }
@@ -209,19 +206,18 @@ export default ({ app, store, redirect }, inject) => {
     }
 
     try {
-      const parsed = await classic(
-        'put',
-        `/users/${store.state.data.user.id}`,
-        payload
-      )
+      const parsed = await classic('put', `/users/${payload.id}`, payload)
 
       // new user infos are returned on success
-      store.commit('SET_USER', { user: parsed })
+      // if updated user is current user, update his data
+      if (payload.id === store.state.data.user.id) {
+        store.commit('SET_USER', { user: parsed })
+      }
 
       store.dispatch('showMessage', {
         message: customMessage || app.i18n.t('api.user_updated'),
         isError: false,
-        time: customTime || 1500,
+        time: customTime || 2000,
       })
     } catch (e) {
       throw e
@@ -314,6 +310,24 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
+  inject('postUser', async function(payload) {
+    if (store.state.data.users === null) {
+      return
+    }
+
+    try {
+      const parsed = await classic('post', '/users', payload)
+
+      store.dispatch('showMessage', {
+        message: app.i18n.t('api.user_created'),
+        isError: false,
+        time: 2000,
+      })
+    } catch (e) {
+      throw e
+    }
+  })
+
   // DELETE
 
   inject('delObjective', async function(payload) {
@@ -349,6 +363,24 @@ export default ({ app, store, redirect }, inject) => {
 
       store.dispatch('showMessage', {
         message: app.i18n.t('api.alert_deleted'),
+        isError: false,
+        time: 2000,
+      })
+    } catch (e) {
+      throw e
+    }
+  })
+
+  inject('delUser', async function(payload) {
+    if (store.state.data.users === null) {
+      return
+    }
+
+    try {
+      await classic('delete', `/users/${payload.id}`)
+
+      store.dispatch('showMessage', {
+        message: app.i18n.t('api.user_deleted'),
         isError: false,
         time: 2000,
       })

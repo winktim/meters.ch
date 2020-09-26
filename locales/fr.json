@@ -36,7 +36,9 @@
     "unknown": "Une erreur s'est produite. Veuillez réessayer plus tard."
   },
   "api": {
-    "user_updated": "Informations utilisateur enregistrées avec succès",
+    "user_updated": "Utilisateur enregistré avec succès",
+    "user_created": "Nouvel utilisateur créé avec succès",
+    "user_deleted": "Utilisateur supprimé avec succès",
     "dashboard_updated": "Tableau de bord enregistré avec succès",
     "objective_updated": "Objectif enregistré avec succès",
     "objective_created": "Nouvel objectif créé avec succès",
@@ -66,6 +68,7 @@
     "year": "Cette année | L'année dernière | Il y a {count} ans"
   },
   "menu": {
+    "admin": "Administration",
     "alerts": "Alertes",
     "explore": "Explorer les données",
     "infos": "Informations",
@@ -91,6 +94,27 @@
       "temps_updated": "Températures mises à jour",
       "updated_manually": "Tableau de bord mis à jour",
       "temp_outdated": "La dernière valeur a été relevée le {time}"
+    },
+    "admin": {
+      "title": "Administration",
+      "description": "Gérez les métadonnées de cette instance Meters",
+      "info": "Créez, modifiez et supprimez des utilisateurs. Aucune action ne peut être annulée.",
+      "modes": {
+        "create": "Nouvel utilisateur",
+        "edit": "Éditer l'utilisateur",
+        "delete": "Supprimer l'utilisateur"
+      },
+      "form": {
+        "name": "Nom",
+        "email": "Adresse email",
+        "password": "Mot de passe",
+        "password_confirmation": "Confirmer le mot de passe",
+        "is_disabled": "Désactiver le compte",
+        "locale": "Langue de contact",
+        "client": "Client",
+        "find_client": "Rechercher un client",
+        "incomplete_data": "Données incomplètes"
+      }
     },
     "infos": {
       "title": "Informations",

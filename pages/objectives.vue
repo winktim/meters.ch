@@ -52,7 +52,7 @@
     <objective-popup
       :show="show"
       :mode="mode"
-      :current="id === -1 ? null : $store.state.dataById.objectives[id]"
+      :current="$store.getters.objective({ objective_id: id })"
       @cancel="popupCancel"
       @confirm="popupConfirm"
     ></objective-popup>

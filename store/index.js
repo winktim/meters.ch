@@ -163,12 +163,14 @@ export const mutations = {
   },
   [SET_USERS](state, { users }) {
     state.data.users = users
+    state.dataById.users = indexOnId(users)
   },
   [SET_CLIENT](state, { client }) {
     state.data.client = client
   },
   [SET_CLIENTS](state, { clients }) {
     state.data.clients = clients
+    state.dataById.clients = indexOnId(clients)
   },
   [SET_RESOURCES](state, { resources }) {
     state.data.resources = resources
@@ -403,6 +405,9 @@ export const getters = {
   numSites: state => (state.data.sites ? state.data.sites.length : 0),
   objectives: state => (state.data.objectives ? state.data.objectives : []),
   alerts: state => (state.data.alerts ? state.data.alerts : []),
+  // for admin only
+  users: state => (state.data.users ? state.data.users : []),
+  clients: state => (state.data.clients ? state.data.clients : []),
 
   // dashboard edit mode
   dashboardUndoList: state => state.dashboardEdit.undoList,
@@ -465,5 +470,50 @@ export const getters = {
     }
 
     return state.dataById.sites[hasSite.site_id]
+  },
+  alert: state => hasAlert => {
+    if (!hasAlert) {
+      return null
+    }
+
+    if (state.dataById.alerts === null) {
+      return null
+    }
+
+    return state.dataById.alerts[hasAlert.alert_id]
+  },
+  objective: state => hasObjective => {
+    if (!hasObjective) {
+      return null
+    }
+
+    if (state.dataById.objectives === null) {
+      return null
+    }
+
+    return state.dataById.objectives[hasObjective.objective_id]
+  },
+  // for admin only
+  user: state => hasUser => {
+    if (!hasUser) {
+      return null
+    }
+
+    if (state.dataById.users === null) {
+      return null
+    }
+
+    return state.dataById.users[hasUser.user_id]
+  },
+  client: state => hasClient => {
+    if (!hasClient) {
+      return null
+    }
+
+    if (state.dataById.clients === null) {
+      return null
+    }
+
+    return state.dataById.clients[hasClient.client_id]
   },
 }

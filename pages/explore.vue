@@ -255,7 +255,7 @@ export default {
 
     this.setQuery()
 
-    await Promise.all([this.$getSensors(), this.$getSites(), this.$getUser()])
+    await Promise.all([this.$getSensors(), this.$getSites(), this.$getUsers()])
   },
   methods: {
     navPopup() {

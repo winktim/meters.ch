@@ -300,7 +300,7 @@ export default {
     await Promise.all([
       this.$getResources(),
       this.$getResourceTypes(),
-      this.$getUser(),
+      this.$getUsers(),
       this.$getSensors(),
       this.$getSites(),
       this.$getAlerts(),
@@ -324,7 +324,7 @@ export default {
 
     const waitTime = nextUpdateTime.diff(now)
 
-    setTimeout(() => {
+    this.timeout = setTimeout(() => {
       this.updateCurrentTemperatures()
       if (this.prepedTemperatureResources.length > 0) {
         this.$store.dispatch('showMessage', {
@@ -334,7 +334,7 @@ export default {
         })
       }
 
-      setInterval(() => {
+      this.interval = setInterval(() => {
         this.updateCurrentTemperatures()
         if (this.prepedTemperatureResources.length > 0) {
           this.$store.dispatch('showMessage', {
@@ -363,8 +363,19 @@ export default {
     }
     */
   },
+  beforeDestroy() {
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+    }
+
+    if (this.interval) {
+      clearInterval(this.interval)
+    }
+  },
   data() {
     return {
+      timeout: null,
+      interval: null,
       changeState,
       isMenuOpen: false,
       editMode: false,

@@ -1,5 +1,7 @@
 <template>
-  <nav class="bg-naito-blue-300 text-gray-100 rounded-md shadow-lg overflow-hidden">
+  <nav
+    class="bg-naito-blue-300 text-gray-100 rounded-md shadow-lg overflow-hidden"
+  >
     <ul class="w-full h-full">
       <li v-for="(element, i) in elements" :key="i">
         <nuxt-link
@@ -17,7 +19,7 @@
 export default {
   data() {
     return {
-      elements: [
+      basicElements: [
         { icon: 'person', label: 'menu.infos', href: '/infos' },
         { icon: 'show_chart', label: 'menu.explore', href: '/explore' },
         {
@@ -28,6 +30,23 @@ export default {
         { icon: 'warning', label: 'menu.alerts', href: '/alerts' },
       ],
     }
+  },
+  computed: {
+    isAdmin() {
+      return this.$store.getters.isAdmin
+    },
+    elements() {
+      return this.isAdmin
+        ? [
+            {
+              icon: 'security',
+              label: 'menu.admin',
+              href: '/admin',
+            },
+            ...this.basicElements,
+          ]
+        : this.basicElements
+    },
   },
 }
 </script>
