@@ -94,6 +94,7 @@ export default {
       showOptions: false,
       currentValue: -1,
       supposedSearchString: '',
+      mousedownListener: null,
     }
   },
   watch: {
@@ -114,14 +115,17 @@ export default {
     },
   },
   mounted() {
-    document.onmousedown = () => {
+    this.mousedownListener = () => {
       this.showOptions = false
       // reset the content of the field when left half-typed
       this.searchString = this.supposedSearchString
     }
+    document.addEventListener('mousedown', this.mousedownListener)
   },
   beforeDestroy() {
-    document.onmousedown = null
+    if (this.mousedownListener) {
+      document.removeEventListener('mousedown', this.mousedownListener)
+    }
   },
   methods: {
     /**

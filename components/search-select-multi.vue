@@ -128,6 +128,7 @@ export default {
       searchString: '',
       showOptions: false,
       checked: [],
+      mousedownListener: null,
     }
   },
   watch: {
@@ -152,12 +153,15 @@ export default {
     },
   },
   mounted() {
-    document.onmousedown = () => {
+    this.mousedownListener = () => {
       this.showOptions = false
     }
+    document.addEventListener('mousedown', this.mousedownListener)
   },
   beforeDestroy() {
-    document.onmousedown = null
+    if (this.mousedownListener) {
+      document.removeEventListener('mousedown', this.mousedownListener)
+    }
   },
   methods: {
     show(event) {
