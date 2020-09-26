@@ -306,6 +306,11 @@ export default {
       this.$getAlerts(),
     ])
 
+    // don't setup temp update if user is admin
+    if (this.isAdmin) {
+      return
+    }
+
     this.updateCurrentTemperatures()
 
     // wait for the next 05 or 35 minute to update, then update every 30 minutes
