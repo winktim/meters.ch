@@ -8,9 +8,21 @@
             v-text="$t('pages.admin.modes.' + mode)"
           ></h2>
 
+          <!-- client -->
+          <label
+            class="block font-bold text-lg mb-2"
+            v-text="$t('pages.admin.form.client')"
+          ></label>
+          <search-select
+            name="resource"
+            :placeholder="$t('pages.admin.form.find_client')"
+            :options="formattedClients"
+            v-model="clientId"
+          ></search-select>
+
           <!-- name -->
           <label
-            class="w-full"
+            class="block font-bold text-lg mt-4"
             for="name-input"
             v-text="$t('pages.admin.form.name')"
           ></label>
@@ -24,7 +36,7 @@
 
           <!-- email -->
           <label
-            class="w-full"
+            class="block font-bold text-lg mt-4"
             for="email-input"
             v-text="$t('pages.admin.form.email')"
           ></label>
@@ -40,7 +52,7 @@
           <div v-if="!editMode">
             <!-- password -->
             <label
-              class="w-full"
+              class="block font-bold text-lg mt-4"
               for="password-input"
               v-text="$t('pages.admin.form.password')"
             ></label>
@@ -54,7 +66,7 @@
 
             <!-- confirm password -->
             <label
-              class="w-full"
+              class="block font-bold text-lg mt-4"
               for="password-confirmation-input"
               v-text="$t('pages.admin.form.password_confirmation')"
             ></label>
@@ -70,11 +82,6 @@
           <!-- disabled -->
           <div class="w-full py-2 flex items-center">
             <label
-              class="select-none"
-              for="is-disabled-input"
-              v-text="$t('pages.admin.form.is_disabled')"
-            ></label>
-            <label
               class="material-checkbox text-naito-green-200"
               for="is-disabled-input"
             >
@@ -88,34 +95,27 @@
                 class="material-checkbox-fake material-checkbox-fake__large"
               ></div>
             </label>
+            <label
+              class="block select-none"
+              for="is-disabled-input"
+              v-text="$t('pages.admin.form.is_disabled')"
+            ></label>
           </div>
 
           <!-- locale -->
           <label
-            class="w-full"
+            class="block font-bold text-lg mt-4"
             for="locale-input"
             v-text="$t('pages.admin.form.locale')"
           ></label>
-          <language-selector
-            :locale="locale"
-            :locales="locales"
-            :label="'global.set_locale'"
-            name="locale-input"
-            @change="setLocale"
-          ></language-selector>
-
-          <!-- client -->
-          <div class="mb-8">
-            <h3
-              class="font-bold text-lg mb-2"
-              v-text="$t('pages.admin.form.client')"
-            ></h3>
-            <search-select
-              name="resource"
-              :placeholder="$t('pages.admin.form.find_client')"
-              :options="formattedClients"
-              v-model="clientId"
-            ></search-select>
+          <div class="flex mb-4">
+            <language-selector
+              :locale="locale"
+              :locales="locales"
+              :label="'global.set_locale'"
+              name="locale-input"
+              @change="setLocale"
+            ></language-selector>
           </div>
         </div>
 
@@ -187,13 +187,15 @@ export default {
         this.passwordConfirmation = ''
         this.isDisabled = false
         this.locale = this.$store.getters.userLocale
-        this.clientId = -1
+        // if there is a single client (on-premise), pre-select it
+        this.clientId =
+          this.formattedClients.length === 1 ? this.formattedClients[0].id : -1
       }
     },
   },
   methods: {
-    setLocale(newLocale) {
-      this.locale = newLocale
+    setLocale(payload) {
+      this.locale = payload.locale
     },
     cancelOnBack(event) {
       if (event.target === this.$refs.back) {
