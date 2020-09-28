@@ -402,6 +402,7 @@ export const getters = {
   hasResourceTypes: state => !!state.data.resourceTypes,
   numResources: state =>
     state.data.resources ? state.data.resources.length : 0,
+  sites: state => (state.data.sites ? state.data.sites : []),
   numSites: state => (state.data.sites ? state.data.sites.length : 0),
   objectives: state => (state.data.objectives ? state.data.objectives : []),
   alerts: state => (state.data.alerts ? state.data.alerts : []),
