@@ -1,5 +1,5 @@
 <template>
-  <div ref="focusRoot" class="relative z-10" @mousedown="show">
+  <div ref="focusRoot" class="relative z-10" @mousedown="keepShown">
     <div
       :class="
         `w-full flex items-center text-gray-900 relative wrapped${
@@ -133,12 +133,20 @@ export default {
   },
   watch: {
     options(to, from) {
+      // don't reset if we get options from the first time
+      // it would reset the default value which is set before we recieve the options
+      if (from.length === 0) {
+        return
+      }
+
       const allOptions = to.map(option => option.id)
 
       // filter out any currently checked option that doesn't exist in the new options
       this.checked = this.checked.filter(option => {
         return allOptions.includes(option)
       })
+
+      this.$emit('input', this.checked)
     },
     value(to) {
       // update from an external change
@@ -156,7 +164,9 @@ export default {
     this.mousedownListener = () => {
       this.showOptions = false
     }
-    document.addEventListener('mousedown', this.mousedownListener)
+    document.addEventListener('mousedown', this.mousedownListener, {
+      passive: true,
+    })
   },
   beforeDestroy() {
     if (this.mousedownListener) {
@@ -164,10 +174,13 @@ export default {
     }
   },
   methods: {
+    keepShown(event) {
+      if (this.showOptions) {
+        // simply prevent document from recieving the mouse event and closing the options list
+        event.stopPropagation()
+      }
+    },
     show(event) {
-      // trick to hide when the document recieves a mousedown event
-      event.stopPropagation()
-
       if (!this.showOptions) {
         this.showOptions = true
         if (this.top) {

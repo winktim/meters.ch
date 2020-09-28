@@ -1,5 +1,5 @@
 <template>
-  <div ref="focusRoot" class="relative z-10" @mousedown="show">
+  <div ref="focusRoot" class="relative z-10" @mousedown="keepShown">
     <div
       :class="
         `w-full flex items-center text-gray-900 relative wrapped${
@@ -113,14 +113,31 @@ export default {
       this.showOptions = false
       this.currentValue = to
     },
+    options(to, from) {
+      // don't reset if we get options from the first time
+      // it would reset the default value which is set before we recieve the options
+      if (from.length === 0) {
+        return
+      }
+
+      this.searchString = ''
+      this.supposedSearchString = this.searchString
+      this.currentValue = -1
+      this.$emit('input', -1)
+    },
   },
   mounted() {
     this.mousedownListener = () => {
+      if (!this.showOptions) {
+        return
+      }
       this.showOptions = false
       // reset the content of the field when left half-typed
       this.searchString = this.supposedSearchString
     }
-    document.addEventListener('mousedown', this.mousedownListener)
+    document.addEventListener('mousedown', this.mousedownListener, {
+      passive: true,
+    })
   },
   beforeDestroy() {
     if (this.mousedownListener) {
@@ -141,10 +158,13 @@ export default {
 
       return null
     },
+    keepShown(event) {
+      if (this.showOptions) {
+        // simply prevent document from recieving the mouse event and closing the options list
+        event.stopPropagation()
+      }
+    },
     show(event) {
-      // trick to hide when the document recieves a mousedown event
-      event.stopPropagation()
-
       if (!this.showOptions) {
         this.showOptions = true
         if (this.top) {
