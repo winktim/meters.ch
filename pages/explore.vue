@@ -277,11 +277,16 @@ export default {
     setQuery() {
       const route = {
         query: {
-          offset: this.offset,
+          offset: String(this.offset),
           agregation: reverseAgregations[this.agregation],
           period: reversePeriods[this.period],
-          resources: this.resources,
+          resources: this.resources.map(String),
         },
+      }
+
+      // small optimization to avoid replacing a route with itself
+      if (JSON.stringify(route.query) === JSON.stringify(this.$route.query)) {
+        return
       }
 
       this.$router.replace(
