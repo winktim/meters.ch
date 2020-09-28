@@ -251,7 +251,7 @@ export default {
       }
     }
 
-    document.addEventListener('keyup', this.escHandler)
+    document.addEventListener('keyup', this.escHandler, { passive: true })
   },
   beforeDestroy() {
     document.removeEventListener('keyup', this.escHandler)

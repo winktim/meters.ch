@@ -8,11 +8,17 @@
             v-text="$t('pages.explore.download.title')"
           ></h2>
           <div class="flex flex-col mb-12">
-            <h3 class="font-bold text-lg mb-2" v-text="$t('pages.explore.download.format')"></h3>
+            <h3
+              class="font-bold text-lg mb-2"
+              v-text="$t('pages.explore.download.format')"
+            ></h3>
 
             <!-- CSV -->
             <div class="flex items-center">
-              <label class="material-radio text-naito-green-200" for="format-csv-input">
+              <label
+                class="material-radio text-naito-green-200"
+                for="format-csv-input"
+              >
                 <input
                   type="radio"
                   id="format-csv-input"
@@ -22,12 +28,17 @@
                 />
                 <div class="material-radio-fake"></div>
               </label>
-              <label class="flex-grow select-none" for="format-csv-input">CSV</label>
+              <label class="flex-grow select-none" for="format-csv-input"
+                >CSV</label
+              >
             </div>
 
             <!-- JSON -->
             <div class="flex items-center">
-              <label class="material-radio text-naito-green-200" for="format-json-input">
+              <label
+                class="material-radio text-naito-green-200"
+                for="format-json-input"
+              >
                 <input
                   type="radio"
                   id="format-json-input"
@@ -37,7 +48,9 @@
                 />
                 <div class="material-radio-fake"></div>
               </label>
-              <label class="flex-grow select-none" for="format-json-input">JSON</label>
+              <label class="flex-grow select-none" for="format-json-input"
+                >JSON</label
+              >
             </div>
           </div>
         </div>
@@ -108,7 +121,7 @@ export default {
       }
     }
 
-    document.addEventListener('keyup', this.escHandler)
+    document.addEventListener('keyup', this.escHandler, { passive: true })
   },
   beforeDestroy() {
     document.removeEventListener('keyup', this.escHandler)

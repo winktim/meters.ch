@@ -7,10 +7,16 @@
             class="text-center font-heading text-2xl my-3"
             v-text="$t('pages.explore.bookmark.title')"
           ></h2>
-          <p class="text-center mb-2" v-text="$t('pages.explore.bookmark.explain')"></p>
+          <p
+            class="text-center mb-2"
+            v-text="$t('pages.explore.bookmark.explain')"
+          ></p>
           <!-- name -->
           <div class="flex flex-col mb-8">
-            <h3 class="font-bold text-lg mb-2" v-text="$t('pages.explore.bookmark.name')"></h3>
+            <h3
+              class="font-bold text-lg mb-2"
+              v-text="$t('pages.explore.bookmark.name')"
+            ></h3>
             <input
               class="flex-grow mx-2 py-2 transparent-input"
               type="text"
@@ -99,7 +105,7 @@ export default {
       }
     }
 
-    document.addEventListener('keyup', this.escHandler)
+    document.addEventListener('keyup', this.escHandler, { passive: true })
   },
   beforeDestroy() {
     document.removeEventListener('keyup', this.escHandler)
