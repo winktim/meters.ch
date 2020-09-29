@@ -175,6 +175,7 @@ export default {
     checkForTab(event) {
       if (event.keyCode === 9) {
         // wait for the focus to change and check if it is in the root
+        // TODO: Vue.nextTick https://vuejs.org/v2/api/#Vue-nextTick
         setTimeout(() => {
           if (!this.$refs.focusRoot.contains(document.activeElement)) {
             this.showOptions = false
