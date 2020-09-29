@@ -198,7 +198,6 @@ export default {
   watch: {
     datasets: {
       handler(to, from) {
-        console.log('change datasets')
         const toDatasets = JSON.stringify(to)
 
         // give it a deep copy because Chartjs likes to modify things
@@ -209,7 +208,6 @@ export default {
     },
     xAxes: {
       handler(to, from) {
-        console.log('change xAxes')
         const toXAxes = JSON.stringify(to)
 
         // give it a deep copy because Chartjs likes to modify things
@@ -221,7 +219,6 @@ export default {
     },
     yAxes: {
       handler(to, from) {
-        console.log('change yAxes')
         const toYAxes = JSON.stringify(to)
 
         // give it a deep copy because Chartjs likes to modify things
@@ -232,7 +229,6 @@ export default {
       deep: true,
     },
     legend(to, from) {
-      console.log('change legend')
       if (to === from) {
         return
       }
