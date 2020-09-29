@@ -40,7 +40,7 @@ import {
 import BasicChart from './basic-chart.vue'
 
 export default {
-  name: 'Chart',
+  name: 'ExploreChart',
   components: { BasicChart },
   props: {
     period: {

@@ -60,7 +60,7 @@ import {
 } from '../assets/mutations'
 
 export default {
-  name: 'Chart',
+  name: 'BasicChart',
   props: {
     datasets: {
       type: Array,
