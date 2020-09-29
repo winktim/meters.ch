@@ -69,10 +69,11 @@
   },
   "menu": {
     "admin": "Administration",
-    "alerts": "Alerts",
-    "explore": "Explore the data",
     "infos": "Information",
-    "objectives": "Objectives"
+    "explore": "Explore data",
+    "signature": "Energy signature",
+    "objectives": "Objectives",
+    "alerts": "Alerts"
   },
   "pages": {
     "index": {
@@ -153,9 +154,19 @@
       },
       "form": {
         "find_resources": "Select resources",
-        "no_resources": "Please select at least one resource to start"
+        "no_resources": "Please select at least one resource to get started"
       },
       "collapse_settings": "Collapse settings"
+    },
+    "signature": {
+      "title": "Energy signature",
+      "description": "Track the sensitivity of a building to cold weather and identify heating issues",
+      "form": {
+        "site": "Select a site",
+        "temperature": "Temperature resource",
+        "heater": "Heater resource",
+        "invalid_query": "Please select a site, temperature resource and heater resource to get started"
+      }
     },
     "objectives": {
       "title": "Objectives",

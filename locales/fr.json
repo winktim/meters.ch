@@ -69,10 +69,11 @@
   },
   "menu": {
     "admin": "Administration",
-    "alerts": "Alertes",
-    "explore": "Explorer les données",
     "infos": "Informations",
-    "objectives": "Objectifs"
+    "explore": "Explorer les données",
+    "signature": "Signature énergétique",
+    "objectives": "Objectifs",
+    "alerts": "Alertes"
   },
   "pages": {
     "index": {
@@ -156,6 +157,16 @@
         "no_resources": "Veuillez sélectionner au moins une ressource pour commencer"
       },
       "collapse_settings": "Réduire les paramètres"
+    },
+    "signature": {
+      "title": "Signature énergétique",
+      "description": "Suivez la sensibilité d'un bâtiment au froid et repérez des problèmes de chauffage",
+      "form": {
+        "site": "Sélectionnez un site",
+        "temperature": "Ressource de température",
+        "heater": "Ressource de chauffage",
+        "invalid_query": "Veuillez sélectionner un site, une ressource de température et une ressource de chauffage pour commencer"
+      }
     },
     "objectives": {
       "title": "Objectifs",

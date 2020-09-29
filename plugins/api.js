@@ -118,6 +118,19 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
+  inject('getMeteoLocations', async function(force) {
+    if (store.state.data.meteoLocations !== null && !force) {
+      return
+    }
+
+    try {
+      const parsed = await classic('get', '/meteoLocations')
+      store.commit('SET_METEO_LOCATIONS', { meteoLocations: parsed })
+    } catch (e) {
+      throw e
+    }
+  })
+
   inject('getSensors', async function(force) {
     if (store.state.data.sensors !== null && !force) {
       return
@@ -198,11 +211,39 @@ export default ({ app, store, redirect }, inject) => {
     return readings
   })
 
+  inject('getMeteoReadings', async function(location, payload, ignoreCache) {
+    const key = `${location}-` + JSON.stringify(payload)
+    const cached = cache.get(key)
+
+    if (cached && !ignoreCache) {
+      return cached
+    }
+
+    let readings = []
+
+    try {
+      readings = await classic(
+        'get',
+        `/meteoLocations/${location}/meteoReadings`,
+        payload
+      )
+    } catch (e) {}
+
+    cache.set(key, readings)
+
+    return readings
+  })
+
   // PUT
 
   inject('putUser', async function(payload, customMessage, customTime) {
     if (store.state.data.user === null) {
       return
+    }
+
+    // make sure the logged user id is added if none is provided
+    if (!payload.hasOwnProperty('id')) {
+      payload.id = store.state.data.user.id
     }
 
     try {

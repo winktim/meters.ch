@@ -42,6 +42,7 @@ import {
   REMOVE_DASHBOARD_CHART,
   REMOVE_LAST_DASHBOARD_EDIT,
   REMOVE_ALL_DASHBOARD_EDITS,
+  SET_METEO_LOCATIONS,
 } from '../assets/mutations'
 
 export const state = () => ({
@@ -80,6 +81,8 @@ export const state = () => ({
     client: null,
     // for admin only
     clients: null,
+    meteoLocations: null,
+    // TODO: verify useless and delete
     readings: [],
   },
   dataById: {
@@ -93,6 +96,7 @@ export const state = () => ({
     resourceTypes: null,
     // for admin only
     clients: null,
+    meteoLocations: null,
   },
 
   dashboardEdit: {
@@ -203,6 +207,10 @@ export const mutations = {
   [SET_ALERTS](state, { alerts }) {
     state.data.alerts = alerts
     state.dataById.alerts = indexOnId(alerts)
+  },
+  [SET_METEO_LOCATIONS](state, { meteoLocations }) {
+    state.data.meteoLocations = meteoLocations
+    state.dataById.meteoLocations = indexOnId(meteoLocations)
   },
   [SET_IS_APP_LOADING](state, { isAppLoading }) {
     state.isAppLoading = isAppLoading
@@ -400,6 +408,8 @@ export const getters = {
   resources: state => (state.data.resources ? state.data.resources : []),
   hasResources: state => !!state.data.resources,
   hasResourceTypes: state => !!state.data.resourceTypes,
+  hasMeteoLocations: state => !!state.data.meteoLocations,
+  hasSites: state => !!state.data.sites,
   numResources: state =>
     state.data.resources ? state.data.resources.length : 0,
   sites: state => (state.data.sites ? state.data.sites : []),
@@ -516,5 +526,16 @@ export const getters = {
     }
 
     return state.dataById.clients[hasClient.client_id]
+  },
+  meteoLocation: state => hasMeteoLocation => {
+    if (!hasMeteoLocation) {
+      return null
+    }
+
+    if (state.dataById.meteoLocations === null) {
+      return null
+    }
+
+    return state.dataById.meteoLocations[hasMeteoLocation.meteo_location_id]
   },
 }

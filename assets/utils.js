@@ -30,6 +30,8 @@ export const alertState = {
   BELOW: 2,
 }
 
+export const HEATING_RESOURCE_TYPES = ['Electricity', 'Gas', 'Oil']
+
 export const SMALL_SCREEN_BREAKPOINT = 640
 
 /**
@@ -76,6 +78,11 @@ export function indexOnId(arrayWithIds) {
 
   return output
 }
+function swapKeyValues(input) {
+  const output = []
+  Object.entries(input).forEach(([key, value]) => (output[value] = key))
+  return output
+}
 
 export const agregations = {
   hour: 0,
@@ -84,7 +91,7 @@ export const agregations = {
   month: 3,
 }
 
-export const reverseAgregations = Object.keys(agregations)
+export const reverseAgregations = swapKeyValues(agregations)
 
 export const periods = {
   day: 0,
@@ -93,7 +100,15 @@ export const periods = {
   year: 3,
 }
 
-export const reversePeriods = Object.keys(periods)
+export const reversePeriods = swapKeyValues(periods)
+
+export const signaturePeriods = {
+  week: 1,
+  month: 2,
+  year: 3,
+}
+
+export const reverseSignaturePeriods = swapKeyValues(signaturePeriods)
 
 /**
  * Get a period representing the last 30 days

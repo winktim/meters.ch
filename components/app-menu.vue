@@ -21,9 +21,10 @@ export default {
     return {
       basicElements: [
         { icon: 'person', label: 'menu.infos', href: '/infos' },
-        { icon: 'show_chart', label: 'menu.explore', href: '/explore' },
+        { icon: 'timeline', label: 'menu.explore', href: '/explore' },
+        { icon: 'track_changes', label: 'menu.signature', href: '/signature' },
         {
-          icon: 'track_changes',
+          icon: 'adjust',
           label: 'menu.objectives',
           href: '/objectives',
         },
