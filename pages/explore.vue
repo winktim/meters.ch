@@ -41,7 +41,7 @@
         "
       >
         <span
-          class="text-center font-medium"
+          class="text-center font-medium p-4"
           v-text="$t('pages.explore.form.no_resources')"
         ></span>
       </div>
