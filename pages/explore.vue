@@ -9,7 +9,7 @@
     <section
       class="relative bg-gray-100 rounded-md p-4 pt-2 md:p-6 md:pt-3 mb-48 mx-auto w-full lg:w-2/3 xl:w-3/5"
     >
-      <chart
+      <explore-chart
         :class="[
           'chart-height-explore',
           'transition-opacity-100',
@@ -20,7 +20,7 @@
         :offset="offset"
         :resources="resources"
         @currentData="setCurrentData"
-      ></chart>
+      ></explore-chart>
       <div
         :class="
           [
@@ -199,7 +199,7 @@ import {
 
 import AppHeader from '../components/app-header.vue'
 import SearchSelectMulti from '../components/search-select-multi'
-import Chart from '../components/chart'
+import ExploreChart from '../components/explore-chart'
 
 import BookmarkPopup from '../components/bookmark-popup'
 import DownloadPopup from '../components/download-popup'
@@ -226,7 +226,7 @@ export default {
     SearchSelectMulti,
     BookmarkPopup,
     DownloadPopup,
-    Chart,
+    ExploreChart,
   },
   data() {
     return {

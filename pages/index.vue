@@ -195,7 +195,7 @@
             <i class="material-icons text-lg">delete</i>
           </button>
         </div>
-        <chart
+        <explore-chart
           ref="charts"
           :class="chartClasses"
           :period="periodNumber(chart.period)"
@@ -203,7 +203,7 @@
           :offset="chart.offset"
           :resources="chart.resources"
           :legend="false"
-        ></chart>
+        ></explore-chart>
         <button
           class="mt-2 w-full sm:w-120 action bg-naito-green-200 text-gray-100 text-center"
           :disabled="editMode"
@@ -265,7 +265,7 @@
 import AppHeader from '../components/app-header.vue'
 import AppMenu from '../components/app-menu.vue'
 
-import Chart from '../components/chart'
+import ExploreChart from '../components/explore-chart'
 import {
   periods,
   agregations,
@@ -295,7 +295,7 @@ export default {
       ],
     }
   },
-  components: { AppHeader, AppMenu, Chart },
+  components: { AppHeader, AppMenu, ExploreChart },
   async mounted() {
     await Promise.all([
       this.$getResources(),
