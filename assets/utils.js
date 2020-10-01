@@ -316,6 +316,16 @@ export const datasetStyle = datasetColors.map(color => ({
   pointBackgroundColor: color,
 }))
 
+export const scatterDatasetStyle = {
+  backgroundColor: 'transparent',
+  borderColor: datasetColors[0],
+  borderWidth: 0,
+  pointRadius: 3,
+  pointHoverRadius: 6,
+  pointBorderColor: 'transparent',
+  pointBackgroundColor: datasetColors[0],
+}
+
 export const decimalDefaultFormat = {
   minimumFractionDigits: 0,
   maximumFractionDigits: 2,
@@ -772,4 +782,113 @@ export function waitForMutations(store, mutations) {
       }
     })
   })
+}
+
+/**
+ *
+ * @param {{x: any, y: number}[]} data the data to filter for noise on Y
+ * @param {number} noiseFilterRatio value between 0 and 1. 0 doesn't filter any noise. 1 filters all values that are not average
+ * @returns {{x: any, y: number}[]} two data points
+ */
+export function noiseFilter(data, noiseFilterRatio) {
+  const globalAverage =
+    data.reduce((carry, sum) => carry + sum.y, 0) / numValues
+  const globalMin = data.reduce(
+    (min, current) => (current.y < min ? current.y : min),
+    Infinity
+  )
+  const globalMax = data.reduce(
+    (max, current) => (current.y > max ? current.y : max),
+    -Infinity
+  )
+  const diffBelow = globalAverage - globalMin
+  const diffAbove = globalMax - globalAverage
+
+  // if noise filter is 1, everything below average is removed
+  // if noise filter is 0, nothing gets removed, because < and not <=
+  const belowNoiseFilter = globalAverage - diffBelow * (1 - noiseFilter)
+  const aboveNoiseFilter = globalAverage + diffAbove * (1 - noiseFilter)
+
+  console.log({ globalAverage, globalMin, globalMax, diffBelow, diffAbove })
+
+  const noiseFiltered = data.filter(data => {
+    if (data.y < globalAverage) {
+      if (data.y < belowNoiseFilter) {
+        return false
+      }
+    } else {
+      if (data.y > aboveNoiseFilter) {
+        return false
+      }
+    }
+
+    return true
+  })
+
+  console.log(
+    `filtered ${numValues - noiseFiltered.length}/${numValues} values`
+  )
+
+  return noiseFiltered
+}
+
+/**
+ * Get an average line of two points that goes through a set of scatter data
+ * @param {{x: number, y: number}[]} scatterData the scattered data
+ * @returns {[{x: number, y: number}, {x: number, y: number}]} two data points
+ */
+export function getScatterAverageLine(scatterData) {
+  const numValues = scatterData.length
+  const firstX = scatterData[0].x
+  const lastX = scatterData[numValues - 1].x
+  const difference = lastX - firstX
+
+  if (numValues === 0) {
+    return [
+      {
+        x: 0,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: 0,
+      },
+    ]
+  }
+
+  if (difference === 0) {
+    return [scatterData[0], scatterData[numValues - 1]]
+  }
+
+  let firstYDivider = 0
+  let lastYDivider = 0
+
+  const firstY =
+    noiseFiltered
+      .map(point => {
+        const multiplier = (lastX - point.x) / difference
+        firstYDivider += multiplier
+        return point.y * multiplier
+      })
+      .reduce((carry, sum) => sum + carry, 0) / firstYDivider
+
+  const lastY =
+    noiseFiltered
+      .map(point => {
+        const multiplier = (firstX - point.x) / -difference
+        lastYDivider += multiplier
+        return point.y * multiplier
+      })
+      .reduce((carry, sum) => sum + carry, 0) / lastYDivider
+
+  return [
+    {
+      x: firstX,
+      y: +firstY.toFixed(2),
+    },
+    {
+      x: lastX,
+      y: +lastY.toFixed(2),
+    },
+  ]
 }
