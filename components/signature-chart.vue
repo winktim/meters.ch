@@ -20,16 +20,17 @@ import {
   datasetStyle,
   decimalDefaultFormat,
   agregateData,
-  reverseAgregations,
   formatResource,
   capitalize,
   reversePeriods,
   chartDefaults,
-  fixMissingData,
-  resourceTypesToAxes,
   toClosestSuffixe,
   getTooltipDateFormat,
   waitForMutations,
+  agregations,
+  signaturePeriods,
+  scatterDatasetStyle,
+  getScatterAverageLine,
 } from '../assets/utils'
 
 import {
@@ -142,13 +143,11 @@ export default {
     async updateRawData(ignoreCache) {
       const now = DateTime.local()
       const fromTo = getPeriod(now, this.period, this.offset)
-      /*
       const fromToSumResource = {
         from: fromTo.from,
         // adding a millisecond includes the value for the next round hour
         to: fromTo.to.plus({ millisecond: 1 }),
       }
-      */
 
       const newDatasets = []
 
@@ -171,33 +170,99 @@ export default {
       // get heater readings
       const heaterReadings = await this.$getReadings(
         this.heaterId,
-        fromTo,
+        fromToSumResource,
         ignoreCache
       )
 
-      console.log({ meteoReadings, temperatureReadings, heaterReadings })
-
-      // TODO: agregate interior & exterior temps
-      // compute difference
-      // get min & max for the X values of the second dataset
-
-      // first dataset: isolated points based on averages of smaller portions than "period"
+      // agregate temperatures based on signature period
       // weekly signature: daily averages
       // monthly signature: daily averages
       // yearly signature: weekly averages
+      const agregation =
+        this.period === signaturePeriods['week'] ||
+        this.period === signaturePeriods['month']
+          ? agregations['day']
+          : agregations['week']
 
-      const dataPoint = {
-        x: 'DiffBetweenInteriorAndExteriorTemp',
-        y: 'consumptionAtThatTemp',
-      }
+      const agregatedMeteoReadings = agregateData(
+        meteoReadings.map(readingToXY),
+        agregation,
+        'avg'
+      )
+
+      const agregatedTemperatureReadings = agregateData(
+        temperatureReadings.map(readingToXY),
+        agregation,
+        'avg'
+      )
+
+      const agregatedHeaterReadings = agregateData(
+        heaterReadings.map(readingToXY),
+        agregation,
+        'sum'
+      )
+
+      // TODO: check there are no missing values in the agregated readings
+      // compute difference. round at two decimals
+      const temperatureDiff = Array.from(
+        new Array(agregatedMeteoReadings.length),
+        (_, i) => ({
+          x: agregatedTemperatureReadings[i].x,
+          y: +(
+            agregatedTemperatureReadings[i].y - agregatedMeteoReadings[i].y
+          ).toFixed(2),
+        })
+      )
+
+      /*
+      // get min & max for the X values of the second dataset
+      // TODO: remove because useless
+      const minDiff = temperatureDiff.reduce(
+        (min, current) => (current.y < min.y ? current : min),
+        { y: Infinity, x: null }
+      )
+      const maxDiff = temperatureDiff.reduce(
+        (max, current) => (current.y > max.y ? current : max),
+        { y: -Infinity, x: null }
+      )
+      */
+
+      console.log({
+        agregatedMeteoReadings,
+        agregatedTemperatureReadings,
+        agregatedHeaterReadings,
+        temperatureDiff,
+      })
+
+      // first dataset: isolated points based on averages of smaller portions than "period"
+      // sorted by average temp diff smallest to biggest
+      const consumptionByAverageTemp = Array.from(
+        new Array(agregatedHeaterReadings.length),
+        (_, i) => ({
+          x: temperatureDiff[i].y,
+          y: agregatedHeaterReadings[i].y,
+        })
+      ).sort((a, b) => a.x - b.x)
+
+      newDatasets.push({
+        label: 'Consumption by average temperature',
+        type: 'scatter',
+        data: consumptionByAverageTemp,
+        // TODO: axes ?
+        yAxisID: 0,
+        // TODO: fixed dataset style
+        ...scatterDatasetStyle,
+      })
+
+      // filter out 1% noise data to draw the line in the "real" expected center
+      const average = getScatterAverageLine(consumptionByAverageTemp, 0.01)
+      console.log({ consumptionByAverageTemp, average })
 
       // second dataset: average consumption line with 2 points
+      // TODO: maybe flip chart around on x somehow (smallest values first)
       newDatasets.push({
         label: 'Ideal consumption line',
-        data: [
-          { x: 1, y: 1 },
-          { x: 0, y: 0 },
-        ],
+        data: average,
         // TODO: axes ?
         yAxisID: 0,
         // TODO: fixed dataset style
