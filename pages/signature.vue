@@ -270,7 +270,7 @@ export default {
       // default to showing previous period
       offset: 1,
       filterNoise: 0,
-      highlightIssues: 0.8,
+      highlightIssues: 0.2,
 
       showBookmarkPopup: false,
       showDownloadPopup: false,
