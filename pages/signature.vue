@@ -20,6 +20,8 @@
         :heater-id="heaterId"
         :period="period"
         :offset="offset"
+        :filter-noise="filterNoise"
+        :highlight-issues="highlightIssues"
         @currentData="setCurrentData"
       ></signature-chart>
 
@@ -93,7 +95,7 @@
       <div :class="areSettingsCollapsed ? 'hidden' : 'block'">
         <!-- site select list -->
         <search-select
-          name="site"
+          name="site-input"
           class="mb-2"
           :placeholder="$t('pages.signature.form.site')"
           :options="formattedSites"
@@ -104,7 +106,7 @@
 
         <!-- interior temp resource select list -->
         <search-select
-          name="temperature"
+          name="temperature-input"
           class="mb-2"
           :placeholder="$t('pages.signature.form.temperature')"
           :options="formattedTemperatures"
@@ -115,7 +117,7 @@
 
         <!-- heater resource select list -->
         <search-select
-          name="heater"
+          name="heater-input"
           class="mb-2"
           :placeholder="$t('pages.signature.form.heater')"
           :options="formattedHeaters"
@@ -136,6 +138,28 @@
             ></option>
           </select>
         </div>
+
+        <!-- noise filter range -->
+        <input
+          type="range"
+          name="filter-noise-input"
+          id="filter-noise-input"
+          min="0"
+          max="1"
+          step="0.05"
+          v-model.number="filterNoise"
+        />
+
+        <!-- highlight issues range -->
+        <input
+          type="range"
+          name="highlight-issues-input"
+          id="highlight-issues-input"
+          min="0"
+          max="1"
+          step="0.05"
+          v-model.number="highlightIssues"
+        />
 
         <!-- offset -->
         <div class="flex justify-end items-center">
@@ -243,7 +267,10 @@ export default {
       // start at one because there is no day period for signature
       // default: monthly
       period: 2,
-      offset: 0,
+      // default to showing previous period
+      offset: 1,
+      filterNoise: 0,
+      highlightIssues: 0.8,
 
       showBookmarkPopup: false,
       showDownloadPopup: false,
@@ -297,6 +324,8 @@ export default {
           heat: this.heaterId === -1 ? undefined : String(this.heaterId),
           period: reverseSignaturePeriods[this.period],
           offset: String(this.offset),
+          filter: String(this.filterNoise),
+          highlight: String(this.highlightIssues),
         },
       }
 
@@ -373,6 +402,20 @@ export default {
       if (!isNaN(offset) && offset >= 0) {
         // back 1 year in weeks
         this.offset = Math.min(offset, 53)
+      }
+
+      const filterNoise = parseFloat(query.filter)
+      if (!isNaN(filterNoise) && filterNoise >= 0 && filterNoise <= 1) {
+        this.filterNoise = filterNoise
+      }
+
+      const highlightIssues = parseFloat(query.highlight)
+      if (
+        !isNaN(highlightIssues) &&
+        highlightIssues >= 0 &&
+        highlightIssues <= 1
+      ) {
+        this.highlightIssues = highlightIssues
       }
     },
     setCurrentData({ datasets, hasData }) {
@@ -461,6 +504,12 @@ export default {
     offset() {
       this.setQuery()
     },
+    filterNoise() {
+      this.setQuery()
+    },
+    highlightIssues() {
+      this.setQuery()
+    },
     $route(to) {
       if (!to.query.hasOwnProperty('popup')) {
         if (this.showBookmarkPopup) {
@@ -518,7 +567,7 @@ export default {
         .map(resource => {
           return {
             id: resource.id,
-            value: formatResource(this.$i18n, resource, null, null),
+            value: resource.description,
           }
         })
     },
