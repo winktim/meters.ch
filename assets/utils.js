@@ -316,15 +316,15 @@ export const datasetStyle = datasetColors.map(color => ({
   pointBackgroundColor: color,
 }))
 
-export const scatterDatasetStyle = {
+export const scatterDatasetStyle = datasetColors.map(color => ({
   backgroundColor: 'transparent',
-  borderColor: datasetColors[0],
+  borderColor: color,
   borderWidth: 0,
   pointRadius: 3,
   pointHoverRadius: 6,
   pointBorderColor: 'transparent',
-  pointBackgroundColor: datasetColors[0],
-}
+  pointBackgroundColor: color,
+}))
 
 export const decimalDefaultFormat = {
   minimumFractionDigits: 0,
@@ -785,110 +785,93 @@ export function waitForMutations(store, mutations) {
 }
 
 /**
- *
- * @param {{x: any, y: number}[]} data the data to filter for noise on Y
- * @param {number} noiseFilterRatio value between 0 and 1. 0 doesn't filter any noise. 1 filters all values that are not average
- * @returns {{x: any, y: number}[]} two data points
+ * Separete noisy data from clean data
+ * @param {{x: number, y: number}[]} data the data to filter for noise on Y
+ * @param {number} noiseRatio value between 0 and 1. 0 doesn't filter any noise. 1 filters all values that are not average
+ * @returns {{cleanData: {x: number, y: number}[], noisyData: {x: number, y: number}[]}} the clean data and the noisy data
  */
-export function noiseFilter(data, noiseFilterRatio) {
-  const globalAverage =
-    data.reduce((carry, sum) => carry + sum.y, 0) / numValues
-  const globalMin = data.reduce(
-    (min, current) => (current.y < min ? current.y : min),
-    Infinity
-  )
-  const globalMax = data.reduce(
-    (max, current) => (current.y > max ? current.y : max),
-    -Infinity
-  )
-  const diffBelow = globalAverage - globalMin
-  const diffAbove = globalMax - globalAverage
+export function noiseFilter(data, noiseRatio) {
+  const numValues = data.length
 
-  // if noise filter is 1, everything below average is removed
-  // if noise filter is 0, nothing gets removed, because < and not <=
-  const belowNoiseFilter = globalAverage - diffBelow * (1 - noiseFilter)
-  const aboveNoiseFilter = globalAverage + diffAbove * (1 - noiseFilter)
-
-  console.log({ globalAverage, globalMin, globalMax, diffBelow, diffAbove })
-
-  const noiseFiltered = data.filter(data => {
-    if (data.y < globalAverage) {
-      if (data.y < belowNoiseFilter) {
-        return false
-      }
-    } else {
-      if (data.y > aboveNoiseFilter) {
-        return false
-      }
+  // can't filter noise if there are 2 values or less
+  if (numValues <= 2) {
+    return {
+      cleanData: data,
+      noisyData: [],
     }
+  }
 
-    return true
+  const { slope, intercept } = getScatterAverageLine(data)
+
+  // calculte squared error for every point
+  // find the biggest and scale the noiseRatio according to it
+  // remove data that falls in the noiseRatio
+
+  const withError = data.map(point => {
+    return {
+      point,
+      squaredError: Math.pow(slope * point.x + intercept - point.y, 2),
+    }
   })
 
-  console.log(
-    `filtered ${numValues - noiseFiltered.length}/${numValues} values`
+  const maxError = withError.reduce(
+    (max, current) => (current.squaredError > max ? current.squaredError : max),
+    0
   )
+  const weightedMaxError = maxError * (1 - noiseRatio)
 
-  return noiseFiltered
+  const cleanData = []
+  const noisyData = []
+
+  for (const { point, squaredError } of withError) {
+    if (squaredError > weightedMaxError) {
+      noisyData.push(point)
+    } else {
+      cleanData.push(point)
+    }
+  }
+
+  return {
+    cleanData,
+    noisyData,
+  }
 }
 
 /**
  * Get an average line of two points that goes through a set of scatter data
  * @param {{x: number, y: number}[]} scatterData the scattered data
- * @returns {[{x: number, y: number}, {x: number, y: number}]} two data points
+ * @returns {{slope: number, intercept: number}} the slope and intercept of the line
  */
 export function getScatterAverageLine(scatterData) {
   const numValues = scatterData.length
-  const firstX = scatterData[0].x
-  const lastX = scatterData[numValues - 1].x
-  const difference = lastX - firstX
 
   if (numValues === 0) {
-    return [
-      {
-        x: 0,
-        y: 0,
-      },
-      {
-        x: 0,
-        y: 0,
-      },
-    ]
+    return {
+      slope: 0,
+      intercept: 0,
+    }
   }
 
-  if (difference === 0) {
-    return [scatterData[0], scatterData[numValues - 1]]
+  // https://www.npmjs.com/package/lobf
+  let sumX = 0
+  let sumY = 0
+  let sumXSquared = 0
+  let sumXY = 0
+
+  scatterData.forEach(({ x, y }) => {
+    sumX += x
+    sumY += y
+    sumXSquared += Math.pow(x, 2)
+    sumXY += x * y
+  })
+
+  const slope =
+    (numValues * sumXY - sumX * sumY) /
+    (numValues * sumXSquared - Math.pow(sumX, 2))
+  const intercept = (sumY - slope * sumX) / numValues
+
+  return {
+    slope,
+    intercept,
   }
-
-  let firstYDivider = 0
-  let lastYDivider = 0
-
-  const firstY =
-    noiseFiltered
-      .map(point => {
-        const multiplier = (lastX - point.x) / difference
-        firstYDivider += multiplier
-        return point.y * multiplier
-      })
-      .reduce((carry, sum) => sum + carry, 0) / firstYDivider
-
-  const lastY =
-    noiseFiltered
-      .map(point => {
-        const multiplier = (firstX - point.x) / -difference
-        lastYDivider += multiplier
-        return point.y * multiplier
-      })
-      .reduce((carry, sum) => sum + carry, 0) / lastYDivider
-
-  return [
-    {
-      x: firstX,
-      y: +firstY.toFixed(2),
-    },
-    {
-      x: lastX,
-      y: +lastY.toFixed(2),
-    },
-  ]
 }
