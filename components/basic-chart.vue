@@ -86,6 +86,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    interactionMode: {
+      type: String,
+      default: 'index',
+    },
     waiting: {
       type: Boolean,
       default: false,
@@ -172,12 +176,12 @@ export default {
             yAxes: this.yAxes,
           },
           hover: {
-            mode: 'index',
+            mode: this.interactionMode,
             intersect: false,
             animationDuration: 0,
           },
           tooltips: {
-            mode: 'index',
+            mode: this.interactionMode,
             intersect: false,
 
             xPadding: 12,
