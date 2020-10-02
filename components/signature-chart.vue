@@ -6,6 +6,7 @@
     :tooltip-title-callback="tooltipTitleCallback"
     :tooltip-label-callback="tooltipLabelCallback"
     :legend="true"
+    interaction-mode="nearest"
     :waiting="waiting"
     :error="!hasData"
     :error-message="$t('global.no_data', { period: periodOffsetString })"
@@ -31,6 +32,7 @@ import {
   signaturePeriods,
   scatterDatasetStyle,
   getScatterAverageLine,
+  noiseFilter,
 } from '../assets/utils'
 
 import {
@@ -64,17 +66,29 @@ export default {
       type: Number,
       required: true,
     },
+    filterNoise: {
+      type: Number,
+      required: true,
+    },
+    highlightIssues: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
+      // auto calculated agregation based on period
+      agregation: 0,
       hasData: true,
       waiting: true,
       datasets: [],
+      consumptionByAverageTemp: null,
       xAxes: [
         {
           type: 'linear',
           gridLines: false,
           ticks: {
+            precision: 2,
             fontColor: chartDefaults.fontColor,
             fontSize: chartDefaults.fontSize,
             padding: 18,
@@ -98,44 +112,34 @@ export default {
       ],
 
       tooltipTitleCallback: (tooltipItems, data) => {
-        // TODO: title callback
-        /*
         const format = getTooltipDateFormat(this.agregation, this.period)
+        const date =
+          data.datasets[tooltipItems[0].datasetIndex].data[
+            tooltipItems[0].index
+          ].z
         return capitalize(
-          DateTime.fromISO(tooltipItems[0].label)
+          DateTime.fromISO(date)
             .setLocale(this.$dateLocale())
             .toFormat(format)
         )
-        */
       },
 
       tooltipLabelCallback: (tooltipItem, data) => {
-        // TODO: label callback
-        /*
-        const label =
-          data.datasets[tooltipItem.datasetIndex].resource.description
-        const symbol =
-          data.datasets[tooltipItem.datasetIndex].resourceType.symbol
+        const temperature = tooltipItem.xLabel.toLocaleString(
+          this.$numberLocale(),
+          decimalDefaultFormat
+        )
+        // TODO: store and retrieve symbol
+        const symbol = 'm³' // data.datasets[tooltipItem.datasetIndex].resourceType.symbol
 
-        const rawValue = parseFloat(tooltipItem.value)
-
-        if (symbol !== '°C') {
-          const result = toClosestSuffixe(rawValue)
-          // add spaces before to make room between the color box and the text
-          return `  ${label}: ${result.number.toLocaleString(
-            this.$numberLocale(),
-            decimalDefaultFormat
-          )} ${result.unit + symbol}`
-        }
-
-        const value = rawValue.toLocaleString(
+        const result = toClosestSuffixe(tooltipItem.yLabel)
+        const heater = result.number.toLocaleString(
           this.$numberLocale(),
           decimalDefaultFormat
         )
 
         // add spaces before to make room between the color box and the text
-        return `  ${label}: ${value} ${symbol}`
-        */
+        return `  ${heater} ${result.unit + symbol}, ${temperature} °C`
       },
     }
   },
@@ -148,8 +152,6 @@ export default {
         // adding a millisecond includes the value for the next round hour
         to: fromTo.to.plus({ millisecond: 1 }),
       }
-
-      const newDatasets = []
 
       // get site meteo readings
       const site = this.$store.getters.site({ site_id: this.siteId })
@@ -174,6 +176,22 @@ export default {
         ignoreCache
       )
 
+      if (
+        meteoReadings.length === 0 ||
+        temperatureReadings.length === 0 ||
+        heaterReadings.length === 0
+      ) {
+        this.datasets = []
+        this.hasData = false
+
+        this.$emit('currentData', {
+          datasets: [],
+          hasData: this.hasData,
+        })
+
+        return
+      }
+
       // agregate temperatures based on signature period
       // weekly signature: daily averages
       // monthly signature: daily averages
@@ -183,6 +201,9 @@ export default {
         this.period === signaturePeriods['month']
           ? agregations['day']
           : agregations['week']
+
+      // store agregation to compute dataset labels
+      this.agregation = agregation
 
       const agregatedMeteoReadings = agregateData(
         meteoReadings.map(readingToXY),
@@ -202,6 +223,23 @@ export default {
         'sum'
       )
 
+      // we need at least two values of each in agregated form to make the line
+      if (
+        agregatedMeteoReadings.length <= 2 ||
+        agregatedTemperatureReadings.length <= 2 ||
+        agregatedHeaterReadings.length <= 2
+      ) {
+        this.datasets = []
+        this.hasData = false
+
+        this.$emit('currentData', {
+          datasets: [],
+          hasData: this.hasData,
+        })
+
+        return
+      }
+
       // TODO: check there are no missing values in the agregated readings
       // compute difference. round at two decimals
       const temperatureDiff = Array.from(
@@ -214,55 +252,86 @@ export default {
         })
       )
 
-      /*
-      // get min & max for the X values of the second dataset
-      // TODO: remove because useless
-      const minDiff = temperatureDiff.reduce(
-        (min, current) => (current.y < min.y ? current : min),
-        { y: Infinity, x: null }
-      )
-      const maxDiff = temperatureDiff.reduce(
-        (max, current) => (current.y > max.y ? current : max),
-        { y: -Infinity, x: null }
-      )
-      */
-
-      console.log({
-        agregatedMeteoReadings,
-        agregatedTemperatureReadings,
-        agregatedHeaterReadings,
-        temperatureDiff,
-      })
-
       // first dataset: isolated points based on averages of smaller portions than "period"
       // sorted by average temp diff smallest to biggest
-      const consumptionByAverageTemp = Array.from(
+      this.consumptionByAverageTemp = Array.from(
         new Array(agregatedHeaterReadings.length),
         (_, i) => ({
           x: temperatureDiff[i].y,
           y: agregatedHeaterReadings[i].y,
+          // keep the timestamp to include it in the tooltip
+          z: agregatedHeaterReadings[i].x,
         })
       ).sort((a, b) => a.x - b.x)
 
+      await this.updateUserFilter()
+    },
+    async updateUserFilter() {
+      if (this.consumptionByAverageTemp === null) {
+        return
+      }
+
+      const newDatasets = []
+
+      // the user has a control to hide noise and get "closer" to the chart
+      const noiseFiltered = noiseFilter(
+        this.consumptionByAverageTemp,
+        this.filterNoise
+      )
+
+      // separete noisy data from clean one to show the user where problems occure
+      // the user also has control to how much data is highlighted
+      const issuesHighlighted = noiseFilter(
+        noiseFiltered.cleanData,
+        this.highlightIssues
+      )
+
+      // use clean data to draw the line
+      const { slope, intercept } = getScatterAverageLine(
+        issuesHighlighted.cleanData
+      )
+
+      // TODO: translate label
       newDatasets.push({
-        label: 'Consumption by average temperature',
+        label: 'Consumption by average temperature, clean',
         type: 'scatter',
-        data: consumptionByAverageTemp,
+        data: issuesHighlighted.cleanData,
         // TODO: axes ?
         yAxisID: 0,
         // TODO: fixed dataset style
-        ...scatterDatasetStyle,
+        ...scatterDatasetStyle[0],
       })
 
-      // filter out 1% noise data to draw the line in the "real" expected center
-      const average = getScatterAverageLine(consumptionByAverageTemp, 0.01)
-      console.log({ consumptionByAverageTemp, average })
+      // TODO: translate label
+      newDatasets.push({
+        label: 'Consumption by average temperature, noisy',
+        type: 'scatter',
+        data: issuesHighlighted.noisyData,
+        // TODO: axes ?
+        yAxisID: 0,
+        // TODO: fixed dataset style
+        ...scatterDatasetStyle[2],
+      })
 
       // second dataset: average consumption line with 2 points
       // TODO: maybe flip chart around on x somehow (smallest values first)
+      const firstX = this.consumptionByAverageTemp[0].x
+      const lastX = this.consumptionByAverageTemp[
+        this.consumptionByAverageTemp.length - 1
+      ].x
+      // TODO: translate label
       newDatasets.push({
         label: 'Ideal consumption line',
-        data: average,
+        data: [
+          {
+            x: firstX,
+            y: slope * firstX + intercept,
+          },
+          {
+            x: lastX,
+            y: slope * lastX + intercept,
+          },
+        ],
         // TODO: axes ?
         yAxisID: 0,
         // TODO: fixed dataset style
@@ -271,11 +340,7 @@ export default {
 
       // updates the underlying chart
       this.datasets = newDatasets
-
-      // TODO: check if there is enough data to compute signature before here
-      this.hasData =
-        this.datasets.length > 0 &&
-        this.datasets.some(dataset => dataset.data.length > 0)
+      this.hasData = true
 
       this.$emit('currentData', {
         datasets: newDatasets,
@@ -335,7 +400,11 @@ export default {
     },
     forceUpdate() {
       return this.waitForData().then(() => {
-        return this.updateRawData(true).catch(console.error)
+        this.waiting = true
+        return this.updateRawData(true).then(
+          () => (this.waiting = false),
+          console.error
+        )
       })
     },
   },
@@ -350,7 +419,11 @@ export default {
       }
 
       this.waitForData().then(() => {
-        this.updateRawData().catch(console.error)
+        this.waiting = true
+        return this.updateRawData().then(
+          () => (this.waiting = false),
+          console.error
+        )
       })
     },
     temperatureId(to, from) {
@@ -363,7 +436,11 @@ export default {
       }
 
       this.waitForData().then(() => {
-        this.updateRawData().catch(console.error)
+        this.waiting = true
+        return this.updateRawData().then(
+          () => (this.waiting = false),
+          console.error
+        )
       })
     },
     heaterId(to, from) {
@@ -376,7 +453,11 @@ export default {
       }
 
       this.waitForData().then(() => {
-        this.updateRawData().catch(console.error)
+        this.waiting = true
+        return this.updateRawData().then(
+          () => (this.waiting = false),
+          console.error
+        )
       })
     },
     period(to, from) {
@@ -389,7 +470,11 @@ export default {
       }
 
       this.waitForData().then(() => {
-        this.updateRawData().catch(console.error)
+        this.waiting = true
+        return this.updateRawData().then(
+          () => (this.waiting = false),
+          console.error
+        )
       })
     },
     offset(to, from) {
@@ -402,8 +487,36 @@ export default {
       }
 
       this.waitForData().then(() => {
-        this.updateRawData().catch(console.error)
+        this.waiting = true
+        return this.updateRawData().then(
+          () => (this.waiting = false),
+          console.error
+        )
       })
+    },
+    filterNoise(to, from) {
+      if (to === from) {
+        return
+      }
+
+      if (!this.isQueryValid) {
+        return
+      }
+
+      this.waiting = true
+      this.updateUserFilter().then(() => (this.waiting = false))
+    },
+    highlightIssues(to, from) {
+      if (to === from) {
+        return
+      }
+
+      if (!this.isQueryValid) {
+        return
+      }
+
+      this.waiting = true
+      this.updateUserFilter().then(() => (this.waiting = false))
     },
     locale(to, from) {
       if (to === from) {
@@ -415,7 +528,11 @@ export default {
   mounted() {
     if (this.isQueryValid) {
       this.waitForData().then(() => {
-        this.updateRawData().catch(console.error)
+        this.waiting = true
+        return this.updateRawData().then(
+          () => (this.waiting = false),
+          console.error
+        )
       })
     }
 
