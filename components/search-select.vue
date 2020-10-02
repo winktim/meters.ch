@@ -120,6 +120,14 @@ export default {
         return
       }
 
+      // if we have an option selected and the new options are of same length
+      // keep the current option selected and simply update the displayed search string
+      if (to.length === from.length && this.currentValue !== -1) {
+        this.searchString = this.getOptionById(this.currentValue).value
+        this.supposedSearchString = this.searchString
+        return
+      }
+
       this.searchString = ''
       this.supposedSearchString = this.searchString
       this.currentValue = -1
