@@ -246,8 +246,8 @@ export default {
 
     // set data, but it might still be empty
     this.chart.data.datasets = JSON.parse(JSON.stringify(this.datasets))
-    this.chart.options.scales.xAxes = JSON.parse(JSON.stringify(this.xAxes))
-    this.chart.options.scales.yAxes = JSON.parse(JSON.stringify(this.yAxes))
+    this.chart.options.scales.xAxes = this.xAxes
+    this.chart.options.scales.yAxes = this.yAxes
   },
   beforeDestroy() {
     if (this.chart) {
