@@ -38,6 +38,7 @@ import {
   getScatterAverageLine,
   noiseFilter,
   symbolToAxis,
+  fixMissingData,
 } from '../assets/utils'
 
 import {
@@ -240,11 +241,15 @@ export default {
         'sum'
       )
 
+      const meteoReadingsLength = agregatedMeteoReadings.length
+      const temperatureReadingsLength = agregatedTemperatureReadings.length
+      const heaterReadingsLength = agregatedHeaterReadings.length
+
       // we need at least two values of each in agregated form to make the line
       if (
-        agregatedMeteoReadings.length <= 2 ||
-        agregatedTemperatureReadings.length <= 2 ||
-        agregatedHeaterReadings.length <= 2
+        meteoReadingsLength <= 2 ||
+        temperatureReadingsLength <= 2 ||
+        heaterReadingsLength <= 2
       ) {
         this.datasets = []
         this.hasData = false
@@ -257,29 +262,56 @@ export default {
         return
       }
 
-      // TODO: check there are no missing values in the agregated readings
+      const allData = [
+        agregatedMeteoReadings,
+        agregatedTemperatureReadings,
+        agregatedHeaterReadings,
+      ]
+
+      // if they are not all of equal length
+      // fix missing data points
+      if (
+        meteoReadingsLength !== temperatureReadingsLength ||
+        temperatureReadingsLength !== heaterReadingsLength
+      ) {
+        const biggestData = allData.reduce((biggest, data) =>
+          data.length > biggest.length ? data : biggest
+        )
+
+        allData.forEach((data, i) => {
+          // ignore complete data
+          if (data.length === biggestData.length) {
+            return
+          }
+
+          allData[i] = fixMissingData(biggestData, data)
+        })
+      }
+
       // compute difference. round at two decimals
       const temperatureDiff = Array.from(
-        new Array(agregatedMeteoReadings.length),
+        new Array(allData[0].length),
         (_, i) => ({
-          x: agregatedTemperatureReadings[i].x,
-          y: +(
-            agregatedTemperatureReadings[i].y - agregatedMeteoReadings[i].y
-          ).toFixed(2),
+          x: allData[1][i].x,
+          y: +(allData[1][i].y - allData[0][i].y).toFixed(2),
         })
       )
 
       // first dataset: isolated points based on averages of smaller portions than "period"
       // sorted by average temp diff smallest to biggest
       this.consumptionByAverageTemp = Array.from(
-        new Array(agregatedHeaterReadings.length),
+        new Array(allData[2].length),
         (_, i) => ({
           x: temperatureDiff[i].y,
-          y: agregatedHeaterReadings[i].y,
+          y: allData[2][i].y,
           // keep the timestamp to include it in the tooltip
-          z: agregatedHeaterReadings[i].x,
+          z: allData[2][i].x,
         })
-      ).sort((a, b) => a.x - b.x)
+      )
+        // if we were missing any data along the way, x will be NaN
+        // remove it here because it is useless on the chart
+        .filter(point => !isNaN(point.x))
+        .sort((a, b) => a.x - b.x)
 
       await this.updateUserFilter()
     },
