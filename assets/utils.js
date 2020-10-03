@@ -316,15 +316,36 @@ export const datasetStyle = datasetColors.map(color => ({
   pointBackgroundColor: color,
 }))
 
-export const scatterDatasetStyle = datasetColors.map(color => ({
+export const cleanScatterDatasetStyle = {
   backgroundColor: 'transparent',
-  borderColor: color,
+  borderColor: datasetColors[0],
   borderWidth: 0,
   pointRadius: 3,
   pointHoverRadius: 6,
   pointBorderColor: 'transparent',
-  pointBackgroundColor: color,
-}))
+  pointBackgroundColor: datasetColors[0],
+}
+
+// orange-600
+export const noisyScatterDatasetStyle = {
+  backgroundColor: 'transparent',
+  borderColor: '#DD6B20',
+  borderWidth: 0,
+  pointRadius: 3,
+  pointHoverRadius: 6,
+  pointBorderColor: 'transparent',
+  pointBackgroundColor: '#DD6B20',
+}
+
+export const idealDatasetStyle = {
+  backgroundColor: 'transparent',
+  borderColor: datasetColors[1],
+  borderWidth: 3,
+  pointRadius: 0,
+  pointHoverRadius: 0,
+  pointBorderColor: 'transparent',
+  pointBackgroundColor: datasetColors[1],
+}
 
 export const decimalDefaultFormat = {
   minimumFractionDigits: 0,

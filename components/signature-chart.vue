@@ -32,7 +32,9 @@ import {
   waitForMutations,
   agregations,
   signaturePeriods,
-  scatterDatasetStyle,
+  cleanScatterDatasetStyle,
+  noisyScatterDatasetStyle,
+  idealDatasetStyle,
   getScatterAverageLine,
   noiseFilter,
   symbolToAxis,
@@ -320,8 +322,7 @@ export default {
         data: issuesHighlighted.cleanData,
         yAxisID: 0,
         hidden: previousHiddenStatus[0],
-        // TODO: fixed dataset style
-        ...scatterDatasetStyle[0],
+        ...cleanScatterDatasetStyle,
       })
 
       newDatasets.push({
@@ -330,8 +331,7 @@ export default {
         data: issuesHighlighted.noisyData,
         yAxisID: 0,
         hidden: previousHiddenStatus[1],
-        // TODO: fixed dataset style
-        ...scatterDatasetStyle[2],
+        ...noisyScatterDatasetStyle,
       })
 
       // second dataset: average consumption line with 2 points
@@ -354,8 +354,7 @@ export default {
         ],
         yAxisID: 0,
         hidden: previousHiddenStatus[2],
-        // TODO: fixed dataset style, don't show circle on hover
-        ...datasetStyle[1],
+        ...idealDatasetStyle,
       })
 
       // updates the underlying chart
