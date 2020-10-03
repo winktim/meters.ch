@@ -47,7 +47,6 @@ import {
   reversePeriods,
   chartDefaults,
   fixMissingData,
-  resourceTypesToAxes,
   toClosestSuffixe,
   getTooltipDateFormat,
   waitForMutations,
