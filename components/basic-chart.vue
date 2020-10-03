@@ -211,10 +211,8 @@ export default {
     },
     xAxes: {
       handler(to, from) {
-        const toXAxes = JSON.stringify(to)
-
-        // give it a deep copy because Chartjs likes to modify things
-        this.chart.options.scales.xAxes = JSON.parse(toXAxes)
+        // can't give a deep copy because it might contain functions
+        this.chart.options.scales.xAxes = to
 
         this.chart.update()
       },
@@ -222,10 +220,8 @@ export default {
     },
     yAxes: {
       handler(to, from) {
-        const toYAxes = JSON.stringify(to)
-
-        // give it a deep copy because Chartjs likes to modify things
-        this.chart.options.scales.yAxes = JSON.parse(toYAxes)
+        // can't give a deep copy because it might contain functions
+        this.chart.options.scales.yAxes = to
 
         this.chart.update()
       },
