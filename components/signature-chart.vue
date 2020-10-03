@@ -5,6 +5,7 @@
     :y-axes="yAxes"
     :tooltip-title-callback="tooltipTitleCallback"
     :tooltip-label-callback="tooltipLabelCallback"
+    :tooltips-filter="tooltipsFilter"
     :legend="true"
     interaction-mode="nearest"
     :waiting="waiting"
@@ -33,6 +34,7 @@ import {
   scatterDatasetStyle,
   getScatterAverageLine,
   noiseFilter,
+  symbolToAxis,
 } from '../assets/utils'
 
 import {
@@ -83,6 +85,7 @@ export default {
       waiting: true,
       datasets: [],
       consumptionByAverageTemp: null,
+      symbol: '',
       xAxes: [
         {
           type: 'linear',
@@ -112,6 +115,10 @@ export default {
       ],
 
       tooltipTitleCallback: (tooltipItems, data) => {
+        if (tooltipItems.length === 0) {
+          return
+        }
+
         const format = getTooltipDateFormat(this.agregation, this.period)
         const date =
           data.datasets[tooltipItems[0].datasetIndex].data[
@@ -129,8 +136,6 @@ export default {
           this.$numberLocale(),
           decimalDefaultFormat
         )
-        // TODO: store and retrieve symbol
-        const symbol = 'm³' // data.datasets[tooltipItem.datasetIndex].resourceType.symbol
 
         const result = toClosestSuffixe(tooltipItem.yLabel)
         const heater = result.number.toLocaleString(
@@ -139,7 +144,11 @@ export default {
         )
 
         // add spaces before to make room between the color box and the text
-        return `  ${heater} ${result.unit + symbol}, ${temperature} °C`
+        return `  ${heater} ${result.unit + this.symbol}, ${temperature} °C`
+      },
+
+      tooltipsFilter: tooltipItem => {
+        return tooltipItem.datasetIndex !== 2
       },
     }
   },
@@ -334,7 +343,7 @@ export default {
         ],
         // TODO: axes ?
         yAxisID: 0,
-        // TODO: fixed dataset style
+        // TODO: fixed dataset style, don't show circle on hover
         ...datasetStyle[1],
       })
 
@@ -376,6 +385,20 @@ export default {
         this.$set(axes.ticks, 'display', true)
       })
     },
+    updateAxes() {
+      if (!this.$store.getters.hasResourceTypes) {
+        return
+      }
+
+      const resourceType = this.$store.getters.resourceType(
+        this.$store.state.dataById.resources[this.heaterId]
+      )
+
+      // keep symbol for tooltip
+      this.symbol = resourceType.symbol
+      // updates the underlying chart
+      this.yAxes = [symbolToAxis(resourceType.symbol, 'left', true, true)]
+    },
     waitForData() {
       const mutationsToWaitFor = []
 
@@ -385,6 +408,10 @@ export default {
 
       if (!this.$store.getters.hasSites) {
         mutationsToWaitFor.push(SET_SITES)
+      }
+
+      if (!this.$store.getters.hasResourceTypes) {
+        mutationsToWaitFor.push(SET_RESOURCE_TYPES)
       }
 
       if (mutationsToWaitFor.length === 0) {
@@ -401,6 +428,7 @@ export default {
     forceUpdate() {
       return this.waitForData().then(() => {
         this.waiting = true
+        this.updateAxes()
         return this.updateRawData(true).then(
           () => (this.waiting = false),
           console.error
@@ -454,6 +482,7 @@ export default {
 
       this.waitForData().then(() => {
         this.waiting = true
+        this.updateAxes()
         return this.updateRawData().then(
           () => (this.waiting = false),
           console.error
@@ -529,6 +558,7 @@ export default {
     if (this.isQueryValid) {
       this.waitForData().then(() => {
         this.waiting = true
+        this.updateAxes()
         return this.updateRawData().then(
           () => (this.waiting = false),
           console.error

@@ -81,6 +81,10 @@ export default {
       type: Function,
       default: undefined,
     },
+    tooltipsFilter: {
+      type: Function,
+      default: undefined,
+    },
     legend: {
       type: Boolean,
       default: true,
@@ -193,6 +197,7 @@ export default {
               title: this.tooltipTitleCallback,
               label: this.tooltipLabelCallback,
             },
+            filter: this.tooltipsFilter,
           },
         },
       },
