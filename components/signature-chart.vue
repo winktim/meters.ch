@@ -536,6 +536,12 @@ export default {
       })
     }
 
+    if (this.$store.getters.smallScreen) {
+      this.hideYTicks()
+    } else {
+      this.showYTicks()
+    }
+
     // show Y ticks only when the screen is large enough
     this.$store.subscribe(({ type }) => {
       if (type === SET_SMALL_SCREEN) {
