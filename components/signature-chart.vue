@@ -92,9 +92,14 @@ export default {
           gridLines: false,
           ticks: {
             precision: 2,
+            maxTicksLimit: 24,
             fontColor: chartDefaults.fontColor,
             fontSize: chartDefaults.fontSize,
             padding: 18,
+
+            callback: tick => {
+              return `${tick} °C`
+            },
           },
         },
       ],
