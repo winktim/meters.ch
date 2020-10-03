@@ -26,10 +26,10 @@ import {
   reversePeriods,
   chartDefaults,
   fixMissingData,
-  resourceTypesToAxes,
   toClosestSuffixe,
   getTooltipDateFormat,
   waitForMutations,
+  symbolToAxis,
 } from '../assets/utils'
 
 import {
@@ -300,7 +300,19 @@ export default {
       }
 
       // updates the underlying chart
-      this.yAxes = resourceTypesToAxes(this.resourceTypes)
+      // find unique symbols and convert them to an axis each
+      this.yAxes = this.resourceTypes
+        .map(resourceType => resourceType.symbol)
+        .filter((symbol, i, array) => array.indexOf(symbol) === i)
+        .map((symbol, i) =>
+          symbolToAxis(
+            symbol,
+            i === 0 ? 'right' : 'left',
+            symbol !== '°C',
+            symbol !== '°C',
+            i
+          )
+        )
 
       // update the axis used by each dataset
       this.datasets.forEach(dataset => {

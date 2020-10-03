@@ -643,18 +643,25 @@ export function toClosestSuffixe(number) {
 
 /**
  * Turn a list of resource types to a list of axes
- * @param {{symbol: string}[]} resourceTypes
+ * @param {string} symbol
+ * @param {'left' | 'right'} position on which side of the chart is the axis
+ * @param {boolean} beginAtZero wether the axis begins with the value 0
+ * @param {boolean} useSuffix wether to shorten the values and include a SI suffix
+ * @param {number} weight optional weight that determines how far away the axis is
  */
-export function resourceTypesToAxes(resourceTypes) {
-  const uniqueSymbols = resourceTypes
-    .map(resourceType => resourceType.symbol)
-    .filter((symbol, i, array) => array.indexOf(symbol) === i)
-  return uniqueSymbols.map((symbol, i) => ({
+export function symbolToAxis(
+  symbol,
+  position,
+  beginAtZero,
+  useSuffix,
+  weight = 0
+) {
+  return {
     display: 'auto',
     offset: true,
     // order (higher = further)
-    weight: i,
-    position: i === 0 ? 'right' : 'left',
+    weight,
+    position,
     gridLines: {
       color: 'rgba(230, 230, 230, 1)',
       lineWidth: 2,
@@ -662,7 +669,7 @@ export function resourceTypesToAxes(resourceTypes) {
       zeroLineWidth: 0,
     },
     ticks: {
-      beginAtZero: symbol !== '°C',
+      beginAtZero,
       precision: 4,
       maxTicksLimit: 7,
       fontColor: chartDefaults.fontColor,
@@ -670,7 +677,7 @@ export function resourceTypesToAxes(resourceTypes) {
       padding: 18,
 
       callback: tick => {
-        if (symbol !== '°C') {
+        if (useSuffix) {
           const result = toClosestSuffixe(tick)
           return `${result.number} ${result.unit + symbol}`
         }
@@ -679,7 +686,7 @@ export function resourceTypesToAxes(resourceTypes) {
       },
     },
     id: symbol,
-  }))
+  }
 }
 
 /**
