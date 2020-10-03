@@ -54,7 +54,6 @@
     <!-- parameters -->
     <section
       class="fixed bottom-0 inset-x-0 w-full p-4 md:px-1/5 lg:px-1/4 xl:px-1/3 bg-naito-green-200 shadow-lg-top"
-      @click="revealIfCollapsed"
     >
       <section
         class="absolute top-0 right-0 -mt-32 text-gray-100 rounded-l-md flex flex-col"
@@ -497,11 +496,6 @@ export default {
     toggleCollapse(event) {
       this.areSettingsCollapsed = !this.areSettingsCollapsed
       event.stopPropagation()
-    },
-    revealIfCollapsed() {
-      if (this.areSettingsCollapsed) {
-        this.areSettingsCollapsed = false
-      }
     },
   },
   watch: {
