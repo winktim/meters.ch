@@ -165,7 +165,9 @@
         "site": "Select a site",
         "temperature": "Temperature resource",
         "heater": "Heater resource",
-        "invalid_query": "Please select a site, temperature resource and heater resource to get started"
+        "invalid_query": "Please select a site, temperature resource and heater resource to get started",
+        "noise_filter": "Noisy data filtering",
+        "highlight_issues": "Deviations highlighting"
       }
     },
     "objectives": {

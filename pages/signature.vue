@@ -140,26 +140,42 @@
         </div>
 
         <!-- noise filter range -->
-        <input
-          type="range"
-          name="filter-noise-input"
-          id="filter-noise-input"
-          min="0"
-          max="1"
-          step="0.05"
-          v-model.number="filterNoise"
-        />
+        <div class="w-full flex items-center mb-2">
+          <label
+            class="text-gray-100 font-bold mr-4 flex-grow"
+            for="filter-noise-input"
+            v-text="$t('pages.signature.form.noise_filter')"
+          ></label>
+          <input
+            class="range-slider__range w-1/2"
+            type="range"
+            name="filter-noise-input"
+            id="filter-noise-input"
+            min="0"
+            max="1"
+            step="0.05"
+            v-model.number="filterNoise"
+          />
+        </div>
 
         <!-- highlight issues range -->
-        <input
-          type="range"
-          name="highlight-issues-input"
-          id="highlight-issues-input"
-          min="0"
-          max="1"
-          step="0.05"
-          v-model.number="highlightIssues"
-        />
+        <div class="w-full flex items-center mb-2">
+          <label
+            class="text-gray-100 font-bold mr-4 flex-grow"
+            for="highlight-issues-input"
+            v-text="$t('pages.signature.form.highlight_issues')"
+          ></label>
+          <input
+            class="range-slider__range w-1/2"
+            type="range"
+            name="highlight-issues-input"
+            id="highlight-issues-input"
+            min="0"
+            max="1"
+            step="0.05"
+            v-model.number="highlightIssues"
+          />
+        </div>
 
         <!-- offset -->
         <div class="flex justify-end items-center">

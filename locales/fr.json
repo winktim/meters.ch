@@ -165,7 +165,9 @@
         "site": "Sélectionnez un site",
         "temperature": "Ressource de température",
         "heater": "Ressource de chauffage",
-        "invalid_query": "Veuillez sélectionner un site, une ressource de température et une ressource de chauffage pour commencer"
+        "invalid_query": "Veuillez sélectionner un site, une ressource de température et une ressource de chauffage pour commencer",
+        "noise_filter": "Filtrage des données bruitées",
+        "highlight_issues": "Mise en évidence des écarts"
       }
     },
     "objectives": {

@@ -27,6 +27,7 @@ module.exports = {
       'padding-top': 'padding-top',
       'border-color': 'border-color',
       'border-radius': 'border-radius',
+      'background': 'background',
     },
     colorVariations: {
       5: 5,

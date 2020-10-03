@@ -346,3 +346,46 @@ $arrow-correction: -45deg;
   transform: rotate(-45deg);
   animation: twitching-arrow-animation 150ms alternate infinite ease-in-out;
 }
+
+.range-slider__range {
+  @apply bg-gray-100 appearance-none h-3 rounded-md outline-none p-0 m-0;
+
+  &::-moz-range-track {
+    // Firefox Mobile Fix
+    background-color: transparent;
+  }
+
+  // Range Handle
+  &::-webkit-slider-thumb {
+    @apply w-6 h-6 rounded-full bg-gray-800 cursor-pointer appearance-none transition-background-100;
+
+    &:hover {
+      @apply bg-gray-700;
+    }
+  }
+
+  &:active::-webkit-slider-thumb {
+    @apply bg-gray-700;
+  }
+
+  &::-moz-range-thumb {
+    @apply w-6 h-6 border-none rounded-full bg-gray-800 cursor-pointer appearance-none transition-background-100;
+
+    &:hover {
+      @apply bg-gray-700;
+    }
+  }
+
+  &:active::-moz-range-thumb {
+    @apply bg-gray-700;
+  }
+
+  &:focus {
+    &::-webkit-slider-thumb {
+      @apply bg-gray-700;
+    }
+    &::-moz-range-thumb {
+      @apply bg-gray-700;
+    }
+  }
+}
