@@ -654,6 +654,7 @@ export function symbolToAxis(
   position,
   beginAtZero,
   useSuffix,
+  id = 0,
   weight = 0
 ) {
   return {
@@ -685,7 +686,7 @@ export function symbolToAxis(
         return `${tick} ${symbol}`
       },
     },
-    id: symbol,
+    id,
   }
 }
 

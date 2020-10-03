@@ -310,6 +310,7 @@ export default {
             i === 0 ? 'right' : 'left',
             symbol !== '°C',
             symbol !== '°C',
+            symbol,
             i
           )
         )
