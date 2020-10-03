@@ -167,7 +167,7 @@
         "heater": "Ressource de chauffage",
         "invalid_query": "Veuillez sélectionner un site, une ressource de température et une ressource de chauffage pour commencer",
         "noise_filter": "Filtrage des données bruitées",
-        "highlight_issues": "Mise en évidence des écarts"
+        "highlight_issues": "Mise en évidence des déviations"
       },
       "chart": {
         "avg_clean": "Consommation normale",
