@@ -318,7 +318,6 @@ export default {
         label: this.$t('pages.signature.chart.avg_clean'),
         type: 'scatter',
         data: issuesHighlighted.cleanData,
-        // TODO: axes ?
         yAxisID: 0,
         hidden: previousHiddenStatus[0],
         // TODO: fixed dataset style
@@ -329,7 +328,6 @@ export default {
         label: this.$t('pages.signature.chart.avg_noisy'),
         type: 'scatter',
         data: issuesHighlighted.noisyData,
-        // TODO: axes ?
         yAxisID: 0,
         hidden: previousHiddenStatus[1],
         // TODO: fixed dataset style
@@ -337,7 +335,6 @@ export default {
       })
 
       // second dataset: average consumption line with 2 points
-      // TODO: maybe flip chart around on x somehow (smallest values first)
       const firstX = this.consumptionByAverageTemp[0].x
       const lastX = this.consumptionByAverageTemp[
         this.consumptionByAverageTemp.length - 1
@@ -355,7 +352,6 @@ export default {
             y: slope * lastX + intercept,
           },
         ],
-        // TODO: axes ?
         yAxisID: 0,
         hidden: previousHiddenStatus[2],
         // TODO: fixed dataset style, don't show circle on hover
