@@ -486,13 +486,9 @@ export function fixMissingData(completeData, dataToFix) {
     const expectedX = completeData[i].x
     const data = out[i]
 
-    // if we read the end of the data, it means it is missing data at the end, but we don't care about that
-    if (!data) {
-      break
-    }
-
+    // if we reached the end, data will be undefined
     // if there is a date mismatch, we know the data to fix is missing at least one value
-    if (data.x === expectedX) {
+    if (data && data.x === expectedX) {
       continue
     }
 
