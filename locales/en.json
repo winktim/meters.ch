@@ -168,6 +168,11 @@
         "invalid_query": "Please select a site, temperature resource and heater resource to get started",
         "noise_filter": "Noisy data filtering",
         "highlight_issues": "Deviations highlighting"
+      },
+      "chart": {
+        "avg_clean": "Normal Consumption",
+        "avg_noisy": "Deviating consumption",
+        "ideal_line": "Ideal consumption line"
       }
     },
     "objectives": {

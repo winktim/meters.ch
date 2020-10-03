@@ -1,5 +1,6 @@
 <template>
   <basic-chart
+    ref="chart"
     :datasets="datasets"
     :x-axes="xAxes"
     :y-axes="yAxes"
@@ -305,24 +306,32 @@ export default {
         issuesHighlighted.cleanData
       )
 
-      // TODO: translate label
+      // get currently hidden datasets
+      let previousHiddenStatus = [false, false, false]
+      if (this.datasets.length === 3 && this.$refs.chart.chart !== null) {
+        previousHiddenStatus = previousHiddenStatus.map(
+          (_, i) => !this.$refs.chart.chart.isDatasetVisible(i)
+        )
+      }
+
       newDatasets.push({
-        label: 'Consumption by average temperature, clean',
+        label: this.$t('pages.signature.chart.avg_clean'),
         type: 'scatter',
         data: issuesHighlighted.cleanData,
         // TODO: axes ?
         yAxisID: 0,
+        hidden: previousHiddenStatus[0],
         // TODO: fixed dataset style
         ...scatterDatasetStyle[0],
       })
 
-      // TODO: translate label
       newDatasets.push({
-        label: 'Consumption by average temperature, noisy',
+        label: this.$t('pages.signature.chart.avg_noisy'),
         type: 'scatter',
         data: issuesHighlighted.noisyData,
         // TODO: axes ?
         yAxisID: 0,
+        hidden: previousHiddenStatus[1],
         // TODO: fixed dataset style
         ...scatterDatasetStyle[2],
       })
@@ -333,9 +342,9 @@ export default {
       const lastX = this.consumptionByAverageTemp[
         this.consumptionByAverageTemp.length - 1
       ].x
-      // TODO: translate label
+
       newDatasets.push({
-        label: 'Ideal consumption line',
+        label: this.$t('pages.signature.chart.ideal_line'),
         data: [
           {
             x: firstX,
@@ -348,6 +357,7 @@ export default {
         ],
         // TODO: axes ?
         yAxisID: 0,
+        hidden: previousHiddenStatus[2],
         // TODO: fixed dataset style, don't show circle on hover
         ...datasetStyle[1],
       })
@@ -362,21 +372,26 @@ export default {
       })
     },
     reTranslate() {
+      if (this.datasets.length !== 3) {
+        return
+      }
+
       // updates the underlying chart
-      /*
-      this.datasets.forEach(dataset => {
-        this.$set(
-          dataset,
-          'label',
-          formatResource(
-            this.$i18n,
-            dataset.resource,
-            dataset.resourceType,
-            dataset.site
-          )
-        )
-      })
-      */
+      this.$set(
+        this.datasets[0],
+        'label',
+        this.$t('pages.signature.chart.avg_clean')
+      )
+      this.$set(
+        this.datasets[1],
+        'label',
+        this.$t('pages.signature.chart.avg_noisy')
+      )
+      this.$set(
+        this.datasets[2],
+        'label',
+        this.$t('pages.signature.chart.ideal_line')
+      )
     },
     hideYTicks() {
       this.yAxes.forEach(axes => {
