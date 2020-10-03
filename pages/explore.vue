@@ -47,40 +47,40 @@
       </div>
     </section>
 
-    <section
-      class="fixed bottom-0 right-0 mb-60 text-gray-100 rounded-l-md flex flex-col"
-    >
-      <!-- download -->
-      <button
-        :title="$t('pages.explore.download.title')"
-        :disabled="!hasData"
-        @click="
-          showDownloadPopup = true
-          navPopup()
-        "
-        class="rounded-tl-md p-4 bg-naito-blue-300 simple-action"
-      >
-        <i class="material-icons text-xl">get_app</i>
-      </button>
-      <!-- bookmark -->
-      <button
-        :title="$t('pages.explore.bookmark.title')"
-        :disabled="resources.length === 0"
-        @click="
-          showBookmarkPopup = true
-          navPopup()
-        "
-        class="rounded-bl-md p-4 bg-naito-blue-300 simple-action"
-      >
-        <i class="material-icons text-xl">bookmark</i>
-      </button>
-    </section>
-
     <!-- parameters -->
     <section
       class="fixed bottom-0 inset-x-0 w-full p-4 md:px-1/5 lg:px-1/4 xl:px-1/3 bg-naito-green-200 shadow-lg-top"
       @click="revealIfCollapsed"
     >
+      <section
+        class="absolute top-0 right-0 -mt-32 text-gray-100 rounded-l-md flex flex-col"
+      >
+        <!-- download -->
+        <button
+          :title="$t('pages.explore.download.title')"
+          :disabled="!hasData"
+          @click="
+            showDownloadPopup = true
+            navPopup()
+          "
+          class="rounded-tl-md p-4 bg-naito-blue-300 simple-action"
+        >
+          <i class="material-icons text-xl">get_app</i>
+        </button>
+        <!-- bookmark -->
+        <button
+          :title="$t('pages.explore.bookmark.title')"
+          :disabled="resources.length === 0"
+          @click="
+            showBookmarkPopup = true
+            navPopup()
+          "
+          class="rounded-bl-md p-4 bg-naito-blue-300 simple-action"
+        >
+          <i class="material-icons text-xl">bookmark</i>
+        </button>
+      </section>
+
       <!-- button to collapse parameters -->
       <button
         :title="$t('pages.explore.collapse_settings')"
