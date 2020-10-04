@@ -43,6 +43,7 @@ import {
 
 import {
   SET_METEO_LOCATIONS,
+  SET_RESOURCE_TYPES,
   SET_SITES,
   SET_SMALL_SCREEN,
 } from '../assets/mutations'
