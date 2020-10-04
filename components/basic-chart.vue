@@ -34,29 +34,7 @@
 </template>
 <script>
 import Chart from '../assets/chart'
-import { DateTime } from 'luxon'
-import {
-  getPeriod,
-  readingToXY,
-  datasetStyle,
-  decimalDefaultFormat,
-  agregateData,
-  reverseAgregations,
-  formatResource,
-  capitalize,
-  reversePeriods,
-  chartDefaults,
-  fixMissingData,
-  toClosestSuffixe,
-  getTooltipDateFormat,
-  waitForMutations,
-} from '../assets/utils'
-
-import {
-  SET_RESOURCES,
-  SET_RESOURCE_TYPES,
-  SET_SMALL_SCREEN,
-} from '../assets/mutations'
+import { chartDefaults } from '../assets/utils'
 
 export default {
   name: 'BasicChart',
