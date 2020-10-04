@@ -2,9 +2,11 @@
   <div ref="focusRoot" class="relative z-10" @mousedown="keepShown">
     <div
       :class="
-        `w-full flex items-center text-gray-900 relative wrapped${
-          single ? '-single' : ''
-        }-transparent-input`
+        `w-full flex items-center text-gray-900 relative ${
+          single
+            ? 'wrapped-single-transparent-input'
+            : 'wrapped-transparent-input'
+        }`
       "
     >
       <label :for="inputName" class="material-icons py-2 pl-2 clickable"
