@@ -1,5 +1,6 @@
 {
   "global": {
+    "date": "Date",
     "email": "Adresse email",
     "set_locale": "Choix de la langue",
     "back": "Retour",
@@ -66,6 +67,11 @@
     "week": "Cette semaine | La semaine dernière | Il y a {count} semaines",
     "month": "Ce mois-ci | Le mois dernier | Il y a {count} mois",
     "year": "Cette année | L'année dernière | Il y a {count} ans"
+  },
+  "signature_periods": {
+    "week": "signature de cette semaine | signature de la semaine dernière | signature d'il y a {count} semaines",
+    "month": "signature de ce mois-ci | signature du mois dernier | signature d'il y a {count} mois",
+    "year": "signature de cette année | signature de l'année dernière | signature d'il y a {count} ans"
   },
   "menu": {
     "admin": "Administration",
@@ -160,19 +166,23 @@
     },
     "signature": {
       "title": "Signature énergétique",
-      "description": "Suivez la sensibilité d'un bâtiment au froid et repérez des problèmes de chauffage",
+      "description": "Suivez la sensibilité d'un bâtiment au froid et repérez des déviations de chauffage",
       "form": {
         "site": "Sélectionnez un site",
         "temperature": "Ressource de température",
         "heater": "Ressource de chauffage",
         "invalid_query": "Veuillez sélectionner un site, une ressource de température et une ressource de chauffage pour commencer",
-        "noise_filter": "Filtrage des données bruitées",
-        "highlight_issues": "Mise en évidence des déviations"
+        "filter": "Filtrage des données bruitées",
+        "highlight": "Mise en évidence des déviations"
       },
       "chart": {
         "avg_clean": "Consommation normale",
         "avg_noisy": "Déviation de la consommation",
         "ideal_line": "Ligne de consommation idéale"
+      },
+      "download": {
+        "avg_temp": "Température moyenne",
+        "consumption": "Consommation"
       }
     },
     "objectives": {

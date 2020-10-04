@@ -1,5 +1,6 @@
 {
   "global": {
+    "date": "Date",
     "email": "Email address",
     "set_locale": "Language selection",
     "back": "Go back",
@@ -66,6 +67,11 @@
     "week": "This week | Last week | {count} weeks ago",
     "month": "This month | Last month | {count} months ago",
     "year": "This year | Last year | {count} years ago"
+  },
+  "signature_periods": {
+    "week": "this week's signature | last week's signature | {count} weeks ago's signature",
+    "month": "this month's signature | last month's signature | {count} months ago's signature",
+    "year": "this year's signature | last year's signature | {count} years ago's signature"
   },
   "menu": {
     "admin": "Administration",
@@ -160,19 +166,23 @@
     },
     "signature": {
       "title": "Energy signature",
-      "description": "Track the sensitivity of a building to cold weather and identify heating issues",
+      "description": "Track the sensitivity of a building to cold weather and identify heating deviations",
       "form": {
         "site": "Select a site",
         "temperature": "Temperature resource",
         "heater": "Heater resource",
         "invalid_query": "Please select a site, temperature resource and heater resource to get started",
-        "noise_filter": "Noisy data filtering",
-        "highlight_issues": "Deviations highlighting"
+        "filter": "Noisy data filtering",
+        "highlight": "Deviations highlighting"
       },
       "chart": {
         "avg_clean": "Normal Consumption",
         "avg_noisy": "Deviating consumption",
         "ideal_line": "Ideal consumption line"
+      },
+      "download": {
+        "avg_temp": "Average temperature",
+        "consumption": "Consumption"
       }
     },
     "objectives": {

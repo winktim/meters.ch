@@ -7,8 +7,8 @@
     :tooltip-title-callback="tooltipTitleCallback"
     :tooltip-label-callback="tooltipLabelCallback"
     :tooltips-filter="tooltipsFilter"
-    :legend="true"
-    interaction-mode="nearest"
+    :legend="legend"
+    interaction-mode="point"
     :waiting="waiting"
     :error="!hasData"
     :error-message="$t('global.no_data', { period: periodOffsetString })"
@@ -52,15 +52,15 @@ export default {
   name: 'SignatureChart',
   components: { BasicChart },
   props: {
-    siteId: {
+    site: {
       type: Number,
       required: true,
     },
-    temperatureId: {
+    temperature: {
       type: Number,
       required: true,
     },
-    heaterId: {
+    heater: {
       type: Number,
       required: true,
     },
@@ -72,13 +72,17 @@ export default {
       type: Number,
       required: true,
     },
-    filterNoise: {
+    filter: {
       type: Number,
       required: true,
     },
-    highlightIssues: {
+    highlight: {
       type: Number,
       required: true,
+    },
+    legend: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -113,7 +117,6 @@ export default {
           gridLines: false,
           offset: true,
           ticks: {
-            // beginAtZero: true,
             precision: 0,
             maxTicksLimit: 7,
             fontColor: chartDefaults.fontColor,
@@ -128,19 +131,8 @@ export default {
           return
         }
 
-        const format = getTooltipDateFormat(this.agregation, this.period)
-        const date =
-          data.datasets[tooltipItems[0].datasetIndex].data[
-            tooltipItems[0].index
-          ].z
-        return capitalize(
-          DateTime.fromISO(date)
-            .setLocale(this.$dateLocale())
-            .toFormat(format)
-        )
-      },
+        const tooltipItem = tooltipItems[0]
 
-      tooltipLabelCallback: (tooltipItem, data) => {
         const temperature = tooltipItem.xLabel.toLocaleString(
           this.$numberLocale(),
           decimalDefaultFormat
@@ -152,8 +144,19 @@ export default {
           decimalDefaultFormat
         )
 
+        return `${heater} ${result.unit + this.symbol}, ${temperature} °C`
+      },
+
+      tooltipLabelCallback: (tooltipItem, data) => {
+        const format = getTooltipDateFormat(this.agregation, this.period)
+        const date =
+          data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].z
         // add spaces before to make room between the color box and the text
-        return `  ${heater} ${result.unit + this.symbol}, ${temperature} °C`
+        return `  ${capitalize(
+          DateTime.fromISO(date)
+            .setLocale(this.$dateLocale())
+            .toFormat(format)
+        )}`
       },
 
       tooltipsFilter: tooltipItem => {
@@ -172,7 +175,7 @@ export default {
       }
 
       // get site meteo readings
-      const site = this.$store.getters.site({ site_id: this.siteId })
+      const site = this.$store.getters.site({ site_id: this.site })
       const meteoLocation = this.$store.getters.meteoLocation(site)
 
       const meteoReadings = await this.$getMeteoReadings(
@@ -183,13 +186,13 @@ export default {
 
       // get temperature readings
       const temperatureReadings = await this.$getReadings(
-        this.temperatureId,
+        this.temperature,
         fromTo,
         ignoreCache
       )
       // get heater readings
       const heaterReadings = await this.$getReadings(
-        this.heaterId,
+        this.heater,
         fromToSumResource,
         ignoreCache
       )
@@ -215,8 +218,9 @@ export default {
       // monthly signature: daily averages
       // yearly signature: weekly averages
       const agregation =
-        this.period === signaturePeriods['week'] ||
-        this.period === signaturePeriods['month']
+        this.period === signaturePeriods['week']
+          ? agregations['hour']
+          : this.period === signaturePeriods['month']
           ? agregations['day']
           : agregations['week']
 
@@ -325,33 +329,32 @@ export default {
       // the user has a control to hide noise and get "closer" to the chart
       const noiseFiltered = noiseFilter(
         this.consumptionByAverageTemp,
-        this.filterNoise
+        this.filter
       )
 
       // separete noisy data from clean one to show the user where problems occure
       // the user also has control to how much data is highlighted
-      const issuesHighlighted = noiseFilter(
-        noiseFiltered.cleanData,
-        this.highlightIssues
-      )
+      const highlighted = noiseFilter(noiseFiltered.cleanData, this.highlight)
 
       // use clean data to draw the line
-      const { slope, intercept } = getScatterAverageLine(
-        issuesHighlighted.cleanData
-      )
+      const { slope, intercept } = getScatterAverageLine(highlighted.cleanData)
 
       // get currently hidden datasets
       let previousHiddenStatus = [false, false, false]
       if (this.datasets.length === 3 && this.$refs.chart.chart !== null) {
-        previousHiddenStatus = previousHiddenStatus.map(
-          (_, i) => !this.$refs.chart.chart.isDatasetVisible(i)
-        )
+        try {
+          previousHiddenStatus = previousHiddenStatus.map(
+            (_, i) => !this.$refs.chart.chart.isDatasetVisible(i)
+          )
+        } catch (e) {
+          // if we can't call isDatasetVisible, ignore it
+        }
       }
 
       newDatasets.push({
         label: this.$t('pages.signature.chart.avg_clean'),
         type: 'scatter',
-        data: issuesHighlighted.cleanData,
+        data: highlighted.cleanData,
         yAxisID: 0,
         hidden: previousHiddenStatus[0],
         ...cleanScatterDatasetStyle,
@@ -360,7 +363,7 @@ export default {
       newDatasets.push({
         label: this.$t('pages.signature.chart.avg_noisy'),
         type: 'scatter',
-        data: issuesHighlighted.noisyData,
+        data: highlighted.noisyData,
         yAxisID: 0,
         hidden: previousHiddenStatus[1],
         ...noisyScatterDatasetStyle,
@@ -438,13 +441,13 @@ export default {
       }
 
       const resourceType = this.$store.getters.resourceType(
-        this.$store.state.dataById.resources[this.heaterId]
+        this.$store.state.dataById.resources[this.heater]
       )
 
       // keep symbol for tooltip
       this.symbol = resourceType.symbol
       // updates the underlying chart
-      this.yAxes = [symbolToAxis(resourceType.symbol, 'left', true, true)]
+      this.yAxes = [symbolToAxis(resourceType.symbol, 'left', false, true)]
     },
     waitForData() {
       const mutationsToWaitFor = []
@@ -476,7 +479,7 @@ export default {
       return this.waitForData().then(() => {
         this.waiting = true
         this.updateAxes()
-        return this.updateRawData(true).then(
+        this.updateRawData(true).then(
           () => (this.waiting = false),
           console.error
         )
@@ -484,7 +487,7 @@ export default {
     },
   },
   watch: {
-    siteId(to, from) {
+    site(to, from) {
       if (to === from) {
         return
       }
@@ -495,13 +498,10 @@ export default {
 
       this.waitForData().then(() => {
         this.waiting = true
-        return this.updateRawData().then(
-          () => (this.waiting = false),
-          console.error
-        )
+        this.updateRawData().then(() => (this.waiting = false), console.error)
       })
     },
-    temperatureId(to, from) {
+    temperature(to, from) {
       if (to === from) {
         return
       }
@@ -512,13 +512,10 @@ export default {
 
       this.waitForData().then(() => {
         this.waiting = true
-        return this.updateRawData().then(
-          () => (this.waiting = false),
-          console.error
-        )
+        this.updateRawData().then(() => (this.waiting = false), console.error)
       })
     },
-    heaterId(to, from) {
+    heater(to, from) {
       if (to === from) {
         return
       }
@@ -530,10 +527,7 @@ export default {
       this.waitForData().then(() => {
         this.waiting = true
         this.updateAxes()
-        return this.updateRawData().then(
-          () => (this.waiting = false),
-          console.error
-        )
+        this.updateRawData().then(() => (this.waiting = false), console.error)
       })
     },
     period(to, from) {
@@ -547,10 +541,7 @@ export default {
 
       this.waitForData().then(() => {
         this.waiting = true
-        return this.updateRawData().then(
-          () => (this.waiting = false),
-          console.error
-        )
+        this.updateRawData().then(() => (this.waiting = false), console.error)
       })
     },
     offset(to, from) {
@@ -564,13 +555,10 @@ export default {
 
       this.waitForData().then(() => {
         this.waiting = true
-        return this.updateRawData().then(
-          () => (this.waiting = false),
-          console.error
-        )
+        this.updateRawData().then(() => (this.waiting = false), console.error)
       })
     },
-    filterNoise(to, from) {
+    filter(to, from) {
       if (to === from) {
         return
       }
@@ -582,7 +570,7 @@ export default {
       this.waiting = true
       this.updateUserFilter().then(() => (this.waiting = false))
     },
-    highlightIssues(to, from) {
+    highlight(to, from) {
       if (to === from) {
         return
       }
@@ -606,10 +594,7 @@ export default {
       this.waitForData().then(() => {
         this.waiting = true
         this.updateAxes()
-        return this.updateRawData().then(
-          () => (this.waiting = false),
-          console.error
-        )
+        this.updateRawData().then(() => (this.waiting = false), console.error)
       })
     }
 
@@ -645,9 +630,7 @@ export default {
       return this.$store.state.data.resourceTypes
     },
     isQueryValid() {
-      return (
-        this.siteId !== -1 && this.temperatureId !== -1 && this.heaterId !== -1
-      )
+      return this.site !== -1 && this.temperature !== -1 && this.heater !== -1
     },
   },
 }

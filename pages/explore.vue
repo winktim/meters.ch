@@ -191,9 +191,9 @@ import {
   reversePeriods,
   reverseAgregations,
   formatResource,
-  datasetsToJson,
-  JsonToCsv,
-  generateName,
+  exploreDatasetsToJson,
+  exploreJsonToCsv,
+  generateExploreChartName,
 } from '../assets/utils'
 
 import AppHeader from '../components/app-header.vue'
@@ -350,15 +350,15 @@ export default {
       this.showDownloadPopup = false
       this.$router.go(-1)
 
-      const jsonData = datasetsToJson(this.currentData)
+      const jsonData = exploreDatasetsToJson(this.currentData)
 
       let dataStr = ''
 
-      let name = `chart-period_${reversePeriods[this.period]}-offset_${
+      let name = `chart_period-${reversePeriods[this.period]}_offset-${
         this.offset
-      }-agregation_${
+      }_agregation-${
         reverseAgregations[this.agregation]
-      }-resources_${this.resources.join(',')}`
+      }_resources-${this.resources.join('-')}`
 
       if (payload.format === 'json') {
         dataStr =
@@ -368,7 +368,7 @@ export default {
       } else {
         dataStr =
           'data:text/csv;charset=utf-8,' +
-          encodeURIComponent(JsonToCsv(jsonData))
+          encodeURIComponent(exploreJsonToCsv(jsonData, this.$i18n))
         name += '.csv'
       }
 
@@ -382,6 +382,7 @@ export default {
 
       const payload = {
         name,
+        type: 'explore',
         offset: this.offset,
         agregation: reverseAgregations[this.agregation],
         period: reversePeriods[this.period],
@@ -465,7 +466,7 @@ export default {
         return ''
       }
 
-      return generateName(
+      return generateExploreChartName(
         {
           offset: this.offset,
           period: reversePeriods[this.period],

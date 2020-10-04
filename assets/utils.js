@@ -161,18 +161,138 @@ export function clamp(value, min, max) {
 }
 
 /**
+ *
+ * @param {{}} element
+ * @param {{[x:number]:{}}} ownedResources the ressources owned if available
+ */
+function fixExploreChart(element, ownedResources) {
+  // check resources is an array
+  if (!Array.isArray(element['resources'])) {
+    return null
+  }
+
+  // convert to numbers and filter resources that are not number or not owned resources
+  // if the owned ressources are not available, ignore that check
+  const resources = element['resources']
+    .map(id => parseInt(id))
+    .filter(id => {
+      return !isNaN(id) && (!ownedResources || ownedResources[id] !== undefined)
+    })
+
+  // check we have at least one resource left
+  if (resources.length === 0) {
+    return null
+  }
+
+  // take the period or the default if invalid
+  const period =
+    reversePeriods.indexOf(element['period']) === -1
+      ? reversePeriods[0]
+      : element['period']
+
+  // take the agregation or the default if invalid
+  const agregation =
+    reverseAgregations.indexOf(element['agregation']) === -1
+      ? reverseAgregations[0]
+      : element['agregation']
+
+  // clamp the offset or reset it to 0
+  const offset = clamp(parseInt(element['offset']), 0, 365) || 0
+
+  // get the name or use an empty string
+  const name = element.hasOwnProperty('name') ? String(element['name']) : ''
+
+  return {
+    type: 'explore',
+    name,
+    offset,
+    period,
+    agregation,
+    resources,
+  }
+}
+
+/**
+ *
+ * @param {{}} element
+ * @param {{[x:number]:{}}} ownedResources the ressources owned if available
+ * @param {{[x:number]:{}}} ownedSites the sites owned if available
+ */
+function fixSignatureChart(element, ownedResources, ownedSites) {
+  // convert to numbers and filter resources that are not number or not owned resources
+  // if the owned ressources are not available, ignore that check
+  const site = parseInt(element['site'])
+
+  if (isNaN(site) || (ownedSites && ownedSites[site] === undefined)) {
+    return null
+  }
+
+  const temperature = parseInt(element['temperature'])
+
+  if (
+    isNaN(temperature) ||
+    (ownedResources && ownedResources[temperature] === undefined)
+  ) {
+    return null
+  }
+
+  const heater = parseInt(element['heater'])
+
+  if (
+    isNaN(heater) ||
+    (ownedResources && ownedResources[heater] === undefined)
+  ) {
+    return null
+  }
+
+  // take the period or the default if invalid
+  const period =
+    reverseSignaturePeriods.indexOf(element['period']) === -1
+      ? reverseSignaturePeriods[2]
+      : element['period']
+
+  // clamp the offset or reset it to 0
+  const parsedOffset = parseInt(element['offset'])
+  const offset = isNaN(parsedOffset) ? 1 : clamp(parsedOffset, 0, 53)
+
+  // clamp the filter or reset it to 0
+  const parsedFilter = parseFloat(element['filter'])
+  const filter = isNaN(parsedFilter) ? 0 : clamp(parsedFilter, 0, 1)
+
+  // clamp the highlight or reset it to 0.2
+  const parsedHighlight = parseFloat(element['highlight'])
+  const highlight = isNaN(parsedHighlight) ? 0.2 : clamp(parsedHighlight, 0, 1)
+
+  // get the name or use an empty string
+  const name = element.hasOwnProperty('name') ? String(element['name']) : ''
+
+  return {
+    type: 'signature',
+    name,
+    site,
+    temperature,
+    heater,
+    period,
+    offset,
+    filter,
+    highlight,
+  }
+}
+
+/**
  * Convert the given potential dashboard into a valid dashboard object
  * @param {any} dashboard The current dashboard as a parsed JSON string
  * @param {{[x:number]:{}}} ownedResources the ressources owned if available
- * @returns {{name: string, offset: number, period: string, agregation: string, resources: number[]}[]}
+ * @param {{[x:number]:{}}} ownedSites the sites owned if available
+ * @returns {{ exploreCharts: {}[], signatureCharts: {}[], temps: { exclude: [] }}}
  */
-export function fixDashboard(dashboard, ownedResources) {
+export function fixDashboard(dashboard, ownedResources, ownedSites) {
   const out = defaultDashboard()
 
   let inputCharts = []
 
   if (Array.isArray(dashboard)) {
-    // if the dashboard is an array, it is the old version. update it
+    // if the dashboard is an array, it is an old version. update it
     inputCharts = dashboard
   } else if (
     dashboard.hasOwnProperty('charts') &&
@@ -203,51 +323,21 @@ export function fixDashboard(dashboard, ownedResources) {
       return
     }
 
-    // check resources is an array
-    if (!Array.isArray(element['resources'])) {
-      return
+    // check type. old dashboard didn't include a type
+    if (!element.hasOwnProperty('type') || element.type === 'explore') {
+      // old dashboard, consider chart an "explore chart"
+      const chart = fixExploreChart(element, ownedResources)
+      if (chart !== null) {
+        out.charts.push(chart)
+      }
+    } else if (element.type === 'signature') {
+      const chart = fixSignatureChart(element, ownedResources, ownedSites)
+      if (chart !== null) {
+        out.charts.push(chart)
+      }
     }
 
-    // convert to numbers and filter resources that are not number or not owned resources
-    // if the owned ressources are not available, ignore that check
-    const resources = element['resources']
-      .map(id => parseInt(id))
-      .filter(id => {
-        return (
-          !isNaN(id) && (!ownedResources || ownedResources[id] !== undefined)
-        )
-      })
-
-    // check we have at least one resource left
-    if (resources.length === 0) {
-      return
-    }
-
-    // take the period or the default if invalid
-    const period =
-      reversePeriods.indexOf(element['period']) === -1
-        ? reversePeriods[0]
-        : element['period']
-
-    // take the agregation or the default if invalid
-    const agregation =
-      reverseAgregations.indexOf(element['agregation']) === -1
-        ? reverseAgregations[0]
-        : element['agregation']
-
-    // clamp the offset or reset it to 0
-    const offset = clamp(parseInt(element['offset']), 0, 365) || 0
-
-    // get the name or use an empty string
-    const name = element.hasOwnProperty('name') ? String(element['name']) : ''
-
-    out.charts.push({
-      name,
-      offset,
-      period,
-      agregation,
-      resources,
-    })
+    // ignore any unknown type
   })
 
   return out
@@ -528,10 +618,10 @@ export function pluck(object, ...keys) {
 }
 
 /**
- * Keep only the relevent data for JSON-downloadable chart data
+ * Keep only the relevent data for JSON-downloadable explore chart data
  * @param {{label: string, data: {x: string, y: number}[], resource: {}, resourceType: {}}[]} datasets
  */
-export function datasetsToJson(datasets) {
+export function exploreDatasetsToJson(datasets) {
   return datasets.map(dataset => ({
     label: dataset.label,
     // remove inserted NaN values to fix the chart
@@ -550,12 +640,24 @@ export function datasetsToJson(datasets) {
 }
 
 /**
+ * Keep only the relevent data for JSON-downloadable signature chart data
+ * @param {{label: string, data: {x: number, y: number, z: string}[]}[]} datasets
+ */
+export function signatureDatasetsToJson(datasets) {
+  return datasets.map(dataset => ({
+    label: dataset.label,
+    data: dataset.data.map(({ x, y, z }) => ({ x, y: +y.toFixed(2), z })),
+  }))
+}
+
+/**
  *
  * @param {{label: string, data: {x: string, y: string}[], resource: {}, resourceType: {symbol: string}}[]} json
+ * @param {import('vue-i18n').default} i18n
  */
-export function JsonToCsv(json) {
+export function exploreJsonToCsv(json, i18n) {
   const data = [
-    ['"Date"'].concat(
+    [`"${i18n.t('global.date')}"`].concat(
       json.map(
         dataset =>
           `"${dataset.label.replace(
@@ -594,6 +696,59 @@ export function JsonToCsv(json) {
 
     data.push([finalDate].concat(values))
   }
+
+  return data.map(line => line.join(',')).join('\n')
+}
+
+/**
+ *
+ * @param {{label: string, data: {x: number, y: number, z: string}[]}[]} json
+ * @param {import('vue-i18n').default} i18n
+ */
+export function signatureJsonToCsv(json, i18n) {
+  // the csv contains 3 parts, one per dataset
+
+  const labels = [
+    `"${i18n.t('pages.signature.download.avg_temp')}"`,
+    `"${i18n.t('pages.signature.download.consumption')}"`,
+    `"${i18n.t('global.date')}"`,
+  ]
+
+  const data = [
+    [`"${json[0].label}"`],
+    labels,
+
+    ...json[0].data.map(point => {
+      // remove UTC offset from date
+      return [
+        `"${point.x.toString().replace('.', ',')}"`,
+        `"${point.y.toString().replace('.', ',')}"`,
+        `"${point.z.replace(/\+.*/g, '')}"`,
+      ]
+    }),
+    ['""'],
+    [`"${json[1].label}"`],
+    labels,
+
+    ...json[1].data.map(point => {
+      // remove UTC offset from date
+      return [
+        `"${point.x.toString().replace('.', ',')}"`,
+        `"${point.y.toString().replace('.', ',')}"`,
+        `"${point.z.replace(/\+.*/g, '')}"`,
+      ]
+    }),
+    ['""'],
+    [`"${json[2].label}"`],
+    [labels[0], labels[1]],
+
+    ...json[2].data.map(point => {
+      return [
+        `"${point.x.toString().replace('.', ',')}"`,
+        `"${point.y.toString().replace('.', ',')}"`,
+      ]
+    }),
+  ]
 
   return data.map(line => line.join(',')).join('\n')
 }
@@ -708,12 +863,12 @@ export function symbolToAxis(
 }
 
 /**
- * Get an auto generated name for the chart
+ * Get an auto generated name for the explore chart
  * @param {{resources: number[], period: string, offset: number}} chart
  * @param {{[x: number]: {description: string}}} resourcesById
  * @param {import('vue-i18n').default} i18n
  */
-export function generateName(chart, resourcesById, i18n) {
+export function generateExploreChartName(chart, resourcesById, i18n) {
   let resources = resourcesById[chart.resources[0]].description
 
   if (chart.resources.length > 1) {
@@ -725,6 +880,26 @@ export function generateName(chart, resourcesById, i18n) {
   })
 
   return `${resources}, ${period}`
+}
+
+/**
+ * Get an auto generated name for the signature chart
+ * @param {{site: number, period: string, offset: number}} chart
+ * @param {{[x: number]: {name: string}}} sitedById
+ * @param {import('vue-i18n').default} i18n
+ */
+export function generateSignatureChartName(chart, sitedById, i18n) {
+  let siteName = sitedById[chart.site].name
+
+  const signaturePeriod = i18n.tc(
+    'signature_periods.' + chart.period,
+    chart.offset,
+    {
+      count: chart.offset,
+    }
+  )
+
+  return `${siteName}, ${signaturePeriod}`
 }
 
 /**

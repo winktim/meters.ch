@@ -15,13 +15,13 @@
           'transition-opacity-100',
           isQueryValid ? 'opacity-1' : 'opacity-0',
         ]"
-        :site-id="siteId"
-        :temperature-id="temperatureId"
-        :heater-id="heaterId"
+        :site="site"
+        :temperature="temperature"
+        :heater="heater"
         :period="period"
         :offset="offset"
-        :filter-noise="filterNoise"
-        :highlight-issues="highlightIssues"
+        :filter="filter"
+        :highlight="highlight"
         @currentData="setCurrentData"
       ></signature-chart>
 
@@ -100,7 +100,7 @@
           :options="formattedSites"
           :top="true"
           :single="true"
-          v-model="siteId"
+          v-model="site"
         ></search-select>
 
         <!-- interior temp resource select list -->
@@ -111,7 +111,7 @@
           :options="formattedTemperatures"
           :top="true"
           :single="true"
-          v-model="temperatureId"
+          v-model="temperature"
         ></search-select>
 
         <!-- heater resource select list -->
@@ -122,7 +122,7 @@
           :options="formattedHeaters"
           :top="true"
           :single="true"
-          v-model="heaterId"
+          v-model="heater"
         ></search-select>
 
         <!-- period -->
@@ -138,41 +138,41 @@
           </select>
         </div>
 
-        <!-- noise filter range -->
+        <!-- filter range -->
         <div class="w-full flex items-center mb-2">
           <label
             class="text-gray-100 font-bold mr-4 flex-grow"
-            for="filter-noise-input"
-            v-text="$t('pages.signature.form.noise_filter')"
+            for="filter-input"
+            v-text="$t('pages.signature.form.filter')"
           ></label>
           <input
             class="range-slider__range w-1/2"
             type="range"
-            name="filter-noise-input"
-            id="filter-noise-input"
+            name="filter-input"
+            id="filter-input"
             min="0"
             max="1"
             step="0.05"
-            v-model.number="filterNoise"
+            v-model.number="filter"
           />
         </div>
 
-        <!-- highlight issues range -->
+        <!-- highlight range -->
         <div class="w-full flex items-center mb-2">
           <label
             class="text-gray-100 font-bold mr-4 flex-grow"
-            for="highlight-issues-input"
-            v-text="$t('pages.signature.form.highlight_issues')"
+            for="highlight-input"
+            v-text="$t('pages.signature.form.highlight')"
           ></label>
           <input
             class="range-slider__range w-1/2"
             type="range"
-            name="highlight-issues-input"
-            id="highlight-issues-input"
+            name="highlight-input"
+            id="highlight-input"
             min="0"
             max="1"
             step="0.05"
-            v-model.number="highlightIssues"
+            v-model.number="highlight"
           />
         </div>
 
@@ -235,12 +235,12 @@
 import { DateTime } from 'luxon'
 import {
   formatResource,
-  datasetsToJson,
-  JsonToCsv,
-  generateName,
+  signatureJsonToCsv,
   HEATING_RESOURCE_TYPES,
   reverseSignaturePeriods,
   signaturePeriods,
+  generateSignatureChartName,
+  signatureDatasetsToJson,
 } from '../assets/utils'
 
 import AppHeader from '../components/app-header.vue'
@@ -276,16 +276,16 @@ export default {
   },
   data() {
     return {
-      siteId: -1,
-      temperatureId: -1,
-      heaterId: -1,
+      site: -1,
+      temperature: -1,
+      heater: -1,
       // start at one because there is no day period for signature
       // default: monthly
       period: 2,
       // default to showing previous period
       offset: 1,
-      filterNoise: 0,
-      highlightIssues: 0.2,
+      filter: 0,
+      highlight: 0.2,
 
       showBookmarkPopup: false,
       showDownloadPopup: false,
@@ -309,8 +309,8 @@ export default {
     this.getQuery()
 
     // if there is a single site and none selected, select it automatically
-    if (this.$store.getters.numSites === 1 && this.siteId === -1) {
-      this.siteId = this.formattedSites[0].id
+    if (this.$store.getters.numSites === 1 && this.site === -1) {
+      this.site = this.formattedSites[0].id
     }
 
     this.setQuery()
@@ -333,14 +333,14 @@ export default {
     setQuery() {
       const route = {
         query: {
-          site: this.siteId === -1 ? undefined : String(this.siteId),
-          temp:
-            this.temperatureId === -1 ? undefined : String(this.temperatureId),
-          heat: this.heaterId === -1 ? undefined : String(this.heaterId),
+          site: this.site === -1 ? undefined : String(this.site),
+          temperature:
+            this.temperature === -1 ? undefined : String(this.temperature),
+          heater: this.heater === -1 ? undefined : String(this.heater),
           period: reverseSignaturePeriods[this.period],
           offset: String(this.offset),
-          filter: String(this.filterNoise),
-          highlight: String(this.highlightIssues),
+          filter: String(this.filter),
+          highlight: String(this.highlight),
         },
       }
 
@@ -365,46 +365,46 @@ export default {
     getQuery() {
       const query = this.$route.query
 
-      const siteId = parseInt(query.site)
+      const site = parseInt(query.site)
       // check site has a meteo location id
       if (
-        !isNaN(siteId) &&
-        this.$store.state.dataById.sites[siteId] !== undefined &&
-        this.$store.state.dataById.sites[siteId].meteo_location_id !== null
+        !isNaN(site) &&
+        this.$store.state.dataById.sites[site] !== undefined &&
+        this.$store.state.dataById.sites[site].meteo_location_id !== null
       ) {
-        this.siteId = siteId
+        this.site = site
       }
 
-      const temperatureId = parseInt(query.temp)
+      const temperature = parseInt(query.temperature)
       if (
-        !isNaN(temperatureId) &&
-        this.$store.state.dataById.resources[temperatureId] !== undefined
+        !isNaN(temperature) &&
+        this.$store.state.dataById.resources[temperature] !== undefined
       ) {
         // check is temperature resource
         const resourceType = this.$store.getters.resourceType(
-          this.$store.state.dataById.resources[temperatureId]
+          this.$store.state.dataById.resources[temperature]
         )
 
         if (resourceType && resourceType.name === 'Temperature') {
-          this.temperatureId = temperatureId
+          this.temperature = temperature
         }
       }
 
-      const heaterId = parseInt(query.heat)
+      const heater = parseInt(query.heater)
       if (
-        !isNaN(heaterId) &&
-        this.$store.state.dataById.resources[heaterId] !== undefined
+        !isNaN(heater) &&
+        this.$store.state.dataById.resources[heater] !== undefined
       ) {
         // check is heater resource
         const resourceType = this.$store.getters.resourceType(
-          this.$store.state.dataById.resources[heaterId]
+          this.$store.state.dataById.resources[heater]
         )
 
         if (
           resourceType &&
           HEATING_RESOURCE_TYPES.includes(resourceType.name)
         ) {
-          this.heaterId = heaterId
+          this.heater = heater
         }
       }
 
@@ -419,18 +419,14 @@ export default {
         this.offset = Math.min(offset, 53)
       }
 
-      const filterNoise = parseFloat(query.filter)
-      if (!isNaN(filterNoise) && filterNoise >= 0 && filterNoise <= 1) {
-        this.filterNoise = filterNoise
+      const filter = parseFloat(query.filter)
+      if (!isNaN(filter) && filter >= 0 && filter <= 1) {
+        this.filter = filter
       }
 
-      const highlightIssues = parseFloat(query.highlight)
-      if (
-        !isNaN(highlightIssues) &&
-        highlightIssues >= 0 &&
-        highlightIssues <= 1
-      ) {
-        this.highlightIssues = highlightIssues
+      const highlight = parseFloat(query.highlight)
+      if (!isNaN(highlight) && highlight >= 0 && highlight <= 1) {
+        this.highlight = highlight
       }
     },
     setCurrentData({ datasets, hasData }) {
@@ -441,17 +437,15 @@ export default {
       this.showDownloadPopup = false
       this.$router.go(-1)
 
-      const jsonData = datasetsToJson(this.currentData)
+      const jsonData = signatureDatasetsToJson(this.currentData)
 
       let dataStr = ''
 
-      // TODO: handle download
-      /*
-      let name = `chart-period_${reversePeriods[this.period]}-offset_${
+      let name = `chart_site-${this.site}_temp-${this.temperature}_heat-${
+        this.heater
+      }_period-${reverseSignaturePeriods[this.period]}_offset-${
         this.offset
-      }-agregation_${
-        reverseAgregations[this.agregation]
-      }-resources_${this.resources.join(',')}`
+      }_filter-${this.filter}_highlight-${this.highlight}`
 
       if (payload.format === 'json') {
         dataStr =
@@ -461,27 +455,28 @@ export default {
       } else {
         dataStr =
           'data:text/csv;charset=utf-8,' +
-          encodeURIComponent(JsonToCsv(jsonData))
+          encodeURIComponent(signatureJsonToCsv(jsonData, this.$i18n))
         name += '.csv'
       }
 
       this.$refs.downloader.setAttribute('href', dataStr)
       this.$refs.downloader.setAttribute('download', name)
       this.$refs.downloader.click()
-      */
     },
     bookmark({ name }) {
       this.showBookmarkPopup = false
       this.$router.go(-1)
 
-      // TODO: handle bookmark
-      /*
       const payload = {
         name,
+        type: 'signature',
+        site: this.site,
+        temperature: this.temperature,
+        heater: this.heater,
+        period: reverseSignaturePeriods[this.period],
         offset: this.offset,
-        agregation: reverseAgregations[this.agregation],
-        period: reversePeriods[this.period],
-        resources: this.resources,
+        filter: this.filter,
+        highlight: this.highlight,
       }
 
       this.$store.commit('ADD_DASHBOARD_CHART', { element: payload })
@@ -491,7 +486,6 @@ export default {
         this.$t('api.dashboard_updated'),
         3000
       )
-      */
     },
     toggleCollapse(event) {
       this.areSettingsCollapsed = !this.areSettingsCollapsed
@@ -499,13 +493,13 @@ export default {
     },
   },
   watch: {
-    siteId() {
+    site() {
       this.setQuery()
     },
-    temperatureId() {
+    temperature() {
       this.setQuery()
     },
-    heaterId() {
+    heater() {
       this.setQuery()
     },
     period() {
@@ -514,10 +508,10 @@ export default {
     offset() {
       this.setQuery()
     },
-    filterNoise() {
+    filter() {
       this.setQuery()
     },
-    highlightIssues() {
+    highlight() {
       this.setQuery()
     },
     $route(to) {
@@ -572,7 +566,7 @@ export default {
       return this.allTemperatures
         .filter(resource => {
           const sensor = this.$store.getters.sensor(resource)
-          return sensor && sensor.site_id === this.siteId
+          return sensor && sensor.site_id === this.site
         })
         .map(resource => {
           return {
@@ -593,7 +587,7 @@ export default {
       return this.allHeaters
         .filter(resource => {
           const sensor = this.$store.getters.sensor(resource)
-          return sensor && sensor.site_id === this.siteId
+          return sensor && sensor.site_id === this.site
         })
         .map(resource => {
           const resourceType = this.$store.getters.resourceType(resource)
@@ -604,32 +598,26 @@ export default {
         })
     },
     defaultChartName() {
-      // TODO: chart name
-      return ''
-      /*
-      if (this.resources.length === 0) {
+      if (!this.isQueryValid) {
         return ''
       }
 
-      if (!this.$store.state.dataById.resources) {
+      if (!this.$store.state.dataById.sites) {
         return ''
       }
 
-      return generateName(
+      return generateSignatureChartName(
         {
+          site: this.site,
+          period: reverseSignaturePeriods[this.period],
           offset: this.offset,
-          period: reversePeriods[this.period],
-          resources: this.resources,
         },
-        this.$store.state.dataById.resources,
+        this.$store.state.dataById.sites,
         this.$i18n
       )
-      */
     },
     isQueryValid() {
-      return (
-        this.siteId !== -1 && this.temperatureId !== -1 && this.heaterId !== -1
-      )
+      return this.site !== -1 && this.temperature !== -1 && this.heater !== -1
     },
   },
 }

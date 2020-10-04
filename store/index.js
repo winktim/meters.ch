@@ -39,7 +39,6 @@ import {
   REMOVE_OBJECTIVE,
   REMOVE_ALERT,
   REMOVE_AWAITING_EVENT,
-  REMOVE_DASHBOARD_CHART,
   REMOVE_LAST_DASHBOARD_EDIT,
   REMOVE_ALL_DASHBOARD_EDITS,
   SET_METEO_LOCATIONS,
@@ -159,10 +158,11 @@ export const mutations = {
       state.data.user.dashboard = defaultDashboard()
     }
 
-    // fix the daashboard in any case because it might be invalid
+    // fix the dashboard in any case because it might be invalid
     state.data.user.dashboard = fixDashboard(
       state.data.user.dashboard,
-      state.dataById.resources
+      state.dataById.resources,
+      state.dataById.sites
     )
   },
   [SET_USERS](state, { users }) {
@@ -184,7 +184,8 @@ export const mutations = {
     if (state.data.user !== null) {
       state.data.user.dashboard = fixDashboard(
         state.data.user.dashboard,
-        state.dataById.resources
+        state.dataById.resources,
+        state.dataById.sites
       )
     }
   },
@@ -199,6 +200,15 @@ export const mutations = {
   [SET_SITES](state, { sites }) {
     state.data.sites = sites
     state.dataById.sites = indexOnId(sites)
+
+    // fix dashboard if we have user data
+    if (state.data.user !== null) {
+      state.data.user.dashboard = fixDashboard(
+        state.data.user.dashboard,
+        state.dataById.resources,
+        state.dataById.sites
+      )
+    }
   },
   [SET_OBJECTIVES](state, { objectives }) {
     state.data.objectives = objectives
@@ -300,20 +310,6 @@ export const mutations = {
   },
   [REMOVE_AWAITING_EVENT](state, { awaitingEvent }) {
     state.awaitingEvents.splice(state.awaitingEvents.indexOf(awaitingEvent), 1)
-  },
-  [REMOVE_DASHBOARD_CHART](state, { element }) {
-    if (state.data.user === null) {
-      console.warn('No user data to remove dashboard element')
-      return
-    }
-
-    const index = state.data.user.dashboard.charts.indexOf(element)
-
-    if (index === -1) {
-      return
-    }
-
-    state.data.user.dashboard.charts.splice(index, 1)
   },
   [REMOVE_LAST_DASHBOARD_EDIT](state) {
     state.dashboardEdit.undoList.pop()

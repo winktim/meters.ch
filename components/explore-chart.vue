@@ -201,9 +201,9 @@ export default {
         })
       }
       this.rawData = newRawData
-      this.updateAgregation()
+      await this.updateAgregation()
     },
-    updateAgregation() {
+    async updateAgregation() {
       if (this.rawData === null || this.rawData.length === 0) {
         return
       }
@@ -350,8 +350,12 @@ export default {
     },
     forceUpdate() {
       return this.waitForData().then(() => {
+        this.waiting = true
         this.updateAxes()
-        return this.updateRawData(true).catch(console.error)
+        this.updateRawData(true).then(
+          () => (this.waiting = false),
+          console.error
+        )
       })
     },
   },
@@ -361,7 +365,8 @@ export default {
         return
       }
       this.waitForData().then(() => {
-        this.updateRawData().catch(console.error)
+        this.waiting = true
+        this.updateRawData().then(() => (this.waiting = false), console.error)
       })
     },
     offset(to, from) {
@@ -369,7 +374,8 @@ export default {
         return
       }
       this.waitForData().then(() => {
-        this.updateRawData().catch(console.error)
+        this.waiting = true
+        this.updateRawData().then(() => (this.waiting = false), console.error)
       })
     },
     resources(to) {
@@ -382,14 +388,16 @@ export default {
 
       this.previousResources = JSON.stringify(to)
       this.waitForData().then(() => {
-        this.updateRawData().catch(console.error)
+        this.waiting = true
+        this.updateRawData().then(() => (this.waiting = false), console.error)
       })
     },
     agregation(to, from) {
       if (to === from) {
         return
       }
-      this.updateAgregation()
+      this.waiting = true
+      this.updateAgregation().then(() => (this.waiting = false))
     },
     locale(to, from) {
       if (to === from) {
@@ -403,9 +411,16 @@ export default {
   },
   mounted() {
     this.waitForData().then(() => {
+      this.waiting = true
       this.updateAxes()
-      this.updateRawData().catch(console.error)
+      this.updateRawData().then(() => (this.waiting = false), console.error)
     })
+
+    if (this.$store.getters.smallScreen) {
+      this.hideYTicks()
+    } else {
+      this.showYTicks()
+    }
 
     // show Y ticks only when the screen is large enough
     this.$store.subscribe(({ type }) => {

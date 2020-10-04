@@ -160,6 +160,7 @@
           v-text="chart.name || generateName(chart)"
         ></h2>
         <div v-else class="w-full flex mb-2">
+          <!-- TODO: translate aria label -->
           <input
             aria-label="Name"
             :value="chart.name || generateName(chart)"
@@ -196,18 +197,33 @@
           </button>
         </div>
         <explore-chart
+          v-if="chart.type === 'explore'"
           ref="charts"
           :class="chartClasses"
-          :period="periodNumber(chart.period)"
-          :agregation="agregationNumber(chart.agregation)"
+          :period="periods[chart.period]"
+          :agregation="agregations[chart.agregation]"
           :offset="chart.offset"
           :resources="chart.resources"
           :legend="false"
         ></explore-chart>
+
+        <signature-chart
+          v-else-if="chart.type === 'signature'"
+          ref="charts"
+          :class="chartClasses"
+          :site="chart.site"
+          :temperature="chart.temperature"
+          :heater="chart.heater"
+          :period="signaturePeriods[chart.period]"
+          :offset="chart.offset"
+          :filter="chart.filter"
+          :highlight="chart.highlight"
+          :legend="false"
+        ></signature-chart>
         <button
           class="mt-2 w-full sm:w-120 action bg-naito-green-200 text-gray-100 text-center"
           :disabled="editMode"
-          @click="$router.push({ name: 'explore', query: chart })"
+          @click="$router.push({ name: chart.type, query: chart })"
           v-text="$t('pages.index.open_chart')"
         ></button>
       </section>
@@ -266,15 +282,18 @@ import AppHeader from '../components/app-header.vue'
 import AppMenu from '../components/app-menu.vue'
 
 import ExploreChart from '../components/explore-chart'
+import SignatureChart from '../components/signature-chart'
 import {
   periods,
   agregations,
-  generateName,
+  generateExploreChartName,
   formatResource,
   decimalTwoFormat,
   changeState,
   alertState,
   OUTDATED_TEMP_THRESHOLD,
+  generateSignatureChartName,
+  signaturePeriods,
 } from '../assets/utils'
 import { Duration, DateTime } from 'luxon'
 
@@ -295,7 +314,7 @@ export default {
       ],
     }
   },
-  components: { AppHeader, AppMenu, ExploreChart },
+  components: { AppHeader, AppMenu, ExploreChart, SignatureChart },
   async mounted() {
     await Promise.all([
       this.$getResources(),
@@ -304,6 +323,7 @@ export default {
       this.$getSensors(),
       this.$getSites(),
       this.$getAlerts(),
+      this.$getMeteoLocations(),
     ])
 
     // don't setup temp update if user is admin
@@ -398,6 +418,7 @@ export default {
         return
       }
 
+      // call member method forceUpdate of explore-chart and signature-chart
       Promise.all(this.$refs.charts.map(chart => chart.forceUpdate())).then(
         () => {
           this.$store.dispatch('showMessage', {
@@ -494,27 +515,31 @@ export default {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen
     },
-    periodNumber(periodName) {
-      return periods[periodName]
-    },
-    agregationNumber(agregationName) {
-      return agregations[agregationName]
-    },
     chartKey(chart) {
-      return `${chart.period}-${chart.agregation}-${
-        chart.offset
-      }-${chart.resources.join('_')}`
+      return JSON.stringify(chart)
     },
     generateName(chart) {
-      if (!this.$store.state.dataById.resources) {
-        return '...'
-      }
+      if (chart.type === 'explore') {
+        if (!this.$store.state.dataById.resources) {
+          return '...'
+        }
 
-      return generateName(
-        chart,
-        this.$store.state.dataById.resources,
-        this.$i18n
-      )
+        return generateExploreChartName(
+          chart,
+          this.$store.state.dataById.resources,
+          this.$i18n
+        )
+      } else if (chart.type === 'signature') {
+        if (!this.$store.state.dataById.sites) {
+          return '...'
+        }
+
+        return generateSignatureChartName(
+          chart,
+          this.$store.state.dataById.sites,
+          this.$i18n
+        )
+      }
     },
     nameEdit(index, oldName, newName) {
       if (oldName === newName) {
@@ -605,6 +630,15 @@ export default {
     },
   },
   computed: {
+    periods() {
+      return periods
+    },
+    agregations() {
+      return agregations
+    },
+    signaturePeriods() {
+      return signaturePeriods
+    },
     /**
      * @returns {string}
      */
