@@ -449,6 +449,11 @@ export default {
       this.symbol = resourceType.symbol
       // updates the underlying chart
       this.yAxes = [symbolToAxis(resourceType.symbol, 'left', false, true)]
+
+      // by default ticks are shown
+      if (this.$store.getters.smallScreen) {
+        this.hideYTicks()
+      }
     },
     waitForData() {
       const mutationsToWaitFor = []
