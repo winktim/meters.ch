@@ -337,10 +337,14 @@ export default {
     // as the new readings arrive
     const now = DateTime.local()
     const updateAt5 = now.minute >= 35 || now.minute < 5
+    // use a random amount of seconds and milliseconds to spread requests
+    // in case there are many dashboards open at once
+    const second = Math.floor(Math.random() * 59)
+    const millisecond = Math.floor(Math.random() * 999)
     let nextUpdateTime = now.set({
       minute: updateAt5 ? 5 : 35,
-      second: 0,
-      millisecond: 0,
+      second,
+      millisecond,
     })
 
     if (nextUpdateTime <= now) {
