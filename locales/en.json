@@ -13,6 +13,7 @@
     "select_none": "Deselect all",
     "selector_close": "Close the selector's results",
     "no_data": "No data for the given period: {period}",
+    "not_enough_data": "Not enough data for the given period: {period}",
     "no_undoing": "This action cannot be undone. Please confirm.",
     "and_others": "and others",
     "browser_alert": "To make full use of this website, we recommand <a class=\"{classes}\" href=\"https://www.google.ch/chrome/\">Google Chrome</a> or <a class=\"{classes}\" href=\"https://www.mozilla.org/en-US/firefox/\">Mozilla Firefox</a>. If your conmapy doesn't allow you to install them, think about <a class=\"{classes}\" href=\"https://www.microsoft.com/en-us/windows/microsoft-edge\">Microsoft Edge</a> which should already be installed on your computer."

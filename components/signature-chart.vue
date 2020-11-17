@@ -11,7 +11,9 @@
     interaction-mode="point"
     :waiting="waiting"
     :error="!hasData"
-    :error-message="$t('global.no_data', { period: periodOffsetString })"
+    :error-message="
+      $t('global.not_enough_data', { period: periodOffsetString })
+    "
   ></basic-chart>
 </template>
 <script>
