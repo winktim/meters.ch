@@ -189,7 +189,7 @@ export default ({ app, store, redirect }, inject) => {
   })
 
   inject('getReadings', async function(resource, payload, ignoreCache) {
-    const key = `${resource}-` + JSON.stringify(payload)
+    const key = `getReadings-${resource}-` + JSON.stringify(payload)
     const cached = cache.get(key)
 
     if (cached && !ignoreCache) {
@@ -212,7 +212,7 @@ export default ({ app, store, redirect }, inject) => {
   })
 
   inject('getMeteoReadings', async function(location, payload, ignoreCache) {
-    const key = `${location}-` + JSON.stringify(payload)
+    const key = `getMeteoReadings-${location}-` + JSON.stringify(payload)
     const cached = cache.get(key)
 
     if (cached && !ignoreCache) {
