@@ -242,6 +242,7 @@ import {
   generateSignatureChartName,
   signatureDatasetsToJson,
   handleNavigationError,
+  removeTrailingSlash,
 } from '../assets/utils'
 
 import AppHeader from '../components/app-header.vue'
@@ -326,6 +327,7 @@ export default {
     },
     setQuery() {
       const route = {
+        path: removeTrailingSlash(this.$route.path),
         query: {
           site: this.site === -1 ? undefined : String(this.site),
           temperature:

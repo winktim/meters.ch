@@ -13,6 +13,9 @@ const features = [
 export default {
   ssr: false,
   target: 'static',
+  generate: {
+    subFolders: false,
+  },
   /*
    ** Headers of the page
    */
@@ -65,6 +68,7 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    '~/plugins/trailingslash',
     '~/plugins/vue-i18n',
     { src: '~/plugins/requests', mode: 'client' },
     { src: '~/plugins/api', mode: 'client' },

@@ -195,6 +195,7 @@ import {
   exploreJsonToCsv,
   generateExploreChartName,
   handleNavigationError,
+  removeTrailingSlash,
 } from '../assets/utils'
 
 import AppHeader from '../components/app-header.vue'
@@ -269,6 +270,7 @@ export default {
     },
     setQuery() {
       const route = {
+        path: removeTrailingSlash(this.$route.path),
         query: {
           offset: String(this.offset),
           agregation: reverseAgregations[this.agregation],

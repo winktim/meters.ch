@@ -1102,3 +1102,16 @@ export function handleNavigationError(e) {
 
   console.error(e)
 }
+
+/**
+ * Remove the trailing slash from a path
+ * @param {string} path the path to trim
+ * @returns {string} the trimmed path
+ */
+export function removeTrailingSlash(path) {
+  if (path !== '/' && path.endsWith('/')) {
+    return path.slice(0, path.length - 1)
+  }
+
+  return path
+}
