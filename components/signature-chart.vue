@@ -164,7 +164,7 @@ export default {
         return `${this.$t(
           `consumption_agregations.${reverseAgregations[this.agregation]}`
         )}: ${heater} ${result.unit + this.symbol}\n${this.$t(
-          'pages.signature.avarage_temp_diff'
+          'pages.signature.download.avg_temp'
         )}: ${temperature} °C`
       },
 

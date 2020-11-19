@@ -187,10 +187,9 @@
         "ideal_line": "Ligne de consommation idéale"
       },
       "download": {
-        "avg_temp": "Température moyenne",
+        "avg_temp": "Différence de température moyenne",
         "consumption": "Consommation"
-      },
-      "avarage_temp_diff": "Différence moyenne de température"
+      }
     },
     "objectives": {
       "title": "Objectifs",
