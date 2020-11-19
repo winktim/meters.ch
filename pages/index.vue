@@ -139,9 +139,7 @@
         <button
           class="mt-2 action bg-naito-green-200 text-gray-100 text-center"
           :disabled="editMode"
-          @click="
-            $router.push({ name: 'explore', query: { resources: resource.id } })
-          "
+          @click="push({ name: 'explore', query: { resources: resource.id } })"
           v-text="$t('pages.index.open_chart')"
         ></button>
       </section>
@@ -223,7 +221,7 @@
         <button
           class="mt-2 w-full sm:w-120 action bg-naito-green-200 text-gray-100 text-center"
           :disabled="editMode"
-          @click="$router.push({ name: chart.type, query: chart })"
+          @click="push({ name: chart.type, query: chart })"
           v-text="$t('pages.index.open_chart')"
         ></button>
       </section>
@@ -294,6 +292,7 @@ import {
   OUTDATED_TEMP_THRESHOLD,
   generateSignatureChartName,
   signaturePeriods,
+  handleNavigationError,
 } from '../assets/utils'
 import { Duration, DateTime } from 'luxon'
 
@@ -631,6 +630,13 @@ export default {
 
     isTempIncluded(id) {
       return this.dashboard.temps.exclude.indexOf(id) === -1
+    },
+    /**
+     * Push a new route and handle potential errors
+     * @param {{route: string, query: {}}} payload the route to push
+     */
+    push(route) {
+      this.$router.push(route).catch(handleNavigationError)
     },
   },
   computed: {

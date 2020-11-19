@@ -58,6 +58,7 @@
   </div>
 </template>
 <script>
+import { handleNavigationError } from '../assets/utils'
 export default {
   middleware: 'not-auth',
   head() {
@@ -130,7 +131,7 @@ export default {
           isError: false,
         })
 
-        this.$router.push('/login')
+        this.$router.push('/login').catch(handleNavigationError)
       } catch (e) {
         console.error('Error getting response', e)
 

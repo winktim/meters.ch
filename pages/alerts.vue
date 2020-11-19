@@ -59,7 +59,7 @@
   </div>
 </template>
 <script>
-import { formatResource } from '../assets/utils'
+import { formatResource, handleNavigationError } from '../assets/utils'
 import { DateTime } from 'luxon'
 
 import AppHeader from '../components/app-header'
@@ -108,16 +108,7 @@ export default {
   },
   methods: {
     navPopup() {
-      this.$router.push(
-        { query: { popup: null } },
-        () => {},
-        (e) => {
-          if (e === undefined || e.name === 'NavigationDuplicated') {
-            return
-          }
-          console.error(e)
-        }
-      )
+      this.$router.push({ query: { popup: null } }).catch(handleNavigationError)
     },
     create() {
       // make sure to hide any messages

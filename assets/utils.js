@@ -1,5 +1,8 @@
 import { DateTime, Duration } from 'luxon'
 
+import VueRouter from 'vue-router'
+const { isNavigationFailure, NavigationFailureType } = VueRouter
+
 /**
  * Map from the simple language local to the full locale for number formatting
  */
@@ -1074,4 +1077,28 @@ export function getScatterAverageLine(scatterData) {
     slope,
     intercept,
   }
+}
+
+/**
+ * Handle a potential navigation error from VueRouter push & replace methods
+ * @param {Error} e the rejected error
+ * @returns {void} nothing
+ */
+export function handleNavigationError(e) {
+  if (e === undefined) {
+    return
+  }
+
+  if (isNavigationFailure(e, NavigationFailureType.cancelled)) {
+    // ingore canceled navigation
+    return
+  }
+
+  if (isNavigationFailure(e, NavigationFailureType.duplicated)) {
+    // ignore this error. we cannot easily check if the query is the same as the current
+    // which would avoid calling replace when not needed
+    return
+  }
+
+  console.error(e)
 }

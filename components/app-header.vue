@@ -19,6 +19,7 @@
   </header>
 </template>
 <script>
+import { handleNavigationError } from '../assets/utils'
 export default {
   props: {
     title: String,
@@ -36,7 +37,7 @@ export default {
     goBack(event) {
       event.preventDefault()
 
-      this.$router.push(this.url)
+      this.$router.push(this.url).catch(handleNavigationError)
     },
   },
 }

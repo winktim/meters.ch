@@ -194,6 +194,7 @@ import {
   exploreDatasetsToJson,
   exploreJsonToCsv,
   generateExploreChartName,
+  handleNavigationError,
 } from '../assets/utils'
 
 import AppHeader from '../components/app-header.vue'
@@ -262,16 +263,9 @@ export default {
   },
   methods: {
     navPopup() {
-      this.$router.push(
-        { query: { ...this.$route.query, popup: null } },
-        () => {},
-        (e) => {
-          if (e === undefined || e.name === 'NavigationDuplicated') {
-            return
-          }
-          console.error(e)
-        }
-      )
+      this.$router
+        .push({ query: { ...this.$route.query, popup: null } })
+        .catch(handleNavigationError)
     },
     setQuery() {
       const route = {
@@ -288,18 +282,7 @@ export default {
         return
       }
 
-      this.$router.replace(
-        route,
-        () => {},
-        (e) => {
-          // ignore this error. we cannot easily check if the query is the same as the current
-          // which would avoid calling replace when not needed
-          if (e === undefined || e.name === 'NavigationDuplicated') {
-            return
-          }
-          console.error(e)
-        }
-      )
+      this.$router.replace(route).catch(handleNavigationError)
     },
     getQuery() {
       const query = this.$route.query

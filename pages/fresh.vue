@@ -81,6 +81,7 @@
   </div>
 </template>
 <script>
+import { handleNavigationError } from '../assets/utils'
 export default {
   middleware: ['has-verify-token', 'not-auth'],
   head() {
@@ -124,17 +125,7 @@ export default {
       if (to) {
         route.query['remember-me'] = null
       }
-      this.$router.replace(
-        route,
-        () => {},
-        (e) => {
-          // ignore this error because it is not important
-          if (e === undefined || e.name === 'NavigationDuplicated') {
-            return
-          }
-          console.error(e)
-        }
-      )
+      this.$router.replace(route).catch(handleNavigationError)
     },
   },
   methods: {
@@ -174,7 +165,7 @@ export default {
               message: parsed.message,
               isError: true,
             })
-            this.$router.push('/reset')
+            this.$router.push('/reset').catch(handleNavigationError)
           }
 
           // stop here
@@ -188,7 +179,7 @@ export default {
         localStorage.setItem('hasConnected', true)
         this.$store.commit('SET_API_TOKEN', { apiToken: parsed.api_token })
 
-        this.$router.push('/')
+        this.$router.push('/').catch(handleNavigationError)
       } catch (e) {
         console.error('Error getting response', e)
 

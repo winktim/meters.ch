@@ -63,6 +63,7 @@ import {
   formatResource,
   toClosestSuffixe,
   decimalDefaultFormat,
+  handleNavigationError,
 } from '../assets/utils'
 import { DateTime } from 'luxon'
 
@@ -112,16 +113,7 @@ export default {
   },
   methods: {
     navPopup() {
-      this.$router.push(
-        { query: { popup: null } },
-        () => {},
-        (e) => {
-          if (e === undefined || e.name === 'NavigationDuplicated') {
-            return
-          }
-          console.error(e)
-        }
-      )
+      this.$router.push({ query: { popup: null } }).catch(handleNavigationError)
     },
     create() {
       // make sure to hide any messages
