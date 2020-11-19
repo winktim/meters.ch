@@ -118,7 +118,7 @@ export default {
               boxWidth: 35,
               fontSize: chartDefaults.fontSize,
               fontColor: chartDefaults.fontColor,
-              generateLabels: chart => {
+              generateLabels: (chart) => {
                 if (!Array.isArray(chart.data.datasets)) {
                   return []
                 }

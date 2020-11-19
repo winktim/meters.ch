@@ -75,7 +75,7 @@ export default {
         navTo = to.name
 
         this.$store.dispatch('addAwaitingEvent', {
-          awaitingEvent: new Promise(resolve => {
+          awaitingEvent: new Promise((resolve) => {
             resolveFunc = resolve
           }),
         })

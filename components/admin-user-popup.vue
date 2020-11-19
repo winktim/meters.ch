@@ -230,7 +230,7 @@ export default {
     },
   },
   mounted() {
-    this.escHandler = event => {
+    this.escHandler = (event) => {
       if (event.keyCode === 27) {
         if (this.show) {
           this.$emit('cancel')
@@ -295,7 +295,7 @@ export default {
       return this.$store.state.locales
     },
     formattedClients() {
-      return this.$store.getters.clients.map(client => ({
+      return this.$store.getters.clients.map((client) => ({
         id: client.id,
         value: `${client.number} - ${client.name}`,
       }))

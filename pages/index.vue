@@ -91,7 +91,7 @@
           <span
             v-if="
               currentTemperatures[resource.id] &&
-                currentTemperatures[resource.id].state === changeState.INCREASE
+              currentTemperatures[resource.id].state === changeState.INCREASE
             "
             class="mr-4 text-3xl text-red-600 twitching-arrow select-none"
             >↗</span
@@ -99,7 +99,7 @@
           <span
             v-if="
               currentTemperatures[resource.id] &&
-                currentTemperatures[resource.id].state === changeState.DECREASE
+              currentTemperatures[resource.id].state === changeState.DECREASE
             "
             class="mr-4 text-3xl text-blue-600 twitching-arrow select-none"
             >↙</span
@@ -116,7 +116,7 @@
           <button
             v-if="
               currentTemperatures[resource.id] &&
-                currentTemperatures[resource.id].isOld
+              currentTemperatures[resource.id].isOld
             "
             class="flex items-center p-4 text-3xl popup select-none"
             data-popup-show="false"
@@ -423,7 +423,7 @@ export default {
       }
 
       // call member method forceUpdate of explore-chart and signature-chart
-      Promise.all(this.$refs.charts.map(chart => chart.forceUpdate())).then(
+      Promise.all(this.$refs.charts.map((chart) => chart.forceUpdate())).then(
         () => {
           this.$store.dispatch('showMessage', {
             message: this.$t('pages.index.updated_manually'),
@@ -680,7 +680,7 @@ export default {
         : this.$store.getters.dashboard
     },
     temperatureResources() {
-      return this.$store.getters.resources.filter(resource => {
+      return this.$store.getters.resources.filter((resource) => {
         const resourceType = this.$store.getters.resourceType(resource)
         return resourceType && resourceType.name === 'Temperature'
       })
@@ -688,7 +688,7 @@ export default {
     prepedTemperatureResources() {
       return (
         this.temperatureResources
-          .map(resource => {
+          .map((resource) => {
             let site = null
 
             if (this.$store.getters.numSites > 1) {
@@ -703,7 +703,9 @@ export default {
             }
           })
           // only show them all in edit mode, otherwise hide the exluded ones
-          .filter(resource => this.editMode || this.isTempIncluded(resource.id))
+          .filter(
+            (resource) => this.editMode || this.isTempIncluded(resource.id)
+          )
       )
     },
 

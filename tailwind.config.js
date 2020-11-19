@@ -36,33 +36,33 @@ module.exports = {
     extend: {
       colors: {
         'gray': {
-          '100': '#f5f5f5',
-          '200': '#eeeeee',
-          '300': '#e0e0e0',
-          '400': '#bdbdbd',
-          '500': '#9e9e9e',
-          '600': '#757575',
-          '700': '#616161',
-          '800': '#424242',
-          '900': '#212121',
-          'darken': '#21212155',
+          100: '#f5f5f5',
+          200: '#eeeeee',
+          300: '#e0e0e0',
+          400: '#bdbdbd',
+          500: '#9e9e9e',
+          600: '#757575',
+          700: '#616161',
+          800: '#424242',
+          900: '#212121',
+          darken: '#21212155',
         },
         'naito-pink': {
-          '100': '#DA91C9',
-          '200': '#BD62C5',
+          100: '#DA91C9',
+          200: '#BD62C5',
         },
         'naito-green': {
-          '100': '#459090',
-          '200': '#326562',
+          100: '#459090',
+          200: '#326562',
         },
         'naito-yellow': {
-          '100': '#fded86',
-          '200': '#fad65e',
+          100: '#fded86',
+          200: '#fad65e',
         },
         'naito-blue': {
-          '100': '#4A90CF',
-          '200': '#45799E',
-          '300': '#3C6285',
+          100: '#4A90CF',
+          200: '#45799E',
+          300: '#3C6285',
         },
       },
       spacing: {
@@ -84,19 +84,19 @@ module.exports = {
         'fake1/2': '48%',
       },
       height: {
-        '18': '4.5rem',
-        '76': '19rem',
-        '100': '25rem',
-        '200': '50rem',
+        18: '4.5rem',
+        76: '19rem',
+        100: '25rem',
+        200: '50rem',
       },
       maxHeight: {
-        '200': '50rem',
-        '32': '8rem',
-        '64': '16rem',
+        200: '50rem',
+        32: '8rem',
+        64: '16rem',
       },
       maxWidth: {
-        '60': '15rem',
-        '120': '30rem',
+        60: '15rem',
+        120: '30rem',
       },
       minWidth: {
         '64': '16rem',
@@ -129,7 +129,7 @@ module.exports = {
     /**
      * Transform plugin
      */
-    function({ addUtilities, addComponents, e, prefix, config }) {
+    function ({ addUtilities, addComponents, e, prefix, config }) {
       const utilities = _.map(config('theme.transform'), (value, key) => {
         return {
           [`.${e(`translate-x-${key}`)}`]: {
@@ -154,7 +154,7 @@ module.exports = {
     /**
      * Transition plugin
      */
-    function({ addUtilities, addComponents, e, prefix, config }) {
+    function ({ addUtilities, addComponents, e, prefix, config }) {
       const utilities = _.map(
         config('theme.transitionProperties'),
         (propertyValue, propertyName) => {
@@ -178,7 +178,7 @@ module.exports = {
     /**
      * Lighten & Darken utility
      */
-    function({ addUtilities, addComponents, e, prefix, config }) {
+    function ({ addUtilities, addComponents, e, prefix, config }) {
       const utilities = _.map(
         config('theme.colorVariations'),
         (variationValue, variationName) => {

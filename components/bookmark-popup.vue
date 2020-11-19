@@ -97,7 +97,7 @@ export default {
     },
   },
   mounted() {
-    this.escHandler = event => {
+    this.escHandler = (event) => {
       if (event.keyCode === 27) {
         if (this.show) {
           this.$emit('cancel')

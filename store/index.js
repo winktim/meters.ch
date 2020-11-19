@@ -384,41 +384,42 @@ export const actions = {
 }
 
 export const getters = {
-  smallScreen: state => state.smallScreen,
-  rememberMe: state => state.rememberMe,
-  name: state => (state.data.user ? state.data.user.name : '...'),
-  email: state => (state.data.user ? state.data.user.email : '...'),
-  userLocale: state =>
+  smallScreen: (state) => state.smallScreen,
+  rememberMe: (state) => state.rememberMe,
+  name: (state) => (state.data.user ? state.data.user.name : '...'),
+  email: (state) => (state.data.user ? state.data.user.email : '...'),
+  userLocale: (state) =>
     state.data.user ? state.data.user.locale : state.locale,
-  accountCreatedAt: state =>
+  accountCreatedAt: (state) =>
     state.data.user
       ? DateTime.fromISO(state.data.user.created_at)
       : DateTime.local(),
-  dashboard: state =>
+  dashboard: (state) =>
     state.data.user ? state.data.user.dashboard : defaultDashboard(),
-  isAdmin: state =>
+  isAdmin: (state) =>
     state.data.user ? Boolean(state.data.user.is_admin) : false,
-  clientName: state => (state.data.client ? state.data.client.name : '...'),
-  clientNumber: state => (state.data.client ? state.data.client.number : '...'),
-  clientEmail: state => (state.data.client ? state.data.client.email : '...'),
-  resources: state => (state.data.resources ? state.data.resources : []),
-  hasResources: state => !!state.data.resources,
-  hasResourceTypes: state => !!state.data.resourceTypes,
-  hasMeteoLocations: state => !!state.data.meteoLocations,
-  hasSites: state => !!state.data.sites,
-  numResources: state =>
+  clientName: (state) => (state.data.client ? state.data.client.name : '...'),
+  clientNumber: (state) =>
+    state.data.client ? state.data.client.number : '...',
+  clientEmail: (state) => (state.data.client ? state.data.client.email : '...'),
+  resources: (state) => (state.data.resources ? state.data.resources : []),
+  hasResources: (state) => !!state.data.resources,
+  hasResourceTypes: (state) => !!state.data.resourceTypes,
+  hasMeteoLocations: (state) => !!state.data.meteoLocations,
+  hasSites: (state) => !!state.data.sites,
+  numResources: (state) =>
     state.data.resources ? state.data.resources.length : 0,
-  sites: state => (state.data.sites ? state.data.sites : []),
-  numSites: state => (state.data.sites ? state.data.sites.length : 0),
-  objectives: state => (state.data.objectives ? state.data.objectives : []),
-  alerts: state => (state.data.alerts ? state.data.alerts : []),
+  sites: (state) => (state.data.sites ? state.data.sites : []),
+  numSites: (state) => (state.data.sites ? state.data.sites.length : 0),
+  objectives: (state) => (state.data.objectives ? state.data.objectives : []),
+  alerts: (state) => (state.data.alerts ? state.data.alerts : []),
   // for admin only
-  users: state => (state.data.users ? state.data.users : []),
-  clients: state => (state.data.clients ? state.data.clients : []),
+  users: (state) => (state.data.users ? state.data.users : []),
+  clients: (state) => (state.data.clients ? state.data.clients : []),
 
   // dashboard edit mode
-  dashboardUndoList: state => state.dashboardEdit.undoList,
-  dashboardEditCurrent: state => {
+  dashboardUndoList: (state) => state.dashboardEdit.undoList,
+  dashboardEditCurrent: (state) => {
     if (state.data.user === null) {
       return defaultDashboard()
     }
@@ -434,7 +435,7 @@ export const getters = {
 
   // Database relations getters
 
-  resource: state => hasResource => {
+  resource: (state) => (hasResource) => {
     if (!hasResource) {
       return null
     }
@@ -445,7 +446,7 @@ export const getters = {
 
     return state.dataById.resources[hasResource.resource_id]
   },
-  resourceType: state => hasResourceType => {
+  resourceType: (state) => (hasResourceType) => {
     if (!hasResourceType) {
       return null
     }
@@ -456,7 +457,7 @@ export const getters = {
 
     return state.dataById.resourceTypes[hasResourceType.resource_type_id]
   },
-  sensor: state => hasSensor => {
+  sensor: (state) => (hasSensor) => {
     if (!hasSensor) {
       return null
     }
@@ -467,7 +468,7 @@ export const getters = {
 
     return state.dataById.sensors[hasSensor.sensor_id]
   },
-  site: state => hasSite => {
+  site: (state) => (hasSite) => {
     if (!hasSite) {
       return null
     }
@@ -478,7 +479,7 @@ export const getters = {
 
     return state.dataById.sites[hasSite.site_id]
   },
-  alert: state => hasAlert => {
+  alert: (state) => (hasAlert) => {
     if (!hasAlert) {
       return null
     }
@@ -489,7 +490,7 @@ export const getters = {
 
     return state.dataById.alerts[hasAlert.alert_id]
   },
-  objective: state => hasObjective => {
+  objective: (state) => (hasObjective) => {
     if (!hasObjective) {
       return null
     }
@@ -501,7 +502,7 @@ export const getters = {
     return state.dataById.objectives[hasObjective.objective_id]
   },
   // for admin only
-  user: state => hasUser => {
+  user: (state) => (hasUser) => {
     if (!hasUser) {
       return null
     }
@@ -512,7 +513,7 @@ export const getters = {
 
     return state.dataById.users[hasUser.user_id]
   },
-  client: state => hasClient => {
+  client: (state) => (hasClient) => {
     if (!hasClient) {
       return null
     }
@@ -523,7 +524,7 @@ export const getters = {
 
     return state.dataById.clients[hasClient.client_id]
   },
-  meteoLocation: state => hasMeteoLocation => {
+  meteoLocation: (state) => (hasMeteoLocation) => {
     if (!hasMeteoLocation) {
       return null
     }

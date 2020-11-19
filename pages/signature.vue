@@ -322,7 +322,7 @@ export default {
       this.$router.push(
         { query: { ...this.$route.query, popup: null } },
         () => {},
-        e => {
+        (e) => {
           if (e === undefined || e.name === 'NavigationDuplicated') {
             return
           }
@@ -352,7 +352,7 @@ export default {
       this.$router.replace(
         route,
         () => {},
-        e => {
+        (e) => {
           // ignore this error. we cannot easily check if the query is the same as the current
           // which would avoid calling replace when not needed
           if (e === undefined || e.name === 'NavigationDuplicated') {
@@ -548,8 +548,8 @@ export default {
     formattedSites() {
       // meteo_location_id is nullable. don't include sites that don't have it
       return this.$store.getters.sites
-        .filter(site => site.meteo_location_id !== null)
-        .map(site => {
+        .filter((site) => site.meteo_location_id !== null)
+        .map((site) => {
           return {
             id: site.id,
             value: `${site.name}, ${site.zip} ${site.city}`,
@@ -557,18 +557,18 @@ export default {
         })
     },
     allTemperatures() {
-      return this.$store.getters.resources.filter(resource => {
+      return this.$store.getters.resources.filter((resource) => {
         const resourceType = this.$store.getters.resourceType(resource)
         return resourceType && resourceType.name === 'Temperature'
       })
     },
     formattedTemperatures() {
       return this.allTemperatures
-        .filter(resource => {
+        .filter((resource) => {
           const sensor = this.$store.getters.sensor(resource)
           return sensor && sensor.site_id === this.site
         })
-        .map(resource => {
+        .map((resource) => {
           return {
             id: resource.id,
             value: resource.description,
@@ -576,7 +576,7 @@ export default {
         })
     },
     allHeaters() {
-      return this.$store.getters.resources.filter(resource => {
+      return this.$store.getters.resources.filter((resource) => {
         const resourceType = this.$store.getters.resourceType(resource)
         return (
           resourceType && HEATING_RESOURCE_TYPES.includes(resourceType.name)
@@ -585,11 +585,11 @@ export default {
     },
     formattedHeaters() {
       return this.allHeaters
-        .filter(resource => {
+        .filter((resource) => {
           const sensor = this.$store.getters.sensor(resource)
           return sensor && sensor.site_id === this.site
         })
-        .map(resource => {
+        .map((resource) => {
           const resourceType = this.$store.getters.resourceType(resource)
           return {
             id: resource.id,

@@ -115,7 +115,7 @@ export default {
       this.$router.push(
         { query: { popup: null } },
         () => {},
-        e => {
+        (e) => {
           if (e === undefined || e.name === 'NavigationDuplicated') {
             return
           }
@@ -179,7 +179,7 @@ export default {
   computed: {
     objectives() {
       const locale = this.$numberLocale()
-      return this.$store.getters.objectives.map(objective => {
+      return this.$store.getters.objectives.map((objective) => {
         const out = {
           id: objective.id,
           value: '',

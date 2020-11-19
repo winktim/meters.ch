@@ -11,7 +11,7 @@ function getNavigatorLanguage() {
   }
 }
 
-export default function({ store }) {
+export default function ({ store }) {
   if (store.state.readClientData) {
     return
   }

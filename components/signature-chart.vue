@@ -108,7 +108,7 @@ export default {
             fontSize: chartDefaults.fontSize,
             padding: 18,
 
-            callback: tick => {
+            callback: (tick) => {
               return `${tick} °C`
             },
           },
@@ -156,13 +156,11 @@ export default {
           data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].z
         // add spaces before to make room between the color box and the text
         return `  ${capitalize(
-          DateTime.fromISO(date)
-            .setLocale(this.$dateLocale())
-            .toFormat(format)
+          DateTime.fromISO(date).setLocale(this.$dateLocale()).toFormat(format)
         )}`
       },
 
-      tooltipsFilter: tooltipItem => {
+      tooltipsFilter: (tooltipItem) => {
         return tooltipItem.datasetIndex !== 2
       },
     }
@@ -317,7 +315,7 @@ export default {
       )
         // if we were missing any data along the way, x will be NaN
         // remove it here because it is useless on the chart
-        .filter(point => !isNaN(point.x))
+        .filter((point) => !isNaN(point.x))
         .sort((a, b) => a.x - b.x)
 
       await this.updateUserFilter()
@@ -427,13 +425,13 @@ export default {
       )
     },
     hideYTicks() {
-      this.yAxes.forEach(axes => {
+      this.yAxes.forEach((axes) => {
         // updates the underlying chart
         this.$set(axes.ticks, 'display', false)
       })
     },
     showYTicks() {
-      this.yAxes.forEach(axes => {
+      this.yAxes.forEach((axes) => {
         // updates the underlying chart
         this.$set(axes.ticks, 'display', true)
       })

@@ -9,14 +9,14 @@ Chart.defaults.global.defaultFontSize = chartDefaults.fontSize
 Chart.defaults.global.defaultFontFamily = chartDefaults.fontFamily
 
 // increase padding between legend and chart
-Chart.Legend.prototype.afterFit = function() {
+Chart.Legend.prototype.afterFit = function () {
   this.height = this.height + 16
 }
 
 // https://github.com/chartjs/Chart.js/blob/cbace1cfe2c1b70ac26d1ee798eb5841fcd978c5/src/core/core.controller.js#L19
 Chart.defaults.global.events.push('touchend')
 
-Chart.Tooltip.prototype.handleEvent = function(e) {
+Chart.Tooltip.prototype.handleEvent = function (e) {
   const me = this
   const options = me._options
   let changed = false

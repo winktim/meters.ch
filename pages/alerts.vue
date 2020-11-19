@@ -111,7 +111,7 @@ export default {
       this.$router.push(
         { query: { popup: null } },
         () => {},
-        e => {
+        (e) => {
           if (e === undefined || e.name === 'NavigationDuplicated') {
             return
           }
@@ -175,7 +175,7 @@ export default {
   computed: {
     alerts() {
       const locale = this.$numberLocale()
-      return this.$store.getters.alerts.map(alert => {
+      return this.$store.getters.alerts.map((alert) => {
         const out = {
           id: alert.id,
           value: '',

@@ -16,7 +16,7 @@ export default function factory(cacheTimeout, cleanInterval) {
    * @param {string} key
    * @returns {any} the value or null
    */
-  const get = key => {
+  const get = (key) => {
     const current = cache[key]
 
     if (!current) {
@@ -55,7 +55,7 @@ export default function factory(cacheTimeout, cleanInterval) {
 
     const keys = Object.keys(cache)
 
-    keys.forEach(key => {
+    keys.forEach((key) => {
       if (cache[key].timeout <= now) {
         delete cache[key]
       }

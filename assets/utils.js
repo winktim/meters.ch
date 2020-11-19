@@ -174,8 +174,8 @@ function fixExploreChart(element, ownedResources) {
   // convert to numbers and filter resources that are not number or not owned resources
   // if the owned ressources are not available, ignore that check
   const resources = element['resources']
-    .map(id => parseInt(id))
-    .filter(id => {
+    .map((id) => parseInt(id))
+    .filter((id) => {
       return !isNaN(id) && (!ownedResources || ownedResources[id] !== undefined)
     })
 
@@ -310,14 +310,14 @@ export function fixDashboard(dashboard, ownedResources, ownedSites) {
     Array.isArray(dashboard.temps.exclude)
   ) {
     const inputExcludedTemps = dashboard.temps.exclude
-      .map(id => parseInt(id))
-      .filter(id => !isNaN(id))
+      .map((id) => parseInt(id))
+      .filter((id) => !isNaN(id))
 
     out.temps.exclude = inputExcludedTemps
   }
 
   // handle charts
-  inputCharts.forEach(element => {
+  inputCharts.forEach((element) => {
     // check all elements are objects
     if (typeof element !== 'object' || element === null) {
       return
@@ -396,7 +396,7 @@ export const datasetColors = [
   '#315C59',
 ]
 
-export const datasetStyle = datasetColors.map(color => ({
+export const datasetStyle = datasetColors.map((color) => ({
   backgroundColor: 'transparent',
   borderColor: color,
   borderWidth: 3,
@@ -481,9 +481,9 @@ function chunkForAgregation(array, agregation) {
 
   const factors = agregationFactors[agregation]
 
-  const retrievedFactors = array.map(value => {
+  const retrievedFactors = array.map((value) => {
     const date = DateTime.fromISO(value.x)
-    return factors.map(factor => date.get(factor))
+    return factors.map((factor) => date.get(factor))
   })
 
   for (let i = 1, lastChunkEnd = 0; i <= length; ++i) {
@@ -543,7 +543,7 @@ export function agregateData(data, agregation, agregationFunction) {
 
   const chunks = chunkForAgregation(out, agregation)
 
-  const summedUp = chunks.map(chunk => {
+  const summedUp = chunks.map((chunk) => {
     return {
       x: DateTime.fromISO(chunk[0].x)
         .startOf(reverseAgregations[agregation])
@@ -622,10 +622,10 @@ export function pluck(object, ...keys) {
  * @param {{label: string, data: {x: string, y: number}[], resource: {}, resourceType: {}}[]} datasets
  */
 export function exploreDatasetsToJson(datasets) {
-  return datasets.map(dataset => ({
+  return datasets.map((dataset) => ({
     label: dataset.label,
     // remove inserted NaN values to fix the chart
-    data: dataset.data.filter(data => !isNaN(data.y)),
+    data: dataset.data.filter((data) => !isNaN(data.y)),
     resource: pluck(
       dataset.resource,
       'id',
@@ -644,7 +644,7 @@ export function exploreDatasetsToJson(datasets) {
  * @param {{label: string, data: {x: number, y: number, z: string}[]}[]} datasets
  */
 export function signatureDatasetsToJson(datasets) {
-  return datasets.map(dataset => ({
+  return datasets.map((dataset) => ({
     label: dataset.label,
     data: dataset.data.map(({ x, y, z }) => ({ x, y: +y.toFixed(2), z })),
   }))
@@ -659,7 +659,7 @@ export function exploreJsonToCsv(json, i18n) {
   const data = [
     [`"${i18n.t('global.date')}"`].concat(
       json.map(
-        dataset =>
+        (dataset) =>
           `"${dataset.label.replace(
             '"',
             '""'
@@ -680,10 +680,10 @@ export function exploreJsonToCsv(json, i18n) {
     // remove the offset from the date string so it parses correctly once in a CSV software
     const finalDate = `"${date.replace(/\+.*/g, '')}"`
 
-    const values = json.map(dataset => {
+    const values = json.map((dataset) => {
       // take the value at the same date as the biggest dataset
       // to account for potential missing values in the middle of the dataset
-      const value = dataset.data.find(value => value.x === date)
+      const value = dataset.data.find((value) => value.x === date)
 
       // missing value
       if (value === undefined) {
@@ -697,7 +697,7 @@ export function exploreJsonToCsv(json, i18n) {
     data.push([finalDate].concat(values))
   }
 
-  return data.map(line => line.join(',')).join('\n')
+  return data.map((line) => line.join(',')).join('\n')
 }
 
 /**
@@ -718,7 +718,7 @@ export function signatureJsonToCsv(json, i18n) {
     [`"${json[0].label}"`],
     labels,
 
-    ...json[0].data.map(point => {
+    ...json[0].data.map((point) => {
       // remove UTC offset from date
       return [
         `"${point.x.toString().replace('.', ',')}"`,
@@ -730,7 +730,7 @@ export function signatureJsonToCsv(json, i18n) {
     [`"${json[1].label}"`],
     labels,
 
-    ...json[1].data.map(point => {
+    ...json[1].data.map((point) => {
       // remove UTC offset from date
       return [
         `"${point.x.toString().replace('.', ',')}"`,
@@ -742,7 +742,7 @@ export function signatureJsonToCsv(json, i18n) {
     [`"${json[2].label}"`],
     [labels[0], labels[1]],
 
-    ...json[2].data.map(point => {
+    ...json[2].data.map((point) => {
       return [
         `"${point.x.toString().replace('.', ',')}"`,
         `"${point.y.toString().replace('.', ',')}"`,
@@ -750,7 +750,7 @@ export function signatureJsonToCsv(json, i18n) {
     }),
   ]
 
-  return data.map(line => line.join(',')).join('\n')
+  return data.map((line) => line.join(',')).join('\n')
 }
 
 /**
@@ -849,7 +849,7 @@ export function symbolToAxis(
       fontSize: chartDefaults.fontSize,
       padding: 18,
 
-      callback: tick => {
+      callback: (tick) => {
         if (useSuffix) {
           const result = toClosestSuffixe(tick)
           return `${result.number} ${result.unit + symbol}`
@@ -968,7 +968,7 @@ export function defaultDashboard() {
  * @returns {Promise<void>} nothing
  */
 export function waitForMutations(store, mutations) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const mutationsLeft = mutations
     store.subscribe(({ type }) => {
       const index = mutationsLeft.indexOf(type)
@@ -1007,7 +1007,7 @@ export function noiseFilter(data, noiseRatio) {
   // find the biggest and scale the noiseRatio according to it
   // remove data that falls in the noiseRatio
 
-  const withError = data.map(point => {
+  const withError = data.map((point) => {
     return {
       point,
       squaredError: Math.pow(slope * point.x + intercept - point.y, 2),

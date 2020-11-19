@@ -143,7 +143,7 @@ export default {
       this.$router.replace(
         route,
         () => {},
-        e => {
+        (e) => {
           // ignore this error because it is not important
           if (e === undefined || e.name === 'NavigationDuplicated') {
             return

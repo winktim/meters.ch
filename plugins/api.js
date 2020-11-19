@@ -61,7 +61,7 @@ export default ({ app, store, redirect }, inject) => {
     })
   }
 
-  inject('getUsers', async function(force) {
+  inject('getUsers', async function (force) {
     if (store.state.data.user !== null && !force) {
       return
     }
@@ -79,7 +79,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getResources', async function(force) {
+  inject('getResources', async function (force) {
     if (store.state.data.resources !== null && !force) {
       return
     }
@@ -92,7 +92,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getResourceTypes', async function(force) {
+  inject('getResourceTypes', async function (force) {
     if (store.state.data.resourceTypes !== null && !force) {
       return
     }
@@ -105,7 +105,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getSites', async function(force) {
+  inject('getSites', async function (force) {
     if (store.state.data.sites !== null && !force) {
       return
     }
@@ -118,7 +118,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getMeteoLocations', async function(force) {
+  inject('getMeteoLocations', async function (force) {
     if (store.state.data.meteoLocations !== null && !force) {
       return
     }
@@ -131,7 +131,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getSensors', async function(force) {
+  inject('getSensors', async function (force) {
     if (store.state.data.sensors !== null && !force) {
       return
     }
@@ -144,7 +144,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getObjectives', async function(force) {
+  inject('getObjectives', async function (force) {
     if (store.state.data.objectives !== null && !force) {
       return
     }
@@ -157,7 +157,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getAlerts', async function(force) {
+  inject('getAlerts', async function (force) {
     if (store.state.data.alerts !== null && !force) {
       return
     }
@@ -170,7 +170,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getClients', async function(force) {
+  inject('getClients', async function (force) {
     if (store.state.data.client !== null && !force) {
       return
     }
@@ -188,7 +188,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getReadings', async function(resource, payload, ignoreCache) {
+  inject('getReadings', async function (resource, payload, ignoreCache) {
     const key = `getReadings-${resource}-` + JSON.stringify(payload)
     const cached = cache.get(key)
 
@@ -211,7 +211,7 @@ export default ({ app, store, redirect }, inject) => {
     return readings
   })
 
-  inject('getMeteoReadings', async function(location, payload, ignoreCache) {
+  inject('getMeteoReadings', async function (location, payload, ignoreCache) {
     const key = `getMeteoReadings-${location}-` + JSON.stringify(payload)
     const cached = cache.get(key)
 
@@ -236,7 +236,7 @@ export default ({ app, store, redirect }, inject) => {
 
   // PUT
 
-  inject('putUser', async function(payload, customMessage, customTime) {
+  inject('putUser', async function (payload, customMessage, customTime) {
     if (store.state.data.user === null) {
       return
     }
@@ -265,7 +265,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('putObjective', async function(payload) {
+  inject('putObjective', async function (payload) {
     if (store.state.data.objectives === null) {
       return
     }
@@ -286,7 +286,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('putAlert', async function(payload) {
+  inject('putAlert', async function (payload) {
     if (store.state.data.alerts === null) {
       return
     }
@@ -309,7 +309,7 @@ export default ({ app, store, redirect }, inject) => {
 
   // POST
 
-  inject('postObjective', async function(payload) {
+  inject('postObjective', async function (payload) {
     if (store.state.data.objectives === null) {
       return
     }
@@ -330,7 +330,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('postAlert', async function(payload) {
+  inject('postAlert', async function (payload) {
     if (store.state.data.alerts === null) {
       return
     }
@@ -351,7 +351,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('postUser', async function(payload) {
+  inject('postUser', async function (payload) {
     if (store.state.data.users === null) {
       return
     }
@@ -371,7 +371,7 @@ export default ({ app, store, redirect }, inject) => {
 
   // DELETE
 
-  inject('delObjective', async function(payload) {
+  inject('delObjective', async function (payload) {
     if (store.state.data.objectives === null) {
       return
     }
@@ -392,7 +392,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('delAlert', async function(payload) {
+  inject('delAlert', async function (payload) {
     if (store.state.data.alerts === null) {
       return
     }
@@ -412,7 +412,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('delUser', async function(payload) {
+  inject('delUser', async function (payload) {
     if (store.state.data.users === null) {
       return
     }

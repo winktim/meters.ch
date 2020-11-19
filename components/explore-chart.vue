@@ -211,7 +211,7 @@ export default {
       /**
        * @type {{data: []}[]}
        */
-      const newDatasets = this.rawData.map(dataset => {
+      const newDatasets = this.rawData.map((dataset) => {
         if (!dataset.resourceType) {
           return dataset
         }
@@ -235,7 +235,7 @@ export default {
         dataset.data.length > carry.data.length ? dataset : carry
       )
 
-      const fixedDatasets = newDatasets.map(dataset => {
+      const fixedDatasets = newDatasets.map((dataset) => {
         // ignore the complete dataset
         if (dataset === completeDataset) {
           return dataset
@@ -256,7 +256,7 @@ export default {
 
       this.hasData =
         this.datasets.length > 0 &&
-        this.datasets.some(dataset => dataset.data.length > 0)
+        this.datasets.some((dataset) => dataset.data.length > 0)
 
       this.$emit('currentData', {
         datasets: fixedDatasets,
@@ -265,7 +265,7 @@ export default {
     },
     reTranslate() {
       // updates the underlying chart
-      this.datasets.forEach(dataset => {
+      this.datasets.forEach((dataset) => {
         this.$set(
           dataset,
           'label',
@@ -283,13 +283,13 @@ export default {
       this.$set(this.xAxes[0].adapters.date, 'locale', this.$dateLocale())
     },
     hideYTicks() {
-      this.yAxes.forEach(axes => {
+      this.yAxes.forEach((axes) => {
         // updates the underlying chart
         this.$set(axes.ticks, 'display', false)
       })
     },
     showYTicks() {
-      this.yAxes.forEach(axes => {
+      this.yAxes.forEach((axes) => {
         // updates the underlying chart
         this.$set(axes.ticks, 'display', true)
       })
@@ -302,7 +302,7 @@ export default {
       // updates the underlying chart
       // find unique symbols and convert them to an axis each
       this.yAxes = this.resourceTypes
-        .map(resourceType => resourceType.symbol)
+        .map((resourceType) => resourceType.symbol)
         .filter((symbol, i, array) => array.indexOf(symbol) === i)
         .map((symbol, i) =>
           symbolToAxis(
@@ -316,7 +316,7 @@ export default {
         )
 
       // update the axis used by each dataset
-      this.datasets.forEach(dataset => {
+      this.datasets.forEach((dataset) => {
         // updates the underlying chart
         this.$set(dataset, 'yAxisID', dataset.resourceType.symbol)
       })

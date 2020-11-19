@@ -243,7 +243,7 @@ export default {
     },
   },
   mounted() {
-    this.escHandler = event => {
+    this.escHandler = (event) => {
       if (event.keyCode === 27) {
         if (this.show) {
           this.$emit('cancel')
@@ -314,13 +314,13 @@ export default {
       return this.mode === 'edit'
     },
     allResources() {
-      return this.$store.getters.resources.filter(resource => {
+      return this.$store.getters.resources.filter((resource) => {
         const resourceType = this.$store.getters.resourceType(resource)
         return resourceType && resourceType.name === 'Temperature'
       })
     },
     formattedResources() {
-      return this.allResources.map(resource => {
+      return this.allResources.map((resource) => {
         let site = null
         if (this.$store.getters.numSites > 1) {
           const sensor = this.$store.getters.sensor(resource)

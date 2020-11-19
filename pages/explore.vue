@@ -265,7 +265,7 @@ export default {
       this.$router.push(
         { query: { ...this.$route.query, popup: null } },
         () => {},
-        e => {
+        (e) => {
           if (e === undefined || e.name === 'NavigationDuplicated') {
             return
           }
@@ -291,7 +291,7 @@ export default {
       this.$router.replace(
         route,
         () => {},
-        e => {
+        (e) => {
           // ignore this error. we cannot easily check if the query is the same as the current
           // which would avoid calling replace when not needed
           if (e === undefined || e.name === 'NavigationDuplicated') {
@@ -324,8 +324,8 @@ export default {
       if (Array.isArray(resources)) {
         // filter existing resources
         this.resources = resources
-          .map(id => parseInt(id))
-          .filter(id => {
+          .map((id) => parseInt(id))
+          .filter((id) => {
             return (
               !isNaN(id) &&
               this.$store.state.dataById.resources[id] !== undefined
@@ -444,7 +444,7 @@ export default {
       )
     },
     formattedResources() {
-      return this.$store.getters.resources.map(resource => {
+      return this.$store.getters.resources.map((resource) => {
         const resourceType = this.$store.getters.resourceType(resource)
         let site = null
         if (this.$store.getters.numSites > 1) {

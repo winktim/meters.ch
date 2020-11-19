@@ -9,7 +9,8 @@
     "build": "nuxt build",
     "start": "cross-env NUXT_HOST=0.0.0.0 nuxt start",
     "generate": "nuxt generate",
-    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
+    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
+    "reformat": "prettier \"**/*.{js,json,html,vue}\" --write"
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.2.2",

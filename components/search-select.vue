@@ -1,13 +1,11 @@
 <template>
   <div ref="focusRoot" class="relative z-10" @mousedown="keepShown">
     <div
-      :class="
-        `w-full flex items-center text-gray-900 relative ${
-          single
-            ? 'wrapped-single-transparent-input'
-            : 'wrapped-transparent-input'
-        }`
-      "
+      :class="`w-full flex items-center text-gray-900 relative ${
+        single
+          ? 'wrapped-single-transparent-input'
+          : 'wrapped-transparent-input'
+      }`"
     >
       <label :for="inputName" class="material-icons py-2 pl-2 clickable"
         >search</label
@@ -221,7 +219,7 @@ export default {
         ? this.options.sort((a, b) => a.value.localeCompare(b.value))
         : this.options
             .filter(
-              option =>
+              (option) =>
                 option.value.search(new RegExp(this.searchString, 'gi')) !== -1
             )
             .sort((a, b) => a.value.localeCompare(b.value))

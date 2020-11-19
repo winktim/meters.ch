@@ -108,7 +108,7 @@ export default {
       this.$router.push(
         { query: { popup: null } },
         () => {},
-        e => {
+        (e) => {
           if (e === undefined || e.name === 'NavigationDuplicated') {
             return
           }
@@ -186,7 +186,7 @@ export default {
       return this.$store.getters.isAdmin
     },
     users() {
-      return this.$store.getters.users.map(user => {
+      return this.$store.getters.users.map((user) => {
         const client = this.$store.getters.client(user)
         return {
           id: user.id,
