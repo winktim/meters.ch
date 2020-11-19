@@ -256,6 +256,7 @@ export default {
         'h-screen',
         'bg-gray-darken',
         'transition-opacity-100',
+        'z-20',
       ].concat(
         this.show
           ? ['pointer-events-auto', 'opacity-1']
