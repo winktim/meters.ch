@@ -7,9 +7,11 @@
     :y-axes="yAxes"
     :tooltip-title-callback="tooltipTitleCallback"
     :tooltip-label-callback="tooltipLabelCallback"
+    :tooltip-after-body-callback="tooltipAfterBodyCallback"
+    :tooltip-body-align="'center'"
     :tooltips-filter="tooltipsFilter"
     :legend="legend"
-    interaction-mode="point"
+    interaction-mode="nearest"
     :waiting="waiting"
     :error="!hasData"
     :error-message="
@@ -144,6 +146,7 @@ export default {
       ],
 
       tooltipTitleCallback: (tooltipItems, data) => {
+        /*
         if (tooltipItems.length === 0) {
           return
         }
@@ -166,9 +169,24 @@ export default {
         )}: ${heater} ${result.unit + this.symbol}\n${this.$t(
           'pages.signature.download.avg_temp'
         )}: ${temperature} °C`
+        */
+        if (tooltipItems.length === 0) {
+          return
+        }
+
+        const tooltipItem = tooltipItems[0]
+
+        const format = getTooltipDateFormat(this.agregation, this.period)
+        const date =
+          data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].z
+        // add spaces before to make room between the color box and the text
+        return `${capitalize(
+          DateTime.fromISO(date).setLocale(this.$dateLocale()).toFormat(format)
+        )}`
       },
 
       tooltipLabelCallback: (tooltipItem, data) => {
+        /*
         const format = getTooltipDateFormat(this.agregation, this.period)
         const date =
           data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].z
@@ -176,6 +194,36 @@ export default {
         return `  ${capitalize(
           DateTime.fromISO(date).setLocale(this.$dateLocale()).toFormat(format)
         )}`
+        */
+        return null
+      },
+
+      tooltipAfterBodyCallback: (tooltipItems, data) => {
+        if (tooltipItems.length === 0) {
+          return ''
+        }
+
+        const tooltipItem = tooltipItems[0]
+
+        const temperature = tooltipItem.xLabel.toLocaleString(
+          this.$numberLocale(),
+          decimalDefaultFormat
+        )
+
+        const result = toClosestSuffixe(tooltipItem.yLabel)
+        const heater = result.number.toLocaleString(
+          this.$numberLocale(),
+          decimalDefaultFormat
+        )
+
+        return [
+          this.$t(
+            `consumption_agregations.${reverseAgregations[this.agregation]}`
+          ),
+          `${heater} ${result.unit + this.symbol}`,
+          this.$t('pages.signature.download.avg_temp'),
+          `${temperature} °C`,
+        ]
       },
 
       tooltipsFilter: (tooltipItem) => {

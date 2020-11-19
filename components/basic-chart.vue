@@ -63,6 +63,14 @@ export default {
       type: Function,
       default: undefined,
     },
+    tooltipAfterBodyCallback: {
+      type: Function,
+      default: () => null,
+    },
+    tooltipBodyAlign: {
+      type: String,
+      default: 'left',
+    },
     tooltipsFilter: {
       type: Function,
       default: undefined,
@@ -172,13 +180,15 @@ export default {
 
             xPadding: 12,
             yPadding: 16,
-            bodySpacing: 12,
+            bodySpacing: 8,
             titleMarginBottom: 18,
             caretSize: 8,
+            bodyAlign: this.tooltipBodyAlign,
 
             callbacks: {
               title: this.tooltipTitleCallback,
               label: this.tooltipLabelCallback,
+              afterBody: this.tooltipAfterBodyCallback,
             },
             filter: this.tooltipsFilter,
           },
