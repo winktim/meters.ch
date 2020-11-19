@@ -161,7 +161,11 @@ export default {
           decimalDefaultFormat
         )
 
-        return `${heater} ${result.unit + this.symbol}, ${temperature} °C`
+        return `${this.$t(
+          `consumption_agregations.${reverseAgregations[this.agregation]}`
+        )}: ${heater} ${result.unit + this.symbol}\n${this.$t(
+          'pages.signature.avarage_temp_diff'
+        )}: ${temperature} °C`
       },
 
       tooltipLabelCallback: (tooltipItem, data) => {

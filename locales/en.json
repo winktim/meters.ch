@@ -75,9 +75,9 @@
     "year": "this year's signature | last year's signature | {count} years ago's signature"
   },
   "consumption_agregations": {
-    "hour": "Hourly consumptions",
-    "day": "Weekly consumptions",
-    "week": "Weekly consumptions"
+    "hour": "Hourly consumption",
+    "day": "Daily consumption",
+    "week": "Weekly consumption"
   },
   "menu": {
     "admin": "Administration",
@@ -189,7 +189,8 @@
       "download": {
         "avg_temp": "Average temperature",
         "consumption": "Consumption"
-      }
+      },
+      "avarage_temp_diff": "Average temperature difference"
     },
     "objectives": {
       "title": "Objectives",
