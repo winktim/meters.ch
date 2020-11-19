@@ -818,7 +818,8 @@ export default {
         'xl:flex-row',
         'xl:flex-wrap',
         'justify-center',
-      ].concat(this.editMode ? ['mb-28', 'sm:mb-15'] : ['mb-15'])
+        'mb-48',
+      ]
     },
     editHasPrevious() {
       return this.$store.getters.dashboardUndoList.length > 0
