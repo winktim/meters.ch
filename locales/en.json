@@ -74,6 +74,11 @@
     "month": "this month's signature | last month's signature | {count} months ago's signature",
     "year": "this year's signature | last year's signature | {count} years ago's signature"
   },
+  "consumption_agregations": {
+    "hour": "Hourly consumptions",
+    "day": "Weekly consumptions",
+    "week": "Weekly consumptions"
+  },
   "menu": {
     "admin": "Administration",
     "infos": "Information",

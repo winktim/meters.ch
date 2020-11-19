@@ -39,6 +39,10 @@ import { chartDefaults } from '../assets/utils'
 export default {
   name: 'BasicChart',
   props: {
+    title: {
+      type: Object,
+      default: () => {},
+    },
     datasets: {
       type: Array,
       default: () => [],
@@ -93,6 +97,7 @@ export default {
           datasets: [],
         },
         options: {
+          title: this.title,
           spanGaps: true,
           maintainAspectRatio: false,
           animation: {
@@ -182,6 +187,13 @@ export default {
     }
   },
   watch: {
+    title: {
+      handler(to, from) {
+        this.chart.options.title = to
+        this.chart.update()
+      },
+      deep: true,
+    },
     datasets: {
       handler(to, from) {
         const toDatasets = JSON.stringify(to)

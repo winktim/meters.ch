@@ -1,6 +1,7 @@
 <template>
   <basic-chart
     ref="chart"
+    :title="title"
     :datasets="datasets"
     :x-axes="xAxes"
     :y-axes="yAxes"
@@ -41,6 +42,7 @@ import {
   noiseFilter,
   symbolToAxis,
   fixMissingData,
+  reverseAgregations,
 } from '../assets/utils'
 
 import {
@@ -97,6 +99,18 @@ export default {
       datasets: [],
       consumptionByAverageTemp: null,
       symbol: '',
+      title: {
+        display: true,
+        text: '...',
+        position: 'left',
+        font: {
+          family: chartDefaults.fontFamily,
+          size: chartDefaults.fontSize,
+          weight: 'normal',
+        },
+        padding: 10,
+      },
+
       xAxes: [
         {
           type: 'linear',
@@ -227,6 +241,10 @@ export default {
 
       // store agregation to compute dataset labels
       this.agregation = agregation
+      // update the title
+      this.title.text = this.$t(
+        `consumption_agregations.${reverseAgregations[this.agregation]}`
+      )
 
       const agregatedMeteoReadings = agregateData(
         meteoReadings.map(readingToXY),
@@ -403,6 +421,9 @@ export default {
       })
     },
     reTranslate() {
+      this.title.text = this.$t(
+        `consumption_agregations.${reverseAgregations[this.agregation]}`
+      )
       if (this.datasets.length !== 3) {
         return
       }

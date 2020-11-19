@@ -74,6 +74,11 @@
     "month": "signature de ce mois-ci | signature du mois dernier | signature d'il y a {count} mois",
     "year": "signature de cette année | signature de l'année dernière | signature d'il y a {count} ans"
   },
+  "consumption_agregations": {
+    "hour": "Consommations horaires",
+    "day": "Consommations quotidiennes",
+    "week": "Consommations hebdomadaires"
+  },
   "menu": {
     "admin": "Administration",
     "infos": "Informations",
