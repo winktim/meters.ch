@@ -10,7 +10,9 @@
     "start": "cross-env NUXT_HOST=0.0.0.0 nuxt start",
     "generate": "nuxt generate",
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
-    "reformat": "prettier \"**/*.{js,json,html,vue}\" --write"
+    "reformat": "prettier \"**/*.{js,json,html,vue}\" --write",
+    "patch": "node patch/patch-node-modules.js",
+    "postinstall": "yarn patch"
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.2.2",
