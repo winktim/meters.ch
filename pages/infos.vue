@@ -22,7 +22,9 @@
       </ul>
     </section>
 
-    <section class="bg-gray-100 rounded-md p-4 md:mx-20 lg:w-200 lg:mx-auto">
+    <section
+      class="bg-gray-100 rounded-md p-4 mb-8 md:mx-20 lg:w-200 lg:mx-auto"
+    >
       <h2 class="text-lg font-bold mb-3" v-text="$t('pages.infos.user')"></h2>
       <ul>
         <li
@@ -53,6 +55,19 @@
           ></p>
         </li>
       </ul>
+    </section>
+
+    <section
+      class="bg-gray-100 rounded-md p-4 md:mx-20 lg:w-200 lg:mx-auto text-center"
+    >
+      <span v-text="$t('copyright.meteo')"></span>
+      <a
+        class="green-link"
+        rel="noreferrer"
+        target="_blank"
+        href="https://www.prevision-meteo.ch"
+        >www.prevision-meteo.ch</a
+      >
     </section>
 
     <section class="mt-16 mb-24 md:mt-24 flex flex-col items-center">

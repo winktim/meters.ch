@@ -37,6 +37,9 @@
   "error": {
     "unknown": "Une erreur s'est produite. Veuillez réessayer plus tard."
   },
+  "copyright": {
+    "meteo": "Données météorologiques fournies par"
+  },
   "api": {
     "user_updated": "Utilisateur enregistré avec succès",
     "user_created": "Nouvel utilisateur créé avec succès",

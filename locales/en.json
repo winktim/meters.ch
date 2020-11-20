@@ -37,6 +37,9 @@
   "error": {
     "unknown": "An error occurred. Please try again later."
   },
+  "copyright": {
+    "meteo": "Meteorological data provided by"
+  },
   "api": {
     "user_updated": "User successfully saved",
     "user_created": "New user successfully created",
