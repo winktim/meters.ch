@@ -79,6 +79,7 @@ export default {
       minY: 5.9445,
       maxY: 10.5079,
       currentSearch: -1,
+      hadQuery: false,
     }
   },
   async mounted() {
@@ -155,7 +156,7 @@ export default {
       )
     }
 
-    if (this.markers.length > 0) {
+    if (this.markers.length > 0 && !this.hadQuery) {
       // fit view to all markers
       const group = L.featureGroup(this.markers)
       this.map.fitBounds(group.getBounds().pad(0.1))
@@ -185,14 +186,17 @@ export default {
       const x = parseFloat(query.x)
       if (!isNaN(x)) {
         this.currentX = +clamp(x, this.minX, this.maxX).toFixed(4)
+        this.hadQuery = true
       }
       const y = parseFloat(query.y)
       if (!isNaN(y)) {
         this.currentY = +clamp(y, this.minY, this.maxY).toFixed(4)
+        this.hadQuery = true
       }
       const z = parseInt(query.z)
       if (!isNaN(z)) {
         this.currentZ = clamp(z, this.minZ, this.maxZ)
+        this.hadQuery = true
       }
     },
   },
