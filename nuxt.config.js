@@ -97,6 +97,7 @@ export default {
 
   purgeCSS: {
     mode: 'webpack',
+    whitelist: ['leaflet-control-attribution'],
   },
 
   /*

@@ -82,14 +82,6 @@
     "day": "Consommation quotidienne",
     "week": "Consommation hebdomadaire"
   },
-  "menu": {
-    "admin": "Administration",
-    "infos": "Informations",
-    "explore": "Explorer les données",
-    "signature": "Signature énergétique",
-    "objectives": "Objectifs",
-    "alerts": "Alertes"
-  },
   "pages": {
     "index": {
       "hello": "Bonjour, {name}",
@@ -151,7 +143,7 @@
       "logout": "Se déconnecter"
     },
     "explore": {
-      "title": "Explorer",
+      "title": "Explorer les données",
       "description": "Explorez vos données en détails, téléchargez-les et ajoutez des graphiques à votre tableau de bord",
       "period": "Période",
       "to": "au",
@@ -193,6 +185,11 @@
         "avg_temp": "Différence de température moyenne",
         "consumption": "Consommation"
       }
+    },
+    "map": {
+      "title": "Emplacement des ressources",
+      "description": "Visionnez l'emplacement de vos ressources sur une carte",
+      "meter": "Compteur"
     },
     "objectives": {
       "title": "Objectifs",

@@ -127,3 +127,7 @@ $loader-color: theme('colors.gray.300');
     transform: rotate(360deg);
   }
 }
+
+.leaflet-control-attribution {
+  @apply text-center;
+}

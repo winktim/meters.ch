@@ -84,10 +84,11 @@ module.exports = {
         'fake1/2': '48%',
       },
       height: {
-        18: '4.5rem',
-        76: '19rem',
-        100: '25rem',
-        200: '50rem',
+        '18': '4.5rem',
+        '76': '19rem',
+        '100': '25rem',
+        '200': '50rem',
+        'screen-36': 'calc(100vh - 9rem)',
       },
       maxHeight: {
         200: '50rem',
@@ -113,7 +114,8 @@ module.exports = {
         full: '100%',
       },
       zIndex: {
-        bottom: '-1',
+        'bottom': '-1',
+        'above-map': '1000',
       },
       screens: {
         'fake-select': '450px',

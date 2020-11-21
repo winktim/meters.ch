@@ -82,14 +82,6 @@
     "day": "Daily consumption",
     "week": "Weekly consumption"
   },
-  "menu": {
-    "admin": "Administration",
-    "infos": "Information",
-    "explore": "Explore data",
-    "signature": "Energy signature",
-    "objectives": "Objectives",
-    "alerts": "Alerts"
-  },
   "pages": {
     "index": {
       "hello": "Hello, {name}",
@@ -151,7 +143,7 @@
       "logout": "Logout"
     },
     "explore": {
-      "title": "Explore",
+      "title": "Explore data",
       "description": "Explore your data in details, download it and save charts to your dashboard",
       "period": "Period",
       "to": "to",
@@ -193,6 +185,11 @@
         "avg_temp": "Average temperature difference",
         "consumption": "Consumption"
       }
+    },
+    "map": {
+      "title": "Resources location",
+      "description": "View the location of your resources on a map",
+      "meter": "Meter"
     },
     "objectives": {
       "title": "Objectives",

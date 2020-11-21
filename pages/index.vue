@@ -31,7 +31,7 @@
         </button>
         <app-menu
           v-if="isMenuOpen"
-          class="absolute top-full w-60 mt-1"
+          class="absolute top-full whitespace-no-wrap mt-1"
         ></app-menu>
       </div>
       <div>
