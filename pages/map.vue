@@ -154,6 +154,12 @@ export default {
           .addTo(this.map)
       )
     }
+
+    if (this.markers.length > 0) {
+      // fit view to all markers
+      const group = L.featureGroup(this.markers)
+      this.map.fitBounds(group.getBounds().pad(0.1))
+    }
   },
   methods: {
     setQuery() {
