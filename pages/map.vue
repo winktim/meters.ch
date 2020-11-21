@@ -88,6 +88,7 @@ export default {
     this.setQuery()
 
     this.map = L.map(this.$refs.map, {
+      zoomControl: false,
       center: [this.currentX, this.currentY],
       zoom: this.currentZ,
       maxBounds: [
