@@ -73,7 +73,7 @@ export default {
       currentY: 8.2245,
       currentZ: 9,
       minZ: 9,
-      maxZ: 18,
+      maxZ: 19,
       minX: 45.8126,
       maxX: 47.8092,
       minY: 5.9445,
@@ -101,6 +101,7 @@ export default {
     L.tileLayer('	https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         'Base map and data from OpenStreetMap and OpenStreetMap Foundation <a ref="noreferer" target="_blank" href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap contributors</a>',
+      maxZoom: this.maxZ,
       tileSize: 256,
     }).addTo(this.map)
 
