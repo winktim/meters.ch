@@ -6,6 +6,25 @@
       :back="true"
     ></app-header>
 
+    <section class="mb-8 flex flex-col items-center">
+      <a
+        class="mb-4 w-full sm:w-100 action bg-naito-blue-300 text-gray-100 text-center relative"
+        href="mailto:support@naito.one"
+      >
+        <i class="material-icons absolute left-0 m-4 top-0">contact_support</i>
+        <span v-text="$t('pages.infos.support')"></span>
+      </a>
+
+      <a
+        class="w-5/6 sm:w-120 action bg-naito-green-200 text-gray-100 text-center relative"
+        @click="logout"
+        :href="loginUrl"
+      >
+        <i class="material-icons absolute left-0 m-4 top-0">launch</i>
+        <span v-text="$t('pages.infos.logout')"></span>
+      </a>
+    </section>
+
     <section
       class="bg-gray-100 rounded-md p-4 mb-8 md:mx-20 lg:w-200 lg:mx-auto"
     >
@@ -58,7 +77,57 @@
     </section>
 
     <section
-      class="bg-gray-100 rounded-md p-4 md:mx-20 lg:w-200 lg:mx-auto text-center"
+      class="bg-gray-100 rounded-md mb-1 p-4 md:mx-20 lg:w-200 lg:mx-auto text-center"
+    >
+      <p
+        class="font-medium text-center"
+        v-text="$t('pages.infos.sensor_subscriptions')"
+      ></p>
+      <p
+        class="text-center"
+        v-text="$t('pages.infos.sensor_subscriptions_details')"
+      ></p>
+    </section>
+
+    <!-- sensor subscriptions -->
+    <ul class="flex flex-col items-center mb-8 md:mx-20 lg:w-200 lg:mx-auto">
+      <li
+        class="w-full my-1 flex justify-between items-center bg-gray-100 rounded-md hover:shadow-lg"
+        v-for="(sensor, i) in sensors"
+        :key="i"
+      >
+        <label
+          :for="i + '-subscribe-input'"
+          class="font-bold flex-grow p-4 clickable focus:shadow-outline flex items-center"
+        >
+          <span class="font-mono uppercase" v-text="`${sensor.name}`"></span>
+          <span
+            class="pl-4"
+            v-text="getFormattedSensorResources(sensor.id)"
+          ></span>
+        </label>
+
+        <!-- checkbox -->
+        <label
+          class="material-checkbox text-naito-blue-300"
+          :for="i + '-subscribe-input'"
+        >
+          <input
+            type="checkbox"
+            :name="i + '-subscribe-input'"
+            :id="i + '-subscribe-input'"
+            :checked="isSubscribed(sensor.id)"
+            @change="toggleSubscribe(sensor.id)"
+          />
+          <div
+            class="material-checkbox-fake material-checkbox-fake__large"
+          ></div>
+        </label>
+      </li>
+    </ul>
+
+    <section
+      class="bg-gray-100 rounded-md mb-24 p-4 md:mx-20 lg:w-200 lg:mx-auto text-center"
     >
       <span v-text="$t('copyright.meteo')"></span>
       <a
@@ -69,25 +138,6 @@
         >www.prevision-meteo.ch</a
       >
     </section>
-
-    <section class="mt-16 mb-24 md:mt-24 flex flex-col items-center">
-      <a
-        class="mb-8 md:mb-12 w-full sm:w-120 action bg-naito-blue-300 text-gray-100 text-center relative"
-        href="mailto:support@naito.one"
-      >
-        <i class="material-icons absolute left-0 m-4 top-0">contact_support</i>
-        <span v-text="$t('pages.infos.support')"></span>
-      </a>
-
-      <a
-        class="w-5/6 sm:w-100 action bg-naito-green-200 text-gray-100 text-center relative"
-        @click="logout"
-        :href="loginUrl"
-      >
-        <i class="material-icons absolute left-0 m-4 top-0">launch</i>
-        <span v-text="$t('pages.infos.logout')"></span>
-      </a>
-    </section>
   </div>
 </template>
 <script>
@@ -96,6 +146,7 @@ import { mapActions } from 'vuex'
 
 import AppHeader from '../components/app-header.vue'
 import LanguageSelector from '../components/language-selector.vue'
+import { formatResource } from '../assets/utils'
 
 export default {
   middleware: 'needs-auth',
@@ -121,20 +172,70 @@ export default {
     }
   },
   async mounted() {
-    await Promise.all([
-      this.$getUsers(),
-      this.$getResources(),
-      this.$getSites(),
-      this.$getClients(),
-    ])
-
     if (this.$store.getters.rememberMe) {
       this.loginUrl = '/login?remember-me'
     }
+
+    await Promise.all([
+      this.$getUsers(),
+      this.$getSensors(),
+      this.$getResources(),
+      this.$getResourceTypes(),
+      this.$getSites(),
+      this.$getClients(),
+    ])
   },
   methods: {
     saveUserLocale(payload) {
       this.$putUser(payload)
+    },
+    isSubscribed(sensorId) {
+      return this.sensorSubscriptions.includes(sensorId)
+    },
+    async toggleSubscribe(sensorId) {
+      const index = this.sensorSubscriptions.indexOf(sensorId)
+
+      const newSensorSubscriptions = [...this.sensorSubscriptions]
+
+      if (index !== -1) {
+        newSensorSubscriptions.splice(index, 1)
+      } else {
+        newSensorSubscriptions.push(sensorId)
+      }
+
+      try {
+        await this.$putUser(
+          { sensor_subscriptions: JSON.stringify(newSensorSubscriptions) },
+          this.$t('api.sensor_subscriptions_updated'),
+          6000
+        )
+
+        // save to local store
+        this.$store.dispatch('updateSensorSubscriptions', {
+          sensor_subscriptions: newSensorSubscriptions,
+        })
+      } catch (e) {
+        // failed to put user. error are handled by the put method
+      }
+    },
+    getFormattedSensorResources(sensorId) {
+      const resources = this.$store.getters.resources.filter(
+        (resource) => resource.sensor_id === sensorId
+      )
+
+      if (resources.length === 0) {
+        return this.$t('pages.infos.no_associated_resources')
+      }
+
+      return resources
+        .map((resource) =>
+          formatResource(
+            this.$i18n,
+            resource,
+            this.$store.getters.resourceType(resource)
+          )
+        )
+        .join(', ')
     },
     ...mapActions(['logout']),
   },
@@ -187,6 +288,15 @@ export default {
     },
     locales() {
       return this.$store.state.locales
+    },
+    /**
+     * @returns {number[]} a list of the ids of the sensors to which the user subscribed to
+     */
+    sensorSubscriptions() {
+      return this.$store.getters.sensorSubscriptions
+    },
+    sensors() {
+      return this.$store.getters.sensors
     },
   },
 }

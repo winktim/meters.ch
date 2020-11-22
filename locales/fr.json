@@ -45,6 +45,7 @@
     "user_created": "Nouvel utilisateur créé avec succès",
     "user_deleted": "Utilisateur supprimé avec succès",
     "dashboard_updated": "Tableau de bord enregistré avec succès",
+    "sensor_subscriptions_updated": "Abonnement aux messages de non réponse des capteurs enregistré avec succès",
     "objective_updated": "Objectif enregistré avec succès",
     "objective_created": "Nouvel objectif créé avec succès",
     "objective_deleted": "Objectif supprimé avec succès",
@@ -139,6 +140,9 @@
         "created_at": "Création du compte",
         "locale": "Langue de contact"
       },
+      "sensor_subscriptions": "Abonnement aux messages de non réponse des capteurs",
+      "sensor_subscriptions_details": "Si les capteurs sélectionnés cessent d'envoyer des données, vous recevrez un email dans les 15 minutes. Peu importe vos paramètres, l'Équipe Naito One est toujours informée des capteurs ne répondant pas.",
+      "no_associated_resources": "Pas de ressource associées",
       "support": "Contacter le support",
       "logout": "Se déconnecter"
     },

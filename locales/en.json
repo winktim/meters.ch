@@ -45,6 +45,7 @@
     "user_created": "New user successfully created",
     "user_deleted": "User successfully deleted",
     "dashboard_updated": "Dashboard successfully saved",
+    "sensor_subscriptions_updated": "Unresponding sensors messages subscription successfully saved",
     "objective_updated": "Objective successfully saved",
     "objective_created": "New objective successfully created",
     "objective_deleted": "Objective successfully deleted",
@@ -139,6 +140,9 @@
         "created_at": "Account creation",
         "locale": "Contact language"
       },
+      "sensor_subscriptions": "Subscription to unresponding sensors email alerts",
+      "sensor_subscriptions_details": "If the selected sensors stop sending data, you will recieve an email in the next 15 minutes. No matter your settings, the Naito One Team is always informed of unresponding sensors.",
+      "no_associated_resources": "No associated resources",
       "support": "Contact support",
       "logout": "Logout"
     },

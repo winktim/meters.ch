@@ -42,6 +42,7 @@ import {
   REMOVE_LAST_DASHBOARD_EDIT,
   REMOVE_ALL_DASHBOARD_EDITS,
   SET_METEO_LOCATIONS,
+  UPDATE_SENSOR_SUBSCRIPTIONS,
 } from '../assets/mutations'
 
 export const state = () => ({
@@ -248,6 +249,13 @@ export const mutations = {
 
     state.data.user.dashboard = dashboard
   },
+  [UPDATE_SENSOR_SUBSCRIPTIONS](state, { sensor_subscriptions }) {
+    if (!state.data.user) {
+      return
+    }
+
+    state.data.user.sensor_subscriptions = sensor_subscriptions
+  },
 
   // ADD
   [ADD_OBJECTIVE](state, { objective }) {
@@ -381,6 +389,9 @@ export const actions = {
       smallScreen: window.innerWidth < SMALL_SCREEN_BREAKPOINT,
     })
   },
+  updateSensorSubscriptions({ commit }, payload) {
+    commit(UPDATE_SENSOR_SUBSCRIPTIONS, payload)
+  },
 }
 
 export const getters = {
@@ -388,6 +399,16 @@ export const getters = {
   rememberMe: (state) => state.rememberMe,
   name: (state) => (state.data.user ? state.data.user.name : '...'),
   email: (state) => (state.data.user ? state.data.user.email : '...'),
+  sensorSubscriptions: (state) => {
+    if (
+      !state.data.user ||
+      !Array.isArray(state.data.user.sensor_subscriptions)
+    ) {
+      return []
+    }
+    return state.data.user.sensor_subscriptions
+  },
+
   userLocale: (state) =>
     state.data.user ? state.data.user.locale : state.locale,
   accountCreatedAt: (state) =>
@@ -402,6 +423,7 @@ export const getters = {
   clientNumber: (state) =>
     state.data.client ? state.data.client.number : '...',
   clientEmail: (state) => (state.data.client ? state.data.client.email : '...'),
+  sensors: (state) => (state.data.sensors ? state.data.sensors : []),
   resources: (state) => (state.data.resources ? state.data.resources : []),
   hasResources: (state) => !!state.data.resources,
   hasResourceTypes: (state) => !!state.data.resourceTypes,
