@@ -8,7 +8,7 @@
 
     <section class="mb-8 flex flex-col items-center">
       <a
-        class="mb-4 w-full sm:w-100 action bg-naito-blue-300 text-gray-100 text-center relative"
+        class="mb-4 w-5/6 sm:w-100 action bg-naito-blue-300 text-gray-100 text-center relative"
         href="mailto:support@naito.one"
       >
         <i class="material-icons absolute left-0 m-4 top-0">contact_support</i>
@@ -16,7 +16,7 @@
       </a>
 
       <a
-        class="w-5/6 sm:w-120 action bg-naito-green-200 text-gray-100 text-center relative"
+        class="w-full sm:w-120 action bg-naito-green-200 text-gray-100 text-center relative"
         @click="logout"
         :href="loginUrl"
       >
