@@ -68,7 +68,7 @@ import {
 import { DateTime } from 'luxon'
 
 import AppHeader from '../components/app-header.vue'
-import ObjectivePopup from '../components/objective-popp.vue'
+import ObjectivePopup from '../components/objective-popup.vue'
 
 export default {
   middleware: 'needs-auth',
