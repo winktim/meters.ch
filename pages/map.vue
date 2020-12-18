@@ -11,9 +11,18 @@
     <map-popup ref="mapPopup" :resource="activeResource"></map-popup>
 
     <section
-      class="absolute bottom-0 inset-x-0 w-full p-4 md:px-1/5 lg:px-1/4 xl:px-1/3 bg-naito-green-200 shadow-lg-top z-above-map"
+      class="absolute bottom-0 inset-x-0 w-full p-4 md:px-1/5 lg:px-1/4 xl:px-1/3 bg-naito-green-200 shadow-lg-top z-above-map flex"
     >
+      <button
+        class="w-10 h-10 bg-gray-100 rounded-md simple-action"
+        @click="resetView"
+        :title="$t('pages.map.home')"
+        :aria-label="$t('pages.map.home')"
+      >
+        <i class="material-icons text-lg text-gray-800">home</i>
+      </button>
       <search-select
+        class="flex-grow ml-2"
         name="resource"
         :placeholder="$t('pages.objectives.form.find_resource')"
         :options="formattedResources"
@@ -157,10 +166,12 @@ export default {
       )
     }
 
+    const group = L.featureGroup(this.markers)
+    this.homeBounds = group.getBounds().pad(0.1)
+
     if (this.markers.length > 0 && !this.hadQuery) {
       // fit view to all markers
-      const group = L.featureGroup(this.markers)
-      this.map.fitBounds(group.getBounds().pad(0.1))
+      this.map.fitBounds(this.homeBounds)
     }
   },
   methods: {
@@ -198,6 +209,12 @@ export default {
       if (!isNaN(z)) {
         this.currentZ = clamp(z, this.minZ, this.maxZ)
         this.hadQuery = true
+      }
+    },
+    resetView() {
+      if (this.markers.length > 0) {
+        // fit view to all markers
+        this.map.fitBounds(this.homeBounds)
       }
     },
   },

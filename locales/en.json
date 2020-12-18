@@ -193,7 +193,8 @@
     "map": {
       "title": "Resources location",
       "description": "View the location of your resources on a map",
-      "meter": "Meter"
+      "meter": "Meter",
+      "home": "Reset view"
     },
     "objectives": {
       "title": "Objectives",

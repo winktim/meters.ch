@@ -193,7 +193,8 @@
     "map": {
       "title": "Emplacement des ressources",
       "description": "Visionnez l'emplacement de vos ressources sur une carte",
-      "meter": "Compteur"
+      "meter": "Compteur",
+      "home": "Réinitialiser la vue"
     },
     "objectives": {
       "title": "Objectifs",
