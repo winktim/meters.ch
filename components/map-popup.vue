@@ -1,6 +1,6 @@
 <template>
   <div class="hidden">
-    <div class="flex flex-col items-center text-base">
+    <div class="flex flex-col items-center text-base p-2">
       <h2
         class="text-lg font-bold mb-2 text-center"
         v-text="formattedResource"
