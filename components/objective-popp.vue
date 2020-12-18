@@ -136,7 +136,7 @@ import {
   decimalDefaultFormat,
 } from '../assets/utils'
 import { DateTime } from 'luxon'
-import SearchSelect from '../components/search-select'
+import SearchSelect from '../components/search-select.vue'
 
 export default {
   name: 'ObjectivePopup',

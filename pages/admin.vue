@@ -61,8 +61,8 @@
 <script>
 import { DateTime } from 'luxon'
 
-import AppHeader from '../components/app-header'
-import AdminUserPopup from '../components/admin-user-popup'
+import AppHeader from '../components/app-header.vue'
+import AdminUserPopup from '../components/admin-user-popup.vue'
 import { handleNavigationError } from '../assets/utils'
 
 export default {

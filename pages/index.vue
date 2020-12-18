@@ -279,8 +279,8 @@
 import AppHeader from '../components/app-header.vue'
 import AppMenu from '../components/app-menu.vue'
 
-import ExploreChart from '../components/explore-chart'
-import SignatureChart from '../components/signature-chart'
+import ExploreChart from '../components/explore-chart.vue'
+import SignatureChart from '../components/signature-chart.vue'
 import {
   periods,
   agregations,

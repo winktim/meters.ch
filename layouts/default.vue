@@ -35,7 +35,7 @@
 <script>
 import { mapMutations } from 'vuex'
 
-import MessageBox from '../components/message-box'
+import MessageBox from '../components/message-box.vue'
 import LanguageSelector from '../components/language-selector.vue'
 import LoadingBar from '../components/loading-bar.vue'
 

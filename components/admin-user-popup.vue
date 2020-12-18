@@ -142,7 +142,7 @@
 </template>
 <script>
 import { scrollToTop } from '../assets/utils'
-import SearchSelect from '../components/search-select'
+import SearchSelect from '../components/search-select.vue'
 import LanguageSelector from '../components/language-selector.vue'
 
 export default {

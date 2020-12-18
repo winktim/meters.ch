@@ -12,7 +12,6 @@
   ></basic-chart>
 </template>
 <script>
-import Chart from '../assets/chart'
 import { DateTime } from 'luxon'
 import {
   getPeriod,

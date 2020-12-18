@@ -20,15 +20,12 @@
   ></basic-chart>
 </template>
 <script>
-import Chart from '../assets/chart'
 import { DateTime } from 'luxon'
 import {
   getPeriod,
   readingToXY,
-  datasetStyle,
   decimalDefaultFormat,
   agregateData,
-  formatResource,
   capitalize,
   reversePeriods,
   chartDefaults,

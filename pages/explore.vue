@@ -199,11 +199,11 @@ import {
 } from '../assets/utils'
 
 import AppHeader from '../components/app-header.vue'
-import SearchSelectMulti from '../components/search-select-multi'
-import ExploreChart from '../components/explore-chart'
+import SearchSelectMulti from '../components/search-select-multi.vue'
+import ExploreChart from '../components/explore-chart.vue'
 
-import BookmarkPopup from '../components/bookmark-popup'
-import DownloadPopup from '../components/download-popup'
+import BookmarkPopup from '../components/bookmark-popup.vue'
+import DownloadPopup from '../components/download-popup.vue'
 
 export default {
   middleware: 'needs-auth',

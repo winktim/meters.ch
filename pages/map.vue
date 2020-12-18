@@ -26,8 +26,8 @@
 </template>
 <script>
 import AppHeader from '../components/app-header.vue'
-import MapPopup from '../components/map-popup'
-import SearchSelect from '../components/search-select'
+import MapPopup from '../components/map-popup.vue'
+import SearchSelect from '../components/search-select.vue'
 
 import * as L from 'leaflet'
 // https://vue2-leaflet.netlify.app/quickstart/#marker-icons-are-missing

@@ -168,7 +168,7 @@
 </template>
 <script>
 import { formatResource, scrollToTop } from '../assets/utils'
-import SearchSelect from '../components/search-select'
+import SearchSelect from '../components/search-select.vue'
 
 export default {
   name: 'AlertPopup',

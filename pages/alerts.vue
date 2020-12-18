@@ -62,8 +62,8 @@
 import { formatResource, handleNavigationError } from '../assets/utils'
 import { DateTime } from 'luxon'
 
-import AppHeader from '../components/app-header'
-import AlertPopup from '../components/alert-popup'
+import AppHeader from '../components/app-header.vue'
+import AlertPopup from '../components/alert-popup.vue'
 
 export default {
   middleware: 'needs-auth',

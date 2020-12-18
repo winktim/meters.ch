@@ -246,11 +246,11 @@ import {
 } from '../assets/utils'
 
 import AppHeader from '../components/app-header.vue'
-import SearchSelect from '../components/search-select'
-import SignatureChart from '../components/signature-chart'
+import SearchSelect from '../components/search-select.vue'
+import SignatureChart from '../components/signature-chart.vue'
 
-import BookmarkPopup from '../components/bookmark-popup'
-import DownloadPopup from '../components/download-popup'
+import BookmarkPopup from '../components/bookmark-popup.vue'
+import DownloadPopup from '../components/download-popup.vue'
 
 export default {
   middleware: 'needs-auth',
