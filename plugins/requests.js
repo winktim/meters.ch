@@ -26,7 +26,7 @@ function withQuery(method, path, params) {
 /**
  * Append the API root to the path
  * @param {string} path the relative path on the API
- * @param {{}} state the app state
+ * @param {{ api: string }} state the app state
  * @returns {string} the absolute path
  */
 function prepPath(path, state) {
@@ -36,16 +36,14 @@ function prepPath(path, state) {
 /**
  * Add the locale and the api token if it exists to the parameters
  * @param {{}} params the current parameters
- * @param {{}} state the app state
+ * @param {{ locale: string, apiToken?: string}} state the app state
  * @returns {{}} the modified parameters
  */
 function prepParams(params, state) {
   const output = { ...params }
 
-  // add locale if not already included
-  if (!output.hasOwnProperty('locale')) {
-    output['locale'] = state.locale
-  }
+  output['api_locale'] = state.locale
+
   // add token if exists
   if (state.apiToken) {
     output['api_token'] = state.apiToken
