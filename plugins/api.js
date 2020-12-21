@@ -38,6 +38,9 @@ export default ({ app, store, redirect }, inject) => {
           }
 
           if (res.status === 401 || res.status === 403) {
+            // token is no longer valid for the backend
+            // delete localy, but we can't call /logout on the server
+            // since that requires a valid token
             const url = store.getters.rememberMe
               ? '/login?remember-me'
               : '/login'

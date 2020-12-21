@@ -237,7 +237,21 @@ export default {
         )
         .join(', ')
     },
-    ...mapActions(['logout']),
+    async logout(event) {
+      event.preventDefault()
+
+      // logout on the backend to delete the session
+      try {
+        const res = await this.$post('/logout', {
+          api_token: this.$store.state.apiToken,
+        })
+      } catch (e) {
+        console.error(e)
+      }
+
+      this.$store.dispatch('logout')
+      this.$router.push(this.loginUrl)
+    },
   },
   computed: {
     /**
