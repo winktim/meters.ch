@@ -125,7 +125,7 @@
         "incomplete_data": "Incomplete data"
       }
     },
-    "infos": {
+    "settings": {
       "title": "Information",
       "description": "Get information about your account and company on Meters",
       "client": "Client",

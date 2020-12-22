@@ -1,8 +1,8 @@
 <template>
   <div>
     <app-header
-      :title="$t('pages.infos.title')"
-      :description="$t('pages.infos.description')"
+      :title="$t('pages.settings.title')"
+      :description="$t('pages.settings.description')"
       :back="true"
     ></app-header>
 
@@ -12,7 +12,7 @@
         href="mailto:support@naito.one"
       >
         <i class="material-icons absolute left-0 m-4 top-0">contact_support</i>
-        <span v-text="$t('pages.infos.support')"></span>
+        <span v-text="$t('pages.settings.support')"></span>
       </a>
 
       <a
@@ -21,14 +21,17 @@
         :href="loginUrl"
       >
         <i class="material-icons absolute left-0 m-4 top-0">launch</i>
-        <span v-text="$t('pages.infos.logout')"></span>
+        <span v-text="$t('pages.settings.logout')"></span>
       </a>
     </section>
 
     <section
       class="bg-gray-100 rounded-md p-4 mb-8 md:mx-20 lg:w-200 lg:mx-auto"
     >
-      <h2 class="text-lg font-bold mb-3" v-text="$t('pages.infos.client')"></h2>
+      <h2
+        class="text-lg font-bold mb-3"
+        v-text="$t('pages.settings.client')"
+      ></h2>
       <ul>
         <li
           class="flex items-center my-1"
@@ -44,7 +47,10 @@
     <section
       class="bg-gray-100 rounded-md p-4 mb-8 md:mx-20 lg:w-200 lg:mx-auto"
     >
-      <h2 class="text-lg font-bold mb-3" v-text="$t('pages.infos.user')"></h2>
+      <h2
+        class="text-lg font-bold mb-3"
+        v-text="$t('pages.settings.user')"
+      ></h2>
       <ul>
         <li
           class="flex items-center my-1"
@@ -57,7 +63,7 @@
         <li class="flex items-center mt-1">
           <p
             class="font-medium w-1/2 pr-2"
-            v-text="$t('pages.infos.data.locale')"
+            v-text="$t('pages.settings.data.locale')"
           ></p>
           <language-selector
             :locale="userLocale"
@@ -70,7 +76,7 @@
         <li>
           <p
             class="text-gray-800 mb-1"
-            v-text="$t('pages.infos.locale_explain')"
+            v-text="$t('pages.settings.locale_explain')"
           ></p>
         </li>
       </ul>
@@ -81,11 +87,11 @@
     >
       <p
         class="font-medium text-center"
-        v-text="$t('pages.infos.sensor_subscriptions')"
+        v-text="$t('pages.settings.sensor_subscriptions')"
       ></p>
       <p
         class="text-center"
-        v-text="$t('pages.infos.sensor_subscriptions_details')"
+        v-text="$t('pages.settings.sensor_subscriptions_details')"
       ></p>
     </section>
 
@@ -152,7 +158,7 @@ export default {
   middleware: 'needs-auth',
   head() {
     return {
-      title: `${this.$t('pages.infos.title')} - Meters`,
+      title: `${this.$t('pages.settings.title')} - Meters`,
       htmlAttrs: {
         lang: this.$store.state.locale,
       },
@@ -160,7 +166,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: this.$t('pages.infos.description'),
+          content: this.$t('pages.settings.description'),
         },
       ],
     }
@@ -224,7 +230,7 @@ export default {
       )
 
       if (resources.length === 0) {
-        return this.$t('pages.infos.no_associated_resources')
+        return this.$t('pages.settings.no_associated_resources')
       }
 
       return resources
@@ -264,20 +270,20 @@ export default {
       const locale = this.$numberLocale()
       return [
         {
-          name: 'pages.infos.data.client_name',
+          name: 'pages.settings.data.client_name',
           value: this.$store.getters.clientName,
         },
         {
-          name: 'pages.infos.data.client_number',
+          name: 'pages.settings.data.client_number',
           value: this.$store.getters.clientNumber,
         },
         { name: 'global.email', value: this.$store.getters.clientEmail },
         {
-          name: 'pages.infos.data.num_sensors',
+          name: 'pages.settings.data.num_sensors',
           value: this.$store.getters.numResources.toLocaleString(locale),
         },
         {
-          name: 'pages.infos.data.num_sites',
+          name: 'pages.settings.data.num_sites',
           value: this.$store.getters.numSites.toLocaleString(locale),
         },
       ]
@@ -285,12 +291,12 @@ export default {
     userData() {
       return [
         {
-          name: 'pages.infos.data.user_name',
+          name: 'pages.settings.data.user_name',
           value: this.$store.getters.name,
         },
         { name: 'global.email', value: this.$store.getters.email },
         {
-          name: 'pages.infos.data.created_at',
+          name: 'pages.settings.data.created_at',
           value: this.$store.getters.accountCreatedAt
             .setLocale(this.$dateLocale())
             .toLocaleString(DateTime.DATE_FULL),

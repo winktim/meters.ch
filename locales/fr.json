@@ -125,7 +125,7 @@
         "incomplete_data": "Données incomplètes"
       }
     },
-    "infos": {
+    "settings": {
       "title": "Informations",
       "description": "Obtenez des informations concernant votre compte et votre entreprise chez Meters",
       "client": "Client",
