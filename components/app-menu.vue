@@ -19,7 +19,6 @@ export default {
   data() {
     return {
       basicElements: [
-        { icon: 'person', label: 'pages.settings.title', href: '/settings' },
         { icon: 'timeline', label: 'pages.explore.title', href: '/explore' },
         {
           icon: 'track_changes',
@@ -33,6 +32,7 @@ export default {
           href: '/objectives',
         },
         { icon: 'warning', label: 'pages.alerts.title', href: '/alerts' },
+        { icon: 'settings', label: 'pages.settings.title', href: '/settings' },
       ],
     }
   },

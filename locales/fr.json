@@ -126,25 +126,32 @@
       }
     },
     "settings": {
-      "title": "Informations",
-      "description": "Obtenez des informations concernant votre compte et votre entreprise chez Meters",
-      "client": "Client",
-      "user": "Utilisateur",
-      "locale_explain": "Cette langue n'est utilisée que lorsque nous vous envoyons des emails.",
-      "data": {
-        "client_name": "Entreprise",
-        "client_number": "Numéro de client",
-        "num_sensors": "Nombre de capteurs",
-        "num_sites": "Nombre de sites",
-        "user_name": "Nom",
-        "created_at": "Création du compte",
-        "locale": "Langue de contact"
+      "title": "Paramètres",
+      "description": "Paramètres et informations concernant votre compte et votre entreprise chez Meters",
+      "actions": {
+        "support": "Contacter le support",
+        "logout": "Se déconnecter"
       },
-      "sensor_subscriptions": "Abonnement aux messages de non réponse des capteurs",
-      "sensor_subscriptions_details": "Si les capteurs sélectionnés cessent d'envoyer des données, vous recevrez un email dans les 15 minutes. Peu importe vos paramètres, l'Équipe Naito One est toujours informée des capteurs ne répondant pas.",
-      "no_associated_resources": "Pas de ressource associées",
-      "support": "Contacter le support",
-      "logout": "Se déconnecter"
+      "infos": {
+        "title": "Informations",
+        "client": "Client",
+        "user": "Utilisateur",
+        "locale_explain": "Cette langue n'est utilisée que lorsque nous vous envoyons des emails.",
+        "data": {
+          "client_name": "Entreprise",
+          "client_number": "Numéro de client",
+          "num_sensors": "Nombre de capteurs",
+          "num_sites": "Nombre de sites",
+          "user_name": "Nom",
+          "created_at": "Création du compte",
+          "locale": "Langue de contact"
+        }
+      },
+      "sensor_subscriptions": {
+        "title": "Alertes email de non réponse des capteurs",
+        "details": "Si les capteurs sélectionnés cessent d'envoyer des données, vous recevrez un email dans les 15 minutes. Peu importe vos paramètres, l'Équipe Naito One est toujours informée des capteurs ne répondant pas.",
+        "no_associated_resources": "Pas de ressource associées"
+      }
     },
     "explore": {
       "title": "Explorer les données",

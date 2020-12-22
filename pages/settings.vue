@@ -6,13 +6,15 @@
       :back="true"
     ></app-header>
 
+    <!-- actions -->
+
     <section class="mb-8 flex flex-col items-center">
       <a
         class="mb-4 w-5/6 sm:w-100 action bg-naito-blue-300 text-gray-100 text-center relative"
         href="mailto:support@naito.one"
       >
         <i class="material-icons absolute left-0 m-4 top-0">contact_support</i>
-        <span v-text="$t('pages.settings.support')"></span>
+        <span v-text="$t('pages.settings.actions.support')"></span>
       </a>
 
       <a
@@ -21,116 +23,129 @@
         :href="loginUrl"
       >
         <i class="material-icons absolute left-0 m-4 top-0">launch</i>
-        <span v-text="$t('pages.settings.logout')"></span>
+        <span v-text="$t('pages.settings.actions.logout')"></span>
       </a>
     </section>
 
-    <section
-      class="bg-gray-100 rounded-md p-4 mb-8 md:mx-20 lg:w-200 lg:mx-auto"
-    >
-      <h2
-        class="text-lg font-bold mb-3"
-        v-text="$t('pages.settings.client')"
-      ></h2>
-      <ul>
-        <li
-          class="flex items-center my-1"
-          v-for="(data, i) in clientData"
-          :key="i"
-        >
-          <p class="font-medium w-1/2 pr-2" v-text="$t(data.name)"></p>
-          <p v-text="data.value"></p>
-        </li>
-      </ul>
-    </section>
+    <!-- information section -->
 
-    <section
-      class="bg-gray-100 rounded-md p-4 mb-8 md:mx-20 lg:w-200 lg:mx-auto"
-    >
-      <h2
-        class="text-lg font-bold mb-3"
-        v-text="$t('pages.settings.user')"
-      ></h2>
-      <ul>
-        <li
-          class="flex items-center my-1"
-          v-for="(data, i) in userData"
-          :key="i"
-        >
-          <p class="font-medium w-1/2 pr-2" v-text="$t(data.name)"></p>
-          <p v-text="data.value"></p>
-        </li>
-        <li class="flex items-center mt-1">
-          <p
-            class="font-medium w-1/2 pr-2"
-            v-text="$t('pages.settings.data.locale')"
-          ></p>
-          <language-selector
-            :locale="userLocale"
-            :locales="locales"
-            :label="'global.set_locale'"
-            name="backend"
-            @change="saveUserLocale"
-          ></language-selector>
-        </li>
-        <li>
-          <p
-            class="text-gray-800 mb-1"
-            v-text="$t('pages.settings.locale_explain')"
-          ></p>
-        </li>
-      </ul>
-    </section>
-
-    <section
-      class="bg-gray-100 rounded-md mb-1 p-4 md:mx-20 lg:w-200 lg:mx-auto text-center"
-    >
-      <p
-        class="font-medium text-center"
-        v-text="$t('pages.settings.sensor_subscriptions')"
-      ></p>
-      <p
-        class="text-center"
-        v-text="$t('pages.settings.sensor_subscriptions_details')"
-      ></p>
-    </section>
-
-    <!-- sensor subscriptions -->
-    <ul class="flex flex-col items-center mb-8 md:mx-20 lg:w-200 lg:mx-auto">
-      <li
-        class="w-full my-1 flex justify-between items-center bg-gray-100 rounded-md hover:shadow-lg"
-        v-for="(sensor, i) in sensors"
-        :key="i"
+    <details>
+      <summary
+        class="bg-gray-100 rounded-md p-4 mb-2 md:mx-20 lg:w-200 lg:mx-auto clickable text-lg font-bold"
+        v-text="$t('pages.settings.infos.title')"
+      ></summary>
+      <section
+        class="bg-gray-100 rounded-md p-4 mb-2 md:mx-20 lg:w-200 lg:mx-auto"
       >
-        <label
-          :for="i + '-subscribe-input'"
-          class="font-bold flex-grow p-4 clickable focus:shadow-outline flex items-center"
-        >
-          <span class="font-mono uppercase" v-text="`${sensor.name}`"></span>
-          <span
-            class="pl-4"
-            v-text="getFormattedSensorResources(sensor.id)"
-          ></span>
-        </label>
+        <h2
+          class="text-lg font-bold mb-3"
+          v-text="$t('pages.settings.infos.client')"
+        ></h2>
+        <ul>
+          <li
+            class="flex items-center my-1"
+            v-for="(data, i) in clientData"
+            :key="i"
+          >
+            <p class="font-medium w-1/2 pr-2" v-text="$t(data.name)"></p>
+            <p v-text="data.value"></p>
+          </li>
+        </ul>
+      </section>
 
-        <!-- checkbox -->
-        <label
-          class="material-checkbox text-naito-blue-300"
-          :for="i + '-subscribe-input'"
+      <section
+        class="bg-gray-100 rounded-md p-4 mb-8 md:mx-20 lg:w-200 lg:mx-auto"
+      >
+        <h2
+          class="text-lg font-bold mb-3"
+          v-text="$t('pages.settings.infos.user')"
+        ></h2>
+        <ul>
+          <li
+            class="flex items-center my-1"
+            v-for="(data, i) in userData"
+            :key="i"
+          >
+            <p class="font-medium w-1/2 pr-2" v-text="$t(data.name)"></p>
+            <p v-text="data.value"></p>
+          </li>
+          <li class="flex items-center mt-1">
+            <p
+              class="font-medium w-1/2 pr-2"
+              v-text="$t('pages.settings.infos.data.locale')"
+            ></p>
+            <language-selector
+              :locale="userLocale"
+              :locales="locales"
+              :label="'global.set_locale'"
+              name="backend"
+              @change="saveUserLocale"
+            ></language-selector>
+          </li>
+          <li>
+            <p
+              class="text-gray-800 mb-1"
+              v-text="$t('pages.settings.infos.locale_explain')"
+            ></p>
+          </li>
+        </ul>
+      </section>
+    </details>
+
+    <!-- sensor subscriptions section -->
+
+    <details>
+      <summary
+        class="bg-gray-100 rounded-md p-4 mb-2 md:mx-20 lg:w-200 lg:mx-auto clickable text-lg font-bold"
+        v-text="$t('pages.settings.sensor_subscriptions.title')"
+      ></summary>
+      <section
+        class="bg-gray-100 rounded-md mb-1 p-4 md:mx-20 lg:w-200 lg:mx-auto text-center"
+      >
+        <p
+          class="text-center"
+          v-text="$t('pages.settings.sensor_subscriptions.details')"
+        ></p>
+      </section>
+
+      <ul class="flex flex-col items-center mb-8 md:mx-20 lg:w-200 lg:mx-auto">
+        <li
+          class="w-full my-1 flex justify-between items-center bg-gray-100 rounded-md hover:shadow-lg"
+          v-for="(sensor, i) in sensors"
+          :key="i"
         >
-          <input
-            type="checkbox"
-            :name="i + '-subscribe-input'"
-            :id="i + '-subscribe-input'"
-            :checked="isSubscribed(sensor.id)"
-            @change="toggleSubscribe(sensor.id)"
-          />
-          <div
-            class="material-checkbox-fake material-checkbox-fake__large"
-          ></div>
-        </label>
-      </li>
-    </ul>
+          <label
+            :for="i + '-subscribe-input'"
+            class="font-bold flex-grow p-4 clickable focus:shadow-outline flex items-center"
+          >
+            <span class="font-mono uppercase" v-text="`${sensor.name}`"></span>
+            <span
+              class="pl-4"
+              v-text="getFormattedSensorResources(sensor.id)"
+            ></span>
+          </label>
+
+          <!-- checkbox -->
+          <label
+            class="material-checkbox text-naito-blue-300"
+            :for="i + '-subscribe-input'"
+          >
+            <input
+              type="checkbox"
+              :name="i + '-subscribe-input'"
+              :id="i + '-subscribe-input'"
+              :checked="isSubscribed(sensor.id)"
+              @change="toggleSubscribe(sensor.id)"
+            />
+            <div
+              class="material-checkbox-fake material-checkbox-fake__large"
+            ></div>
+          </label>
+        </li>
+      </ul>
+    </details>
+
+    <!-- licenses -->
 
     <section
       class="bg-gray-100 rounded-md mb-24 p-4 md:mx-20 lg:w-200 lg:mx-auto text-center"
@@ -230,7 +245,9 @@ export default {
       )
 
       if (resources.length === 0) {
-        return this.$t('pages.settings.no_associated_resources')
+        return this.$t(
+          'pages.settings.sensor_subscriptions.no_associated_resources'
+        )
       }
 
       return resources
@@ -270,20 +287,20 @@ export default {
       const locale = this.$numberLocale()
       return [
         {
-          name: 'pages.settings.data.client_name',
+          name: 'pages.settings.infos.data.client_name',
           value: this.$store.getters.clientName,
         },
         {
-          name: 'pages.settings.data.client_number',
+          name: 'pages.settings.infos.data.client_number',
           value: this.$store.getters.clientNumber,
         },
         { name: 'global.email', value: this.$store.getters.clientEmail },
         {
-          name: 'pages.settings.data.num_sensors',
+          name: 'pages.settings.infos.data.num_sensors',
           value: this.$store.getters.numResources.toLocaleString(locale),
         },
         {
-          name: 'pages.settings.data.num_sites',
+          name: 'pages.settings.infos.data.num_sites',
           value: this.$store.getters.numSites.toLocaleString(locale),
         },
       ]
@@ -291,12 +308,12 @@ export default {
     userData() {
       return [
         {
-          name: 'pages.settings.data.user_name',
+          name: 'pages.settings.infos.data.user_name',
           value: this.$store.getters.name,
         },
         { name: 'global.email', value: this.$store.getters.email },
         {
-          name: 'pages.settings.data.created_at',
+          name: 'pages.settings.infos.data.created_at',
           value: this.$store.getters.accountCreatedAt
             .setLocale(this.$dateLocale())
             .toLocaleString(DateTime.DATE_FULL),

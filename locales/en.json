@@ -126,25 +126,32 @@
       }
     },
     "settings": {
-      "title": "Information",
-      "description": "Get information about your account and company on Meters",
-      "client": "Client",
-      "user": "User",
-      "locale_explain": "This language is only used when we send you emails.",
-      "data": {
-        "client_name": "Company",
-        "client_number": "Client number",
-        "num_sensors": "Number of sensors",
-        "num_sites": "Number of sites",
-        "user_name": "Name",
-        "created_at": "Account creation",
-        "locale": "Contact language"
+      "title": "Settings",
+      "description": "Settings and information about your account and company on Meters",
+      "actions": {
+        "support": "Contact support",
+        "logout": "Logout"
       },
-      "sensor_subscriptions": "Subscription to unresponding sensors email alerts",
-      "sensor_subscriptions_details": "If the selected sensors stop sending data, you will recieve an email in the next 15 minutes. No matter your settings, the Naito One Team is always informed of unresponding sensors.",
-      "no_associated_resources": "No associated resources",
-      "support": "Contact support",
-      "logout": "Logout"
+      "infos": {
+        "title": "Information",
+        "client": "Client",
+        "user": "User",
+        "locale_explain": "This language is only used when we send you emails.",
+        "data": {
+          "client_name": "Company",
+          "client_number": "Client number",
+          "num_sensors": "Number of sensors",
+          "num_sites": "Number of sites",
+          "user_name": "Name",
+          "created_at": "Account creation",
+          "locale": "Contact language"
+        }
+      },
+      "sensor_subscriptions": {
+        "title": "Unresponding sensors email alerts",
+        "details": "If the selected sensors stop sending data, you will recieve an email in the next 15 minutes. No matter your settings, the Naito One Team is always informed of unresponding sensors.",
+        "no_associated_resources": "No associated resources"
+      }
     },
     "explore": {
       "title": "Explore data",
