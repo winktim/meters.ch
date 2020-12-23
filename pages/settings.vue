@@ -145,6 +145,63 @@
       </ul>
     </details>
 
+    <!-- sessions section -->
+
+    <details open="open">
+      <summary
+        class="bg-gray-100 rounded-md p-4 mb-2 md:mx-20 lg:w-200 lg:mx-auto clickable text-lg font-bold"
+        v-text="$t('pages.settings.sessions.title')"
+      ></summary>
+
+      <ul class="flex flex-col items-center mb-8 md:mx-20 lg:w-200 lg:mx-auto">
+        <li
+          class="w-full my-1 flex justify-between items-center bg-gray-100 rounded-md"
+          v-for="(session, i) in formattedSessions"
+          :key="i"
+        >
+          <div class="flex-grow pl-4 pt-4 flex flex-col">
+            <div class="flex flex-grow items-center">
+              <img
+                class="w-6 mr-2 text-gray-100 select-none text-gray-900 font-bold"
+                :src="session.browserImage"
+                :alt="session.browserAlt"
+              />
+              <i
+                class="material-icons text-2xl select-none"
+                v-text="session.platformIcon"
+              ></i>
+
+              <span
+                class="flex-grow text-sm text-right ml-2 pr-4"
+                v-text="session.lastUsedAt"
+              ></span>
+            </div>
+
+            <div class="flex mt-2">
+              <p class="flex flex-col text-sm flex-grow">
+                <span
+                  class="font-bold leading-tight"
+                  v-text="session.description"
+                ></span>
+                <span class="leading-tight" v-text="session.ipAddress"></span>
+              </p>
+
+              <button
+                class="flex items-center text-naito-blue-300 text-lg py-4 px-5 clickable focus:shadow-outline popup confirmable"
+                data-popup-show="false"
+                :data-popup-text="$t('global.no_undoing')"
+                @click="confirmDeleteSession($event, session)"
+                @blur="$event.currentTarget.dataset.popupShow = 'false'"
+                :title="$t('pages.settings.sessions.delete')"
+              >
+                <i class="material-icons">delete</i>
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </details>
+
     <!-- licenses -->
 
     <section
@@ -204,6 +261,8 @@ export default {
       this.$getResourceTypes(),
       this.$getSites(),
       this.$getClients(),
+      // always update the sessions
+      this.$getSessions(true),
     ])
   },
   methods: {
@@ -275,6 +334,25 @@ export default {
       this.$store.dispatch('logout')
       this.$router.push(this.loginUrl)
     },
+    /**
+     * @param {{ currentTarget: HTMLElement}} event
+     */
+    async confirmDeleteSession(event, session) {
+      // need a second click to delete
+      if (event.currentTarget.dataset.popupShow === 'false') {
+        event.currentTarget.dataset.popupShow = 'true'
+      } else {
+        event.currentTarget.dataset.popupShow = 'false'
+        // make sure to hide any messages
+        this.$store.dispatch('hideMessage')
+        try {
+          await this.$delSession({ id: session.id })
+        } catch (e) {}
+
+        // fetch up to date session list
+        this.$getSessions(true)
+      }
+    },
   },
   computed: {
     /**
@@ -334,6 +412,39 @@ export default {
     },
     sensors() {
       return this.$store.getters.sensors
+    },
+    sessions() {
+      return this.$store.getters.sessions
+    },
+    formattedSessions() {
+      const now = DateTime.local()
+      return (
+        this.sessions
+          .map((session) => {
+            const date = DateTime.fromISO(session['last_used_at'])
+            // return with the date for sorting
+            return [
+              date.toMillis(),
+              {
+                id: session.id,
+                browserImage: `/images/browsers/${session['user_agent']['browser']}.svg`,
+                browserAlt: session['user_agent']['browser'],
+                platformIcon: session['user_agent']['is_mobile']
+                  ? 'smartphone'
+                  : 'computer',
+                description: session['user_agent']['description'],
+                lastUsedAt: date
+                  .setLocale(this.$dateLocale())
+                  // padding 1000 to make sure a token that was just used shows a date in the past
+                  .toRelative({ base: now, style: 'short', padding: 1000 }),
+                ipAddress: session['ip_address'],
+              },
+            ]
+          })
+          .sort((a, b) => b[0] - a[0])
+          // remove date included for sorting
+          .map((x) => x[1])
+      )
     },
   },
 }

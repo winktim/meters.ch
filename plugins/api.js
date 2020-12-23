@@ -14,6 +14,7 @@ import {
   SET_RESOURCES,
   SET_RESOURCE_TYPES,
   SET_SENSORS,
+  SET_SESSIONS,
   SET_SITES,
   SET_USER,
   SET_USERS,
@@ -257,6 +258,19 @@ export default ({ app, store, redirect }, inject) => {
     return readings
   })
 
+  inject('getSessions', async function (force) {
+    if (store.state.data.sessions !== null && !force) {
+      return
+    }
+
+    try {
+      const parsed = await classic('get', '/sessions')
+      store.commit(SET_SESSIONS, { sessions: parsed })
+    } catch (e) {
+      throw e
+    }
+  })
+
   // PUT
 
   inject('putUser', async function (payload, customMessage, customTime) {
@@ -445,6 +459,24 @@ export default ({ app, store, redirect }, inject) => {
 
       store.dispatch('showMessage', {
         message: app.i18n.t('api.user_deleted'),
+        isError: false,
+        time: 2000,
+      })
+    } catch (e) {
+      throw e
+    }
+  })
+
+  inject('delSession', async function (payload) {
+    if (store.state.data.sessions === null) {
+      return
+    }
+
+    try {
+      await classic('delete', `/sessions/${payload.id}`)
+
+      store.dispatch('showMessage', {
+        message: app.i18n.t('api.session_deleted'),
         isError: false,
         time: 2000,
       })

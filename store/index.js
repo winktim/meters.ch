@@ -43,6 +43,7 @@ import {
   REMOVE_ALL_DASHBOARD_EDITS,
   SET_METEO_LOCATIONS,
   UPDATE_SENSOR_SUBSCRIPTIONS,
+  SET_SESSIONS,
 } from '../assets/mutations'
 
 export const state = () => ({
@@ -84,6 +85,7 @@ export const state = () => ({
     meteoLocations: null,
     // TODO: verify useless and delete
     readings: [],
+    sessions: null,
   },
   dataById: {
     // for admin only
@@ -97,6 +99,7 @@ export const state = () => ({
     // for admin only
     clients: null,
     meteoLocations: null,
+    sessions: null,
   },
 
   dashboardEdit: {
@@ -231,6 +234,10 @@ export const mutations = {
   },
   [SET_SMALL_SCREEN](state, { smallScreen }) {
     state.smallScreen = smallScreen
+  },
+  [SET_SESSIONS](state, { sessions }) {
+    state.data.sessions = sessions
+    state.dataById.sessions = indexOnId(sessions)
   },
 
   // UPDATE
@@ -438,6 +445,7 @@ export const getters = {
   // for admin only
   users: (state) => (state.data.users ? state.data.users : []),
   clients: (state) => (state.data.clients ? state.data.clients : []),
+  sessions: (state) => (state.data.sessions ? state.data.sessions : []),
 
   // dashboard edit mode
   dashboardUndoList: (state) => state.dashboardEdit.undoList,

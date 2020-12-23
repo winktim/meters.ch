@@ -51,7 +51,8 @@
     "objective_deleted": "Objective successfully deleted",
     "alert_updated": "Alert successfully saved",
     "alert_created": "New alert successfully created",
-    "alert_deleted": "Alert successfully deleted"
+    "alert_deleted": "Alert successfully deleted",
+    "session_deleted": "Session successfully deleted"
   },
   "agregations": {
     "short": "Aggregate",
@@ -151,6 +152,10 @@
         "title": "Unresponding sensors email alerts",
         "details": "If the selected sensors stop sending data, you will recieve an email in the next 15 minutes. No matter your settings, the Naito One Team is always informed of unresponding sensors.",
         "no_associated_resources": "No associated resources"
+      },
+      "sessions": {
+        "title": "Sessions",
+        "delete": "Delete session"
       }
     },
     "explore": {

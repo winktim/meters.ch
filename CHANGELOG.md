@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added the ability to view and delete sessions
+
 ### Changed
 
 - Logging out now calls the logout route on the backend

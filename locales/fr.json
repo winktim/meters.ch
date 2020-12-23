@@ -51,7 +51,8 @@
     "objective_deleted": "Objectif supprimé avec succès",
     "alert_updated": "Alerte enregistrée avec succès",
     "alert_created": "Nouvelle alerte créée avec succès",
-    "alert_deleted": "Alerte supprimée avec succès"
+    "alert_deleted": "Alerte supprimée avec succès",
+    "session_deleted": "Session supprimée avec succès"
   },
   "agregations": {
     "short": "Agrégat",
@@ -151,6 +152,10 @@
         "title": "Alertes email de non réponse des capteurs",
         "details": "Si les capteurs sélectionnés cessent d'envoyer des données, vous recevrez un email dans les 15 minutes. Peu importe vos paramètres, l'Équipe Naito One est toujours informée des capteurs ne répondant pas.",
         "no_associated_resources": "Pas de ressource associées"
+      },
+      "sessions": {
+        "title": "Sessions",
+        "delete": "Supprimer la session"
       }
     },
     "explore": {
