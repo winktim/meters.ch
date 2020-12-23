@@ -1,6 +1,26 @@
 import factory from '../assets/cache'
 import { Duration } from 'luxon'
 
+import {
+  ADD_ALERT,
+  ADD_OBJECTIVE,
+  REMOVE_ALERT,
+  REMOVE_OBJECTIVE,
+  SET_ALERTS,
+  SET_CLIENT,
+  SET_CLIENTS,
+  SET_METEO_LOCATIONS,
+  SET_OBJECTIVES,
+  SET_RESOURCES,
+  SET_RESOURCE_TYPES,
+  SET_SENSORS,
+  SET_SITES,
+  SET_USER,
+  SET_USERS,
+  UPDATE_ALERT,
+  UPDATE_OBJECTIVE,
+} from '../assets/mutations'
+
 const cache = factory(
   Duration.fromObject({ minutes: 5 }),
   Duration.fromObject({ minutes: 5 })
@@ -71,11 +91,11 @@ export default ({ app, store, redirect }, inject) => {
 
     try {
       const parsed = await classic('get', '/users')
-      store.commit('SET_USER', { user: parsed[0] })
+      store.commit(SET_USER, { user: parsed[0] })
 
       // admin will be able to query all users. first user will still be himself
       if (parsed.length > 1) {
-        store.commit('SET_USERS', { users: parsed })
+        store.commit(SET_USERS, { users: parsed })
       }
     } catch (e) {
       throw e
@@ -89,7 +109,7 @@ export default ({ app, store, redirect }, inject) => {
 
     try {
       const parsed = await classic('get', '/resources')
-      store.commit('SET_RESOURCES', { resources: parsed })
+      store.commit(SET_RESOURCES, { resources: parsed })
     } catch (e) {
       throw e
     }
@@ -102,7 +122,7 @@ export default ({ app, store, redirect }, inject) => {
 
     try {
       const parsed = await classic('get', '/resourceTypes')
-      store.commit('SET_RESOURCE_TYPES', { resourceTypes: parsed })
+      store.commit(SET_RESOURCE_TYPES, { resourceTypes: parsed })
     } catch (e) {
       throw e
     }
@@ -115,7 +135,7 @@ export default ({ app, store, redirect }, inject) => {
 
     try {
       const parsed = await classic('get', '/sites')
-      store.commit('SET_SITES', { sites: parsed })
+      store.commit(SET_SITES, { sites: parsed })
     } catch (e) {
       throw e
     }
@@ -128,7 +148,7 @@ export default ({ app, store, redirect }, inject) => {
 
     try {
       const parsed = await classic('get', '/meteoLocations')
-      store.commit('SET_METEO_LOCATIONS', { meteoLocations: parsed })
+      store.commit(SET_METEO_LOCATIONS, { meteoLocations: parsed })
     } catch (e) {
       throw e
     }
@@ -141,7 +161,7 @@ export default ({ app, store, redirect }, inject) => {
 
     try {
       const parsed = await classic('get', '/sensors')
-      store.commit('SET_SENSORS', { sensors: parsed })
+      store.commit(SET_SENSORS, { sensors: parsed })
     } catch (e) {
       throw e
     }
@@ -154,7 +174,7 @@ export default ({ app, store, redirect }, inject) => {
 
     try {
       const parsed = await classic('get', '/objectives')
-      store.commit('SET_OBJECTIVES', { objectives: parsed })
+      store.commit(SET_OBJECTIVES, { objectives: parsed })
     } catch (e) {
       throw e
     }
@@ -167,7 +187,7 @@ export default ({ app, store, redirect }, inject) => {
 
     try {
       const parsed = await classic('get', '/alerts')
-      store.commit('SET_ALERTS', { alerts: parsed })
+      store.commit(SET_ALERTS, { alerts: parsed })
     } catch (e) {
       throw e
     }
@@ -180,11 +200,11 @@ export default ({ app, store, redirect }, inject) => {
 
     try {
       const parsed = await classic('get', '/clients')
-      store.commit('SET_CLIENT', { client: parsed[0] })
+      store.commit(SET_CLIENT, { client: parsed[0] })
 
       // admin will be able to query all clients. first client will still be his own
       if (parsed.length > 1) {
-        store.commit('SET_CLIENTS', { clients: parsed })
+        store.commit(SET_CLIENTS, { clients: parsed })
       }
     } catch (e) {
       throw e
@@ -255,7 +275,7 @@ export default ({ app, store, redirect }, inject) => {
       // new user infos are returned on success
       // if updated user is current user, update his data
       if (payload.id === store.state.data.user.id) {
-        store.commit('SET_USER', { user: parsed })
+        store.commit(SET_USER, { user: parsed })
       }
 
       store.dispatch('showMessage', {
@@ -277,7 +297,7 @@ export default ({ app, store, redirect }, inject) => {
       const parsed = await classic('put', `/objectives/${payload.id}`, payload)
 
       // new objective infos are returned on success
-      store.commit('UPDATE_OBJECTIVE', { objective: parsed })
+      store.commit(UPDATE_OBJECTIVE, { objective: parsed })
 
       store.dispatch('showMessage', {
         message: app.i18n.t('api.objective_updated'),
@@ -298,7 +318,7 @@ export default ({ app, store, redirect }, inject) => {
       const parsed = await classic('put', `/alerts/${payload.id}`, payload)
 
       // new alert infos are returned on success
-      store.commit('UPDATE_ALERT', { alert: parsed })
+      store.commit(UPDATE_ALERT, { alert: parsed })
 
       store.dispatch('showMessage', {
         message: app.i18n.t('api.alert_updated'),
@@ -321,7 +341,7 @@ export default ({ app, store, redirect }, inject) => {
       const parsed = await classic('post', '/objectives', payload)
 
       // new objective infos are returned on success
-      store.commit('ADD_OBJECTIVE', { objective: parsed })
+      store.commit(ADD_OBJECTIVE, { objective: parsed })
 
       store.dispatch('showMessage', {
         message: app.i18n.t('api.objective_created'),
@@ -342,7 +362,7 @@ export default ({ app, store, redirect }, inject) => {
       const parsed = await classic('post', '/alerts', payload)
 
       // new alert infos are returned on success
-      store.commit('ADD_ALERT', { alert: parsed })
+      store.commit(ADD_ALERT, { alert: parsed })
 
       store.dispatch('showMessage', {
         message: app.i18n.t('api.alert_created'),
@@ -383,7 +403,7 @@ export default ({ app, store, redirect }, inject) => {
       await classic('delete', `/objectives/${payload.id}`)
 
       // new objective infos are returned on success
-      store.commit('REMOVE_OBJECTIVE', { objective: payload })
+      store.commit(REMOVE_OBJECTIVE, { objective: payload })
 
       store.dispatch('showMessage', {
         message: app.i18n.t('api.objective_deleted'),
@@ -403,7 +423,7 @@ export default ({ app, store, redirect }, inject) => {
     try {
       await classic('delete', `/alerts/${payload.id}`)
 
-      store.commit('REMOVE_ALERT', { alert: payload })
+      store.commit(REMOVE_ALERT, { alert: payload })
 
       store.dispatch('showMessage', {
         message: app.i18n.t('api.alert_deleted'),
