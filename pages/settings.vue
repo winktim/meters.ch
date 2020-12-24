@@ -453,9 +453,11 @@ export default {
                   : 'computer',
                 description: session['user_agent']['description'],
                 lastUsedAt: date
+                  .startOf('second')
+                  .minus({ second: 2 })
                   .setLocale(this.$dateLocale())
                   // padding 1000 to make sure a token that was just used shows a date in the past
-                  .toRelative({ base: now, style: 'short', padding: 1000 }),
+                  .toRelative({ base: now, style: 'short' }),
                 ipAddress: session['ip_address'],
               },
             ]
