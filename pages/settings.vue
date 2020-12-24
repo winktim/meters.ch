@@ -29,9 +29,9 @@
 
     <!-- information section -->
 
-    <details>
+    <details open="open" @toggle="toggleDetail">
       <summary
-        class="bg-gray-100 rounded-md p-4 mb-2 md:mx-20 lg:w-200 lg:mx-auto clickable text-lg font-bold"
+        class="bg-gray-100 rounded-md p-4 mb-2 md:mx-20 lg:w-200 lg:mx-auto clickable focus:shadow-outline hover:shadow-lg text-lg font-bold"
         v-text="$t('pages.settings.infos.title')"
       ></summary>
       <section
@@ -94,9 +94,9 @@
 
     <!-- sensor subscriptions section -->
 
-    <details>
+    <details @toggle="toggleDetail">
       <summary
-        class="bg-gray-100 rounded-md p-4 mb-2 md:mx-20 lg:w-200 lg:mx-auto clickable text-lg font-bold"
+        class="bg-gray-100 rounded-md p-4 mb-2 md:mx-20 lg:w-200 lg:mx-auto clickable focus:shadow-outline hover:shadow-lg text-lg font-bold"
         v-text="$t('pages.settings.sensor_subscriptions.title')"
       ></summary>
       <section
@@ -147,9 +147,9 @@
 
     <!-- sessions section -->
 
-    <details open="open">
+    <details @toggle="toggleDetail">
       <summary
-        class="bg-gray-100 rounded-md p-4 mb-2 md:mx-20 lg:w-200 lg:mx-auto clickable text-lg font-bold"
+        class="bg-gray-100 rounded-md p-4 mb-2 md:mx-20 lg:w-200 lg:mx-auto clickable focus:shadow-outline hover:shadow-lg text-lg font-bold"
         v-text="$t('pages.settings.sessions.title')"
       ></summary>
 
@@ -220,7 +220,6 @@
 </template>
 <script>
 import { DateTime } from 'luxon'
-import { mapActions } from 'vuex'
 
 import AppHeader from '../components/app-header.vue'
 import LanguageSelector from '../components/language-selector.vue'
@@ -247,12 +246,15 @@ export default {
   data() {
     return {
       loginUrl: '/login',
+      details: null,
     }
   },
   async mounted() {
     if (this.$store.getters.rememberMe) {
       this.loginUrl = '/login?remember-me'
     }
+
+    this.details = [...this.$el.getElementsByTagName('details')]
 
     await Promise.all([
       this.$getUsers(),
@@ -351,6 +353,23 @@ export default {
 
         // fetch up to date session list
         this.$getSessions(true)
+      }
+    },
+    /**
+     * @param {{ currentTarget: HTMLElement}} event
+     */
+    toggleDetail(event) {
+      if (event.currentTarget.open) {
+        // close all others
+        this.details.forEach((detail) => {
+          if (detail === event.currentTarget) {
+            return
+          }
+
+          if (detail.open) {
+            detail.open = false
+          }
+        })
       }
     },
   },
