@@ -160,7 +160,7 @@
           :key="i"
         >
           <div class="flex-grow pl-4 pt-4 flex flex-col">
-            <div class="flex flex-grow items-center">
+            <div class="flex flex-grow items-center pr-4">
               <img
                 class="w-6 mr-2 text-gray-100 select-none text-gray-900 font-bold"
                 :src="session.browserImage"
@@ -172,8 +172,18 @@
               ></i>
 
               <span
-                class="flex-grow text-sm text-right ml-2 pr-4"
+                class="flex-grow text-sm text-right ml-2"
                 v-text="session.lastUsedAt"
+              ></span>
+
+              <span
+                v-if="session.expiresAt"
+                v-text="
+                  `${$t('pages.settings.sessions.expires')} ${
+                    session.expiresAt
+                  }`
+                "
+                class="ml-2 italic text-sm"
               ></span>
             </div>
 
@@ -437,13 +447,28 @@ export default {
     },
     formattedSessions() {
       const now = DateTime.local()
+      const nowMillis = now.toMillis()
       return (
         this.sessions
           .map((session) => {
-            const date = DateTime.fromISO(session['last_used_at'])
-            // return with the date for sorting
+            // first get the expires at date parsed
+            const expiresAt =
+              session['expires_at'] === null
+                ? null
+                : DateTime.fromISO(session['expires_at'])
+
+            return [expiresAt, session]
+          })
+          .filter(([expiresAt]) => {
+            // then remove the ones that have expired
+            return !expiresAt || nowMillis < expiresAt.toMillis()
+          })
+          .map(([expiresAt, session]) => {
+            const lastUsedAt = DateTime.fromISO(session['last_used_at'])
+
+            // return with the last used at date for sorting
             return [
-              date.toMillis(),
+              lastUsedAt.toMillis(),
               {
                 id: session.id,
                 browserImage: `/images/browsers/${session['user_agent']['browser']}.svg`,
@@ -452,12 +477,18 @@ export default {
                   ? 'smartphone'
                   : 'computer',
                 description: session['user_agent']['description'],
-                lastUsedAt: date
+                lastUsedAt: lastUsedAt
                   .startOf('second')
                   .minus({ second: 2 })
                   .setLocale(this.$dateLocale())
-                  // padding 1000 to make sure a token that was just used shows a date in the past
                   .toRelative({ base: now, style: 'short' }),
+                expiresAt: expiresAt
+                  ? expiresAt
+                      .startOf('second')
+                      .plus({ second: 2 })
+                      .setLocale(this.$dateLocale())
+                      .toRelative({ base: now, style: 'short' })
+                  : null,
                 ipAddress: session['ip_address'],
               },
             ]

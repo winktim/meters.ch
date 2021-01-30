@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Logging in sends the remember_me parameter
+- Sessions now display their expire date and disappear when expired
+
+### Fixed
+
+- Fixed console error when force-logged out on the index page
+
 ## [1.1.1] - 2020-12-24
 
 ### Fixed

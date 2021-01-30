@@ -455,6 +455,12 @@ export default {
             alert: 0,
           })
         }
+
+        if (this.currentTemperatures[id] === undefined) {
+          // prevent error happening sometimes when logging out
+          return
+        }
+
         this.currentTemperatures[id].value = `${last.value.toLocaleString(
           this.$numberLocale(),
           decimalTwoFormat

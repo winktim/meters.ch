@@ -155,7 +155,8 @@
       },
       "sessions": {
         "title": "Sessions",
-        "delete": "Supprimer la session"
+        "delete": "Supprimer la session",
+        "expires": "expire"
       }
     },
     "explore": {

@@ -160,6 +160,7 @@ export default {
         const res = await this.$post('/login', {
           email,
           password,
+          remember_me: Boolean(rememberMe),
         })
 
         const parsed = await res.json()
