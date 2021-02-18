@@ -145,6 +145,7 @@ export default {
           verify_token: this.verifyToken,
           password,
           password_confirmation,
+          remember_me: Boolean(rememberMe),
         })
 
         const parsed = await res.json()

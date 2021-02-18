@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2021-02-18
+
+### Fixed
+
+- Changing password sends the remember_me parameter
+
 ## [1.2.1] - 2021-01-30
 
 ### Changed
