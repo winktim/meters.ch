@@ -162,7 +162,7 @@
           <div class="flex-grow pl-4 pt-4 flex flex-col">
             <div class="flex flex-grow items-center pr-4">
               <img
-                class="w-6 mr-2 text-gray-100 select-none text-gray-900 font-bold"
+                class="h-6 mr-2 text-gray-100 select-none text-gray-900 font-bold"
                 :src="session.browserImage"
                 :alt="session.browserAlt"
               />
