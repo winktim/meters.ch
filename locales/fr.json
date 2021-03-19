@@ -156,7 +156,8 @@
       "sessions": {
         "title": "Sessions",
         "delete": "Supprimer la session",
-        "expires": "expire"
+        "expires": "expire",
+        "unknown_browser": "Inconnu"
       }
     },
     "explore": {

@@ -472,7 +472,9 @@ export default {
               {
                 id: session.id,
                 browserImage: `/images/browsers/${session['user_agent']['browser']}.svg`,
-                browserAlt: session['user_agent']['browser'],
+                browserAlt:
+                  session['user_agent']['browser'] ||
+                  this.$t('pages.settings.sessions.unknown_browser'),
                 platformIcon: session['user_agent']['is_mobile']
                   ? 'smartphone'
                   : 'computer',
