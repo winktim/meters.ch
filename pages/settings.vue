@@ -267,12 +267,12 @@ export default {
     this.details = [...this.$el.getElementsByTagName('details')]
 
     await Promise.all([
-      this.$getUsers(),
+      this.$getUser(),
       this.$getSensors(),
       this.$getResources(),
       this.$getResourceTypes(),
       this.$getSites(),
-      this.$getClients(),
+      this.$getClient(),
       // always update the sessions
       this.$getSessions(true),
     ])

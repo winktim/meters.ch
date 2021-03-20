@@ -132,7 +132,7 @@ export default {
       this.$getResourceTypes(),
       this.$getSensors(),
       this.$getSites(),
-      this.$getUsers(),
+      this.$getUser(),
     ])
 
     // generate a marker for each resource

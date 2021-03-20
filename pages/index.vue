@@ -318,7 +318,7 @@ export default {
     await Promise.all([
       this.$getResources(),
       this.$getResourceTypes(),
-      this.$getUsers(),
+      this.$getUser(),
       this.$getSensors(),
       this.$getSites(),
       this.$getAlerts(),

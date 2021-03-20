@@ -84,7 +84,7 @@ export default {
   },
   components: { AppHeader, AdminUserPopup },
   async mounted() {
-    await Promise.all([this.$getUsers(), this.$getClients()])
+    await Promise.all([this.$getUser(), this.$getUsers(), this.$getClients()])
 
     if (!this.isAdmin) {
       this.$router.replace('/').catch(handleNavigationError)

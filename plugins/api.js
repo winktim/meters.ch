@@ -85,7 +85,7 @@ export default ({ app, store, redirect }, inject) => {
     })
   }
 
-  inject('getUsers', async function (force) {
+  inject('getUser', async function (force) {
     if (store.state.data.user !== null && !force) {
       return
     }
@@ -93,11 +93,19 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/users')
       store.commit(SET_USER, { user: parsed[0] })
+    } catch (e) {
+      throw e
+    }
+  })
 
-      // admin will be able to query all users. first user will still be himself
-      if (parsed.length > 1) {
-        store.commit(SET_USERS, { users: parsed })
-      }
+  inject('getUsers', async function (force) {
+    if (store.state.data.users !== null && !force) {
+      return
+    }
+
+    try {
+      const parsed = await classic('get', '/users')
+      store.commit(SET_USERS, { users: parsed })
     } catch (e) {
       throw e
     }
@@ -194,7 +202,7 @@ export default ({ app, store, redirect }, inject) => {
     }
   })
 
-  inject('getClients', async function (force) {
+  inject('getClient', async function (force) {
     if (store.state.data.client !== null && !force) {
       return
     }
@@ -202,11 +210,19 @@ export default ({ app, store, redirect }, inject) => {
     try {
       const parsed = await classic('get', '/clients')
       store.commit(SET_CLIENT, { client: parsed[0] })
+    } catch (e) {
+      throw e
+    }
+  })
 
-      // admin will be able to query all clients. first client will still be his own
-      if (parsed.length > 1) {
-        store.commit(SET_CLIENTS, { clients: parsed })
-      }
+  inject('getClients', async function (force) {
+    if (store.state.data.clients !== null && !force) {
+      return
+    }
+
+    try {
+      const parsed = await classic('get', '/clients')
+      store.commit(SET_CLIENTS, { clients: parsed })
     } catch (e) {
       throw e
     }

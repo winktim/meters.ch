@@ -317,7 +317,7 @@ export default {
 
     this.setQuery()
 
-    await Promise.all([this.$getUsers(), this.$getMeteoLocations()])
+    await Promise.all([this.$getUser(), this.$getMeteoLocations()])
   },
   methods: {
     navPopup() {

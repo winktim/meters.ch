@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.5] - 2021-03-20
+
+### Fixed
+
+- Fixed admin panel when there is a single client or a single user
+
 ## [1.2.4] - 2021-03-19
 
 ### Fixed
